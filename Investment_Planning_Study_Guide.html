@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PFPINP-8 | Investment Planning Study Guide (2026/2027)</title>
+<style>
+:root {
+  --bg: #f5f6fa;
+  --bg-card: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #555;
+  --border: #d1d5db;
+  --accent-invest: #2563eb;
+  --accent-tax: #16a34a;
+  --accent-calc: #ea580c;
+  --accent-behav: #7c3aed;
+  --accent-fund: #0891b2;
+  --accent-invest-bg: #eff6ff;
+  --accent-tax-bg: #f0fdf4;
+  --accent-calc-bg: #fff7ed;
+  --accent-behav-bg: #f5f3ff;
+  --accent-fund-bg: #ecfeff;
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #e2e8f0;
+  --sidebar-hover: #334155;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
+  --radius: 8px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'Courier New', monospace;
+  --transition: 0.25s ease;
+}
+[data-theme="dark"] {
+  --bg: #0f172a; --bg-card: #1e293b; --text: #e2e8f0; --text-muted: #94a3b8;
+  --border: #334155; --accent-invest-bg: #1e2a4a; --accent-tax-bg: #1a2e1a;
+  --accent-calc-bg: #2e1f0f; --accent-behav-bg: #241a3e; --accent-fund-bg: #0c2a33;
+  --sidebar-bg: #0b1120; --sidebar-text: #cbd5e1; --sidebar-hover: #1e293b;
+  --shadow: 0 1px 3px rgba(0,0,0,0.4); --shadow-lg: 0 4px 12px rgba(0,0,0,0.5);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.65; transition: background var(--transition), color var(--transition); }
+
+/* SIDEBAR */
+.sidebar { position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background: var(--sidebar-bg); color: var(--sidebar-text); overflow-y: auto; z-index: 1000; transition: transform var(--transition); display: flex; flex-direction: column; }
+.sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+.sidebar-header h2 { font-size: 1rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #60a5fa; }
+.sidebar-header p { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--sidebar-text); text-decoration: none; font-size: 0.85rem; transition: background var(--transition); border-left: 3px solid transparent; }
+.sidebar-nav a:hover, .sidebar-nav a.active { background: var(--sidebar-hover); border-left-color: #60a5fa; }
+.sidebar-nav .nav-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.nav-dot.invest { background: var(--accent-invest); }
+.nav-dot.tax { background: var(--accent-tax); }
+.nav-dot.calc { background: var(--accent-calc); }
+.nav-dot.behav { background: var(--accent-behav); }
+.nav-dot.fund { background: var(--accent-fund); }
+.sidebar-progress { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+.progress-bar-container { background: rgba(255,255,255,0.1); border-radius: 10px; height: 8px; overflow: hidden; margin-top: 8px; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, #60a5fa, #a78bfa); border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+.progress-label { font-size: 0.75rem; color: #94a3b8; }
+
+/* MAIN */
+.main-content { margin-left: 280px; padding: 30px 40px 80px; max-width: 960px; }
+.page-header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px solid var(--border); }
+.page-header h1 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-invest), var(--accent-behav)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-header .subtitle { font-size: 1rem; color: var(--text-muted); margin-top: 6px; }
+.page-header .tax-year-badge { display: inline-block; margin-top: 12px; padding: 4px 16px; background: var(--accent-tax); color: #fff; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+/* TOOLBAR */
+.toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 30px; padding: 12px 16px; background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); }
+.search-box { flex: 1; min-width: 200px; padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.9rem; background: var(--bg); color: var(--text); outline: none; }
+.search-box:focus { border-color: var(--accent-invest); }
+.btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; font-size: 0.85rem; font-weight: 600; background: var(--bg-card); color: var(--text); transition: all var(--transition); white-space: nowrap; }
+.btn:hover { background: var(--accent-invest); color: #fff; border-color: var(--accent-invest); }
+.btn.active { background: var(--accent-invest); color: #fff; border-color: var(--accent-invest); }
+
+/* SECTIONS */
+.section { margin-bottom: 50px; scroll-margin-top: 20px; }
+.section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid var(--accent-invest); display: flex; align-items: center; gap: 10px; }
+.section-title .icon { font-size: 1.3rem; }
+
+/* CARDS */
+.card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; border-left: 4px solid var(--accent-invest); transition: box-shadow var(--transition); }
+.card:hover { box-shadow: var(--shadow-lg); }
+.card.tax { border-left-color: var(--accent-tax); background: var(--accent-tax-bg); }
+.card.calc { border-left-color: var(--accent-calc); background: var(--accent-calc-bg); }
+.card.behav { border-left-color: var(--accent-behav); background: var(--accent-behav-bg); }
+.card.fund { border-left-color: var(--accent-fund); background: var(--accent-fund-bg); }
+.card.invest { border-left-color: var(--accent-invest); background: var(--accent-invest-bg); }
+.card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
+.card h4 { font-size: 1rem; font-weight: 600; margin: 16px 0 8px; color: var(--accent-invest); }
+.card p, .card li { font-size: 0.92rem; margin-bottom: 6px; }
+.card ul, .card ol { padding-left: 20px; margin-bottom: 12px; }
+
+/* FORMULA BOX */
+.formula-box { background: #1e293b; color: #e2e8f0; padding: 16px 20px; border-radius: var(--radius); margin: 12px 0; font-family: var(--mono); font-size: 0.9rem; overflow-x: auto; }
+[data-theme="dark"] .formula-box { background: #0f172a; border: 1px solid #334155; }
+
+/* TABLES */
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.88rem; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: var(--accent-invest); color: #fff; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.3px; }
+.card.tax th { background: var(--accent-tax); }
+.card.calc th { background: var(--accent-calc); }
+.card.behav th { background: var(--accent-behav); }
+.card.fund th { background: var(--accent-fund); }
+tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+[data-theme="dark"] tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+
+/* DUMMY BOX */
+.dummy-box { background: linear-gradient(135deg, #fef3c7, #fde68a); border: 2px solid #f59e0b; border-radius: var(--radius); padding: 16px 20px; margin: 12px 0; font-size: 0.9rem; color: #92400e; }
+[data-theme="dark"] .dummy-box { background: linear-gradient(135deg, #422006, #78350f); border-color: #d97706; color: #fde68a; }
+.dummy-box strong { display: block; margin-bottom: 4px; font-size: 0.95rem; }
+
+/* EXAMPLE BOX */
+.example-box { background: var(--accent-calc-bg); border: 1px solid var(--accent-calc); border-radius: var(--radius); padding: 16px 20px; margin: 12px 0; }
+[data-theme="dark"] .example-box { background: #2e1f0f; }
+
+/* COLLAPSIBLE */
+details { margin: 10px 0; }
+summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; padding: 8px 0; color: var(--accent-invest); }
+summary:hover { text-decoration: underline; }
+details[open] summary { margin-bottom: 8px; }
+
+/* TOGGLE */
+.hamburger { display: none; position: fixed; top: 16px; left: 16px; z-index: 1100; background: var(--sidebar-bg); color: #fff; border: none; padding: 8px 12px; border-radius: var(--radius); cursor: pointer; font-size: 1.2rem; }
+
+@media (max-width: 800px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 20px 16px 80px; }
+  .hamburger { display: block; }
+}
+
+/* PRINT */
+@media print { .sidebar, .toolbar, .hamburger { display: none; } .main-content { margin-left: 0; } .card { break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h2>PFPINP-8</h2>
+    <p>Investment Planning Study Guide</p>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#tax-rates"><span class="nav-dot tax"></span>SA Tax Rates 2026/27</a>
+    <a href="#week1-behavioral"><span class="nav-dot behav"></span>Behavioral Finance</a>
+    <a href="#week1-gamma"><span class="nav-dot invest"></span>Alpha, Beta & Gamma</a>
+    <a href="#week1-goals"><span class="nav-dot invest"></span>Goals-Based Allocation</a>
+    <a href="#week1-fpi"><span class="nav-dot behav"></span>FPI Competency Profile</a>
+    <a href="#week1-longterm"><span class="nav-dot invest"></span>Long-Term Perspectives</a>
+    <a href="#week1-gap"><span class="nav-dot behav"></span>Mind the Gap</a>
+    <a href="#week1-bit"><span class="nav-dot behav"></span>Behavioral Investor Types</a>
+    <a href="#week1-vanguard"><span class="nav-dot invest"></span>Vanguard Advisor's Alpha</a>
+    <a href="#week2-resultant"><span class="nav-dot calc"></span>Resultant Rate Method</a>
+    <a href="#week2-cna"><span class="nav-dot calc"></span>Capital Needs Analysis</a>
+    <a href="#week2-retirement"><span class="nav-dot calc"></span>Retirement Shortfall</a>
+    <a href="#week3-fees"><span class="nav-dot fund"></span>Fees: TER, TC & EAC</a>
+    <a href="#week3-mdd"><span class="nav-dot fund"></span>Reading MDDs</a>
+    <a href="#week3-funds"><span class="nav-dot fund"></span>Fund Matching</a>
+    <a href="#week3-products"><span class="nav-dot fund"></span>Investment Products</a>
+    <a href="#week4-returns"><span class="nav-dot calc"></span>Measures of Return</a>
+    <a href="#week4-risk"><span class="nav-dot calc"></span>Measures of Risk</a>
+    <a href="#week4-money"><span class="nav-dot calc"></span>Money Market Instruments</a>
+    <a href="#week4-bonds"><span class="nav-dot calc"></span>Bonds</a>
+    <a href="#week4-ddm"><span class="nav-dot calc"></span>Dividend Discount Model</a>
+    <a href="#week4-derivatives"><span class="nav-dot calc"></span>Derivatives</a>
+    <a href="#week5-reports"><span class="nav-dot invest"></span>Report Writing</a>
+    <a href="#week5-risk"><span class="nav-dot behav"></span>Risk Profiling</a>
+    <a href="#formulas"><span class="nav-dot calc"></span>Master Formula Sheet</a>
+  </nav>
+  <div class="sidebar-progress">
+    <div class="progress-label">Study Progress: <span id="progress-pct">0%</span></div>
+    <div class="progress-bar-container"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-content">
+
+<div class="page-header">
+  <h1>Investment Planning Study Guide</h1>
+  <p class="subtitle">PFPINP-8 &mdash; Milpark Education &mdash; Comprehensive Notes</p>
+  <span class="tax-year-badge">2026 / 2027 Tax Year</span>
+</div>
+
+<div class="toolbar">
+  <input type="text" class="search-box" id="searchBox" placeholder="Search topics, formulas, keywords...">
+  <button class="btn" onclick="toggleTheme()">Dark / Light</button>
+  <button class="btn" onclick="expandAll()">Expand All</button>
+  <button class="btn" onclick="collapseAll()">Collapse All</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- SA TAX RATES 2026/2027 -->
+<!-- ============================================================ -->
+<div class="section" id="tax-rates">
+<h2 class="section-title"><span class="icon">&#127487;&#127462;</span> South African Tax Rates &amp; Duties &mdash; 2026/2027</h2>
+
+<div class="card tax">
+<h3>Individual Income Tax Brackets</h3>
+<div class="dummy-box"><strong>Think of it like a staircase!</strong>You only pay the higher rate on the portion of your income that falls in each "step" &mdash; not on your total income. If you earn R500,000 you do NOT pay 31% on all of it.</div>
+<table>
+<tr><th>Taxable Income (R)</th><th>How Tax is Calculated</th></tr>
+<tr><td>R1 &ndash; R245,100</td><td>18% of your income</td></tr>
+<tr><td>R245,101 &ndash; R383,100</td><td>R44,118 + 26% on amount above R245,100</td></tr>
+<tr><td>R383,101 &ndash; R530,200</td><td>R79,998 + 31% on amount above R383,100</td></tr>
+<tr><td>R530,201 &ndash; R695,800</td><td>R125,599 + 36% on amount above R530,200</td></tr>
+<tr><td>R695,801 &ndash; R887,000</td><td>R185,215 + 39% on amount above R695,800</td></tr>
+<tr><td>R887,001 &ndash; R1,878,600</td><td>R259,783 + 41% on amount above R887,000</td></tr>
+<tr><td>R1,878,601+</td><td>R666,339 + 45% on amount above R1,878,600</td></tr>
+</table>
+</div>
+
+<div class="card tax">
+<h3>Tax Rebates</h3>
+<div class="dummy-box"><strong>What is a rebate?</strong>A rebate is a direct reduction of your tax bill &mdash; it gets subtracted AFTER your tax is calculated. Different from a deduction (which reduces your income BEFORE tax is calculated).</div>
+<table>
+<tr><th>Rebate</th><th>Amount / Year</th><th>Who Gets It</th></tr>
+<tr><td>Primary</td><td>R17,820</td><td>Every taxpayer</td></tr>
+<tr><td>Secondary</td><td>R9,765</td><td>Ages 65&ndash;74 (added to Primary)</td></tr>
+<tr><td>Tertiary</td><td>R3,249</td><td>Ages 75+ (added to both above)</td></tr>
+</table>
+<div class="dummy-box"><strong>Example:</strong> If you're under 65 and owe R20,000 tax, subtract R17,820 rebate = you only pay R2,180. If you're 75+, your total rebate is R17,820 + R9,765 + R3,249 = R30,834.</div>
+</div>
+
+<div class="card tax">
+<h3>Tax Thresholds (Below this = no tax!)</h3>
+<table>
+<tr><th>Age</th><th>Annual Threshold</th></tr>
+<tr><td>Under 65</td><td>R99,000</td></tr>
+<tr><td>65 to 74</td><td>R153,250</td></tr>
+<tr><td>75 and older</td><td>R171,300</td></tr>
+</table>
+<div class="dummy-box"><strong>Plain English:</strong> If you're under 65 and earn less than R99,000/year (~R8,250/month), you owe ZERO income tax.</div>
+</div>
+
+<div class="card tax">
+<h3>Capital Gains Tax (CGT)</h3>
+<div class="dummy-box"><strong>What is CGT?</strong>Tax paid when you SELL an asset (shares, second property) for MORE than you paid. You're taxed on the profit ("gain"), not the full sale price.</div>
+<p><strong>Annual Exclusion:</strong> R50,000 (first R50,000 of gains each year = tax-free)</p>
+<p><strong>Exclusion on death:</strong> R440,000</p>
+<p><strong>Primary residence exclusion:</strong> R3,000,000</p>
+<table>
+<tr><th>Taxpayer Type</th><th>Inclusion Rate</th><th>Max Effective CGT Rate</th></tr>
+<tr><td>Individual</td><td>40%</td><td>18% (45% x 40%)</td></tr>
+<tr><td>Company</td><td>80%</td><td>21.6% (27% x 80%)</td></tr>
+<tr><td>Trust</td><td>80%</td><td>36% (45% x 80%)</td></tr>
+</table>
+<div class="dummy-box"><strong>Example:</strong> You sell shares and make R150,000 profit. Subtract R50,000 exclusion = R100,000 taxable gain. Only 40% of that (R40,000) gets added to your income. You then pay tax on that R40,000 at your normal rate. You NEVER pay 40% on a gain &mdash; 40% is just the inclusion rate.</div>
+</div>
+
+<div class="card tax">
+<h3>Donations Tax</h3>
+<table>
+<tr><th>Amount Donated / Year</th><th>Rate</th></tr>
+<tr><td>First R150,000</td><td>0% (exempt)</td></tr>
+<tr><td>Above R150,000 up to cumulative R30 million</td><td>20%</td></tr>
+<tr><td>Cumulative above R30 million</td><td>25%</td></tr>
+</table>
+<div class="dummy-box"><strong>Plain English:</strong> You can give away up to R150,000 per year as gifts, completely tax-free. Above that, donations tax kicks in at 20%.</div>
+</div>
+
+<div class="card tax">
+<h3>Estate Duty</h3>
+<p><strong>Basic Abatement:</strong> R3,500,000 (first R3.5m of your estate = tax-free)</p>
+<p><strong>Married couples:</strong> Unused abatement rolls over to surviving spouse (up to R7m combined).</p>
+<table>
+<tr><th>Dutiable Estate Value</th><th>Rate</th></tr>
+<tr><td>Up to R30,000,000</td><td>20%</td></tr>
+<tr><td>Above R30,000,000</td><td>25%</td></tr>
+</table>
+<div class="dummy-box"><strong>Example:</strong> Estate worth R5m. Subtract R3.5m abatement = R1.5m taxable. Estate duty = 20% of R1.5m = R300,000.</div>
+</div>
+
+<div class="card tax">
+<h3>Transfer Duty (Property)</h3>
+<table>
+<tr><th>Purchase Price (R)</th><th>Transfer Duty</th></tr>
+<tr><td>R0 &ndash; R1,210,000</td><td>0% (no tax)</td></tr>
+<tr><td>R1,210,001 &ndash; R1,663,800</td><td>3% on amount above R1,210,000</td></tr>
+<tr><td>R1,663,801 &ndash; R2,329,300</td><td>R13,614 + 6% on amount above R1,663,800</td></tr>
+<tr><td>R2,329,301 &ndash; R2,994,800</td><td>R53,544 + 8% on amount above R2,329,300</td></tr>
+<tr><td>R2,994,801 &ndash; R13,310,000</td><td>R106,784 + 11% on amount above R2,994,800</td></tr>
+<tr><td>R13,310,001+</td><td>R1,241,456 + 13% on amount above R13,310,000</td></tr>
+</table>
+</div>
+
+<div class="card tax">
+<h3>Other Key Tax Numbers</h3>
+<table>
+<tr><th>Item</th><th>Detail</th></tr>
+<tr><td>VAT</td><td>15%</td></tr>
+<tr><td>Dividends Withholding Tax</td><td>20% (deducted before dividend reaches you)</td></tr>
+<tr><td>Retirement fund deduction limit</td><td>27.5% of taxable income (or remuneration), capped at R430,000/year</td></tr>
+<tr><td>Medical credit: main member</td><td>R376/month</td></tr>
+<tr><td>Medical credit: 1st dependant</td><td>R376/month</td></tr>
+<tr><td>Medical credit: each additional</td><td>R254/month</td></tr>
+<tr><td>Interest exemption: under 65</td><td>R23,800/year</td></tr>
+<tr><td>Interest exemption: 65+</td><td>R34,500/year</td></tr>
+<tr><td>TFSA annual limit</td><td>R46,000</td></tr>
+<tr><td>TFSA lifetime limit</td><td>R500,000</td></tr>
+<tr><td>TFSA over-contribution penalty</td><td>40% on excess</td></tr>
+</table>
+</div>
+
+<div class="card tax">
+<h3>Key Changes for 2026/2027 at a Glance</h3>
+<table>
+<tr><th>Item</th><th>Old (2025/26)</th><th>New (2026/27)</th></tr>
+<tr><td>Primary rebate</td><td>R17,235</td><td>R17,820</td></tr>
+<tr><td>Threshold (under 65)</td><td>R95,750</td><td>R99,000</td></tr>
+<tr><td>CGT annual exclusion</td><td>R40,000</td><td>R50,000</td></tr>
+<tr><td>CGT primary residence exclusion</td><td>R2,000,000</td><td>R3,000,000</td></tr>
+<tr><td>Donations exemption</td><td>R100,000</td><td>R150,000</td></tr>
+<tr><td>Retirement fund deduction cap</td><td>R350,000</td><td>R430,000</td></tr>
+<tr><td>TFSA annual limit</td><td>R36,000</td><td>R46,000</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- WEEK 1: BEHAVIORAL FINANCE -->
+<!-- ============================================================ -->
+<div class="section" id="week1-behavioral">
+<h2 class="section-title"><span class="icon">&#129504;</span> Behavioral Finance: The Second Generation</h2>
+
+<div class="card behav">
+<h3>Normal vs. Rational Investors</h3>
+<p><strong>Standard finance</strong> says investors are <em>rational</em>: they only want more wealth, have perfect self-control, and are immune to all cognitive and emotional errors.</p>
+<p><strong>Second-generation behavioral finance</strong> says investors are <em>normal</em>: they have multiple wants, use shortcuts, and sometimes make errors &mdash; but they are NOT "irrational."</p>
+
+<h4>Three Types of Benefits from Every Financial Product</h4>
+<ol>
+<li><strong>Utilitarian:</strong> "What does this do for my wallet?"</li>
+<li><strong>Expressive:</strong> "What does this say about me to others?"</li>
+<li><strong>Emotional:</strong> "How does this make me feel?"</li>
+</ol>
+
+<h4>System 1 vs System 2 Thinking</h4>
+<table>
+<tr><th>System 1 (Fast)</th><th>System 2 (Slow)</th></tr>
+<tr><td>Intuitive, automatic</td><td>Deliberate, analytical</td></tr>
+<tr><td>Where shortcuts live</td><td>Where careful analysis happens</td></tr>
+<tr><td>Quick decisions</td><td>Complex reasoning</td></tr>
+</table>
+<div class="dummy-box"><strong>Key insight:</strong> Shortcuts are NOT always bad! They become <em>errors</em> only when they take people far from their best choice. A shortcut that saves time and gets you 90% there is efficient.</div>
+</div>
+
+<div class="card behav">
+<h3>Key Biases to Know</h3>
+<p><strong>Disposition Effect:</strong> Selling winners too early and holding losers too long (driven by pride and regret avoidance).</p>
+<p><strong>Mental Accounting:</strong> Framing wealth into distinct "buckets" (e.g., "spend dividends but don't dip into capital") as a self-control tool.</p>
+<p><strong>Cognitive Biases</strong> (errors in thinking) &mdash; CAN be fixed through education:</p>
+<ul>
+<li>Belief perseverance: conservatism, confirmation, representativeness, hindsight, illusion of control</li>
+<li>Information processing: anchoring, framing, availability, recency, mental accounting</li>
+</ul>
+<p><strong>Emotional Biases</strong> (based on feelings) &mdash; very HARD to change, must ADAPT to them:</p>
+<ul>
+<li>Loss aversion, overconfidence, self-control, status quo, endowment, regret aversion</li>
+</ul>
+</div>
+</div>
+
+<!-- GAMMA -->
+<div class="section" id="week1-gamma">
+<h2 class="section-title"><span class="icon">&#947;</span> Alpha, Beta &amp; Gamma (Blanchett &amp; Kaplan)</h2>
+
+<div class="card invest">
+<h3>The Three Greek Letters</h3>
+<table>
+<tr><th>Concept</th><th>What It Means</th><th>Who Gets It</th></tr>
+<tr><td><strong>Alpha</strong></td><td>Skill-based return from active management</td><td>Zero-sum game &mdash; hard to get consistently</td></tr>
+<tr><td><strong>Beta</strong></td><td>Return from systematic market risk (asset allocation)</td><td>Everyone who is invested</td></tr>
+<tr><td><strong>Gamma</strong></td><td>Value from intelligent financial planning decisions</td><td>Anyone following an efficient strategy</td></tr>
+</table>
+<p><strong>Gamma = +1.59% annual equivalent alpha</strong> (or 22.6% more certainty-equivalent retirement income).</p>
+
+<h4>The Five Gamma Factors</h4>
+<ol>
+<li><strong>Asset Location &amp; Withdrawal Sourcing:</strong> Put bonds in tax-deferred accounts, stocks in taxable accounts; withdraw from taxable first</li>
+<li><strong>Total Wealth Asset Allocation:</strong> Include human capital + Social Security as "bonds" in your total portfolio</li>
+<li><strong>Annuity Allocation:</strong> Hedge longevity risk with annuities (25% in their model)</li>
+<li><strong>Dynamic Withdrawal Strategy:</strong> Recalculate annually based on remaining life expectancy &mdash; NOT a static 4% rule</li>
+<li><strong>Liability-Relative Optimization:</strong> Optimise for goals, not just return &mdash; hedge inflation and funding risks</li>
+</ol>
+<div class="dummy-box"><strong>Key takeaway:</strong> Smart planning decisions (Gamma) are worth MORE than trying to beat the market (Alpha). And unlike Alpha, Gamma is available to everyone.</div>
+</div>
+</div>
+
+<!-- GOALS-BASED -->
+<div class="section" id="week1-goals">
+<h2 class="section-title"><span class="icon">&#127919;</span> Goals-Based Asset Allocation (CFA Institute)</h2>
+
+<div class="card invest">
+<h3>Core Concept: Minimum Expectations vs. Expected Returns</h3>
+<p>Goals-based investing breaks your portfolio into <strong>sub-portfolios</strong>, each matched to a specific goal with its own time horizon and required probability of success.</p>
+<div class="dummy-box"><strong>Critical insight:</strong> A portfolio with 7% expected return and 10% volatility over 5 years, at 90% confidence, only earns <strong>1.3% per year compounded</strong> (not 7%). The correct discount rate for funding goals must account for BOTH time horizon AND required probability.</div>
+
+<h4>The Process</h4>
+<ol>
+<li>Describe all client goals (cash flows, time horizons, required probability)</li>
+<li>Match each goal to a pre-optimised portfolio module</li>
+<li>Assess funding costs using <em>minimum expectations</em></li>
+<li>Allocate capital to each sub-portfolio</li>
+<li>Combine into overall portfolio</li>
+<li>Annual review</li>
+</ol>
+</div>
+</div>
+
+<!-- FPI -->
+<div class="section" id="week1-fpi">
+<h2 class="section-title"><span class="icon">&#128218;</span> FPI Financial Planner Competency Profile</h2>
+
+<div class="card behav">
+<h3>Three Pillars of Competence</h3>
+<table>
+<tr><th>Pillar</th><th>Description</th></tr>
+<tr><td>Knowledge</td><td>Financial Planning Body of Knowledge (6 components)</td></tr>
+<tr><td>Ability</td><td>Tasks performed: Collection, Analysis, Synthesis</td></tr>
+<tr><td>Skill</td><td>Professional skills: Responsibility, Practice, Communication, Cognitive</td></tr>
+</table>
+
+<h4>Six Financial Planning Components</h4>
+<ol>
+<li>Financial Management</li>
+<li>Asset Management</li>
+<li>Risk Management</li>
+<li>Tax Planning</li>
+<li>Retirement Planning</li>
+<li>Estate Planning</li>
+</ol>
+
+<h4>Core Abilities</h4>
+<ul>
+<li><strong>Collection:</strong> Gather quantitative (assets, liabilities, cash flows) AND qualitative data (attitudes, biases, risk tolerance)</li>
+<li><strong>Analysis:</strong> Assess adequacy, identify gaps, evaluate risk exposures</li>
+<li><strong>Synthesis:</strong> Develop strategies, evaluate pros/cons, optimise, prioritise action steps</li>
+</ul>
+</div>
+</div>
+
+<!-- LONG TERM -->
+<div class="section" id="week1-longterm">
+<h2 class="section-title"><span class="icon">&#128200;</span> Long-Term Perspectives (Old Mutual, 93 Years of SA Data)</h2>
+
+<div class="card invest">
+<h3>SA Real Returns Since 1929</h3>
+<table>
+<tr><th>Asset Class</th><th>R1 Grew To</th><th>Annualised Real Return</th></tr>
+<tr><td>Global Equity (ZAR)</td><td>R687</td><td>7.3%</td></tr>
+<tr><td>SA Equity</td><td>R638</td><td>7.2%</td></tr>
+<tr><td>Balanced Index</td><td>R175</td><td>5.7%</td></tr>
+<tr><td>Gold (ZAR)</td><td>R32</td><td>3.8%</td></tr>
+<tr><td>SA Bonds</td><td>R5</td><td>1.7%</td></tr>
+<tr><td>SA Cash</td><td>R2</td><td>0.8%</td></tr>
+</table>
+
+<h4>The Eight Lessons</h4>
+<ol>
+<li><strong>Inflation is your enemy</strong> &mdash; 6% inflation halves your money's purchasing power in ~12 years</li>
+<li><strong>Time is your friend</strong> &mdash; staying invested smooths short-term volatility</li>
+<li><strong>You need equities</strong> &mdash; only equities consistently deliver real (above-inflation) returns</li>
+<li><strong>Cash is trash</strong> &mdash; 0.8% real return means 88 years to double your real wealth</li>
+<li><strong>Compounding is powerful</strong> &mdash; at 13.7%/year, R1,000 becomes R13,000+ in 20 years</li>
+<li><strong>Don't miss out</strong> &mdash; missing the 10 best market days almost halves your savings</li>
+<li><strong>Diversify</strong> &mdash; the one free lunch in investing</li>
+<li><strong>Active allocation adds value</strong> &mdash; shifting between asset classes across cycles works</li>
+</ol>
+</div>
+</div>
+
+<!-- MIND THE GAP -->
+<div class="section" id="week1-gap">
+<h2 class="section-title"><span class="icon">&#9888;</span> Mind the Gap (Morningstar)</h2>
+
+<div class="card behav">
+<h3>The Behavioral Gap: -1.7% Per Year</h3>
+<p>Morningstar measured what investors ACTUALLY earned vs. what their funds earned over 10 years:</p>
+<table>
+<tr><th>Measure</th><th>Return</th></tr>
+<tr><td>Average fund total return</td><td>7.7% / year</td></tr>
+<tr><td>Average investor return</td><td>6.0% / year</td></tr>
+<tr><td><strong>Gap (behavioral drag)</strong></td><td><strong>-1.7% / year</strong></td></tr>
+</table>
+<div class="dummy-box"><strong>Why does this happen?</strong> Investors buy high and sell low. They chase past performance, panic during downturns, and time the market poorly. This costs them about one-fifth of what they could have earned by simply buying and holding.</div>
+
+<h4>Key Findings</h4>
+<ul>
+<li><strong>Allocation funds</strong> had the NARROWEST gap (-0.46%) &mdash; simple, diversified, easy to stick with</li>
+<li><strong>Sector equity funds</strong> had the WIDEST gap (-4%+) &mdash; volatile, narrow, tempting to chase</li>
+<li>Higher volatility = wider behavioral gap</li>
+<li>Dollar-cost averaging did NOT significantly help</li>
+</ul>
+</div>
+</div>
+
+<!-- BIT -->
+<div class="section" id="week1-bit">
+<h2 class="section-title"><span class="icon">&#128101;</span> Behavioral Investor Types (Pompian)</h2>
+
+<div class="card behav">
+<h3>The Four BITs</h3>
+<table>
+<tr><th>Type</th><th>Risk Tolerance</th><th>Bias Type</th><th>Key Biases</th><th>Adviser Approach</th></tr>
+<tr><td><strong>Conservative</strong></td><td>Low</td><td>Emotional</td><td>Loss aversion, status quo, endowment</td><td>Focus on big picture (family, security); build trust first</td></tr>
+<tr><td><strong>Moderate</strong></td><td>Medium</td><td>Cognitive</td><td>Recency, hindsight, framing, regret</td><td>Educate on diversification; challenge them to be introspective</td></tr>
+<tr><td><strong>Growth</strong></td><td>Medium-High</td><td>Cognitive</td><td>Confirmation, availability, self-attribution</td><td>Present disconfirming evidence; encourage due diligence</td></tr>
+<tr><td><strong>Aggressive</strong></td><td>Very High</td><td>Emotional</td><td>Overconfidence, self-control, affinity</td><td>Adapt to behaviour; focus on risk management</td></tr>
+</table>
+<div class="dummy-box"><strong>Pattern to remember:</strong> The LOWEST and HIGHEST risk tolerance types are emotionally biased. The MIDDLE types are cognitively biased. Cognitive biases can be fixed through education; emotional biases must be adapted to.</div>
+</div>
+</div>
+
+<!-- VANGUARD -->
+<div class="section" id="week1-vanguard">
+<h2 class="section-title"><span class="icon">&#128176;</span> Vanguard Advisor's Alpha (~3%)</h2>
+
+<div class="card invest">
+<h3>Seven Modules of Value-Add</h3>
+<table>
+<tr><th>Module</th><th>Value Added</th></tr>
+<tr><td>Asset Allocation</td><td>&gt;0 bps (significant but unique per client)</td></tr>
+<tr><td>Cost-Effective Implementation</td><td>~40 bps</td></tr>
+<tr><td>Rebalancing</td><td>~35 bps</td></tr>
+<tr><td><strong>Behavioral Coaching</strong></td><td><strong>~150 bps (LARGEST)</strong></td></tr>
+<tr><td>Asset Location (tax efficiency)</td><td>0&ndash;75 bps</td></tr>
+<tr><td>Withdrawal Order (spending strategy)</td><td>0&ndash;110 bps</td></tr>
+<tr><td>Total-Return vs. Income Investing</td><td>&gt;0 bps</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>~300 bps (~3%)</strong></td></tr>
+</table>
+<div class="dummy-box"><strong>The biggest takeaway:</strong> Behavioral coaching alone is worth ~1.5% per year. A single successful intervention during a bear market can offset YEARS of advisory fees. The adviser's job is to be an "emotional circuit breaker."</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- WEEK 2: CALCULATIONS -->
+<!-- ============================================================ -->
+<div class="section" id="week2-resultant">
+<h2 class="section-title"><span class="icon">&#128290;</span> The Resultant Rate Method</h2>
+
+<div class="card calc">
+<h3>The Core Formula</h3>
+<div class="formula-box">Resultant Rate = (Investment Return - Escalation Rate) / (1 + Escalation Rate)</div>
+<div class="dummy-box"><strong>What does this do?</strong> When payments grow each year (escalate with inflation), you can't use the normal interest rate in your calculator. The resultant rate strips out the effect of escalation so you can use a simple annuity calculation for growing payments.</div>
+
+<h4>The Three-Step Income-Stream Process</h4>
+<table>
+<tr><th>Step</th><th>What You Do</th><th>Calculator Mode</th><th>Rate Used</th></tr>
+<tr><td><strong>Step 1</strong></td><td>Grow today's payment to the future start date</td><td>END mode</td><td>Escalation rate (e.g., inflation)</td></tr>
+<tr><td><strong>Step 2</strong></td><td>Calculate capital needed at start of income period</td><td>BEGIN mode</td><td>Resultant Rate</td></tr>
+<tr><td><strong>Step 3</strong></td><td>Discount that capital back to today</td><td>END mode</td><td>Full investment return (NOT resultant)</td></tr>
+</table>
+<div class="dummy-box"><strong>Critical rule:</strong> The resultant rate is ONLY used in Step 2 (the income annuity). The accumulation step (Step 3) ALWAYS uses the full investment return rate &mdash; never a resultant rate.</div>
+</div>
+
+<div class="card calc">
+<h3>Worked Example: R10,000/month for 10 years, escalating at 7%</h3>
+<p>Return: 8% (years 1-5), 10% (years 6-10). Annual payment = R120,000.</p>
+
+<h4>Phase 1 (Years 1-5): BEGIN mode, 8% return</h4>
+<div class="example-box">
+<p>Resultant rate = (8 - 7) / 1.07 = <strong>0.9346%</strong></p>
+<p>PMT = 120,000 | N = 5 | I/YR = 0.9346</p>
+<p><strong>PV = R588,991</strong></p>
+</div>
+
+<h4>Phase 2 (Years 6-10): Three sub-steps</h4>
+<div class="example-box">
+<p><strong>Step 1:</strong> Inflate payment to Year 6: PV=120,000, I/YR=7, N=5 &rarr; FV = <strong>R168,306</strong></p>
+<p><strong>Step 2:</strong> Capital at Year 6 (BEGIN): PMT=168,306, N=5, I/YR = (10-7)/1.07 = 2.8037% &rarr; PV = <strong>R796,864</strong></p>
+<p><strong>Step 3:</strong> Discount to today (END): FV=796,864, I/YR=10, N=5 &rarr; PV = <strong>R494,790</strong></p>
+</div>
+<p><strong>Total Capital Needed: R588,991 + R494,790 = R1,083,781</strong></p>
+</div>
+
+<div class="card calc">
+<h3>Lump-Sum Capital Need (e.g., Holiday, Car)</h3>
+<div class="formula-box">Step 1: FV = PV x (1 + inflation)^N &nbsp; [grow at inflation]
+Step 2: PV = FV / (1 + return)^N &nbsp; [discount at investment return]</div>
+<div class="example-box">
+<p><strong>Example:</strong> Holiday in 5 years, current cost R180,000, inflation 7%, return 10%</p>
+<p>Step 1: FV = 180,000 x (1.07)^5 = <strong>R252,459</strong></p>
+<p>Step 2: PV = 252,459 / (1.10)^5 = <strong>R156,757</strong></p>
+</div>
+</div>
+</div>
+
+<!-- CNA -->
+<div class="section" id="week2-cna">
+<h2 class="section-title"><span class="icon">&#128202;</span> Capital Needs Analysis Examples</h2>
+
+<div class="card calc">
+<h3>Wilson Green Family Trust (Complex Multi-Need)</h3>
+<p>Available: R8,700,000 | Inflation: 6% | Returns: 8% (short), 11% (long), 10%/14% (capital)</p>
+<table>
+<tr><th>Need</th><th>Capital Required</th></tr>
+<tr><td>Sam's income (20 years, net of GGWT)</td><td>R1,332,691</td></tr>
+<tr><td>Alex's income (45 years)</td><td>R5,897,682</td></tr>
+<tr><td>Ad hoc capital (45 years)</td><td>R1,115,343</td></tr>
+<tr><td>Sam's car (10 years)</td><td>R138,090</td></tr>
+<tr><td>Alex's 3 cars (8, 18, 28 years)</td><td>R285,958</td></tr>
+<tr><td><strong>Total Required</strong></td><td><strong>R8,769,964</strong></td></tr>
+</table>
+
+<h4>Income Fund Selection (GG Will Trust &mdash; income only)</h4>
+<div class="formula-box">Units = Amount Invested / NAV per unit
+Annual Income = Units x CPU (cents per unit)</div>
+<table>
+<tr><th>Fund</th><th>Units from R1m</th><th>Annual Income</th></tr>
+<tr><td>Coronation Strategic Income</td><td>64,185</td><td>R71,874</td></tr>
+<tr><td>Investec Diversified Income</td><td>854,701</td><td>R71,453</td></tr>
+<tr><td><strong>Ashburton SA Income</strong></td><td>970,874</td><td><strong>R82,136 (best)</strong></td></tr>
+</table>
+</div>
+</div>
+
+<!-- RETIREMENT -->
+<div class="section" id="week2-retirement">
+<h2 class="section-title"><span class="icon">&#127796;</span> Retirement Capital Shortfall Analysis</h2>
+
+<div class="card calc">
+<h3>The Four-Step Framework</h3>
+<table>
+<tr><th>Step</th><th>What</th><th>How</th></tr>
+<tr><td>A</td><td>Capital Required at Retirement</td><td>Inflate income need to retirement + PV of annuity using resultant rate + lump sums</td></tr>
+<tr><td>B</td><td>Capital Available at Retirement</td><td>FV of current funds + FV of future contributions (use resultant rate for escalating contributions)</td></tr>
+<tr><td>C</td><td>Shortfall/Surplus</td><td>A minus B</td></tr>
+<tr><td>D</td><td>Investment to Eliminate Shortfall</td><td>Level PMT or escalating PMT (use resultant rate for escalating)</td></tr>
+</table>
+
+<h4>Converting After-Tax to Pre-Tax Income Need</h4>
+<div class="formula-box">Pre-tax income = After-tax income / (1 - effective tax rate)</div>
+
+<details>
+<summary>Full Worked Example: Ken Barrington</summary>
+<div class="example-box">
+<p>Age 40, retiring at 60. After-tax need R120,000/year for 20 years. Inflation 6%, post-retirement return 12%, pre-retirement return 10%, effective tax 20%.</p>
+
+<p><strong>Step A &mdash; Capital Required:</strong></p>
+<p>Pre-tax need = R120,000 / 0.80 = R150,000</p>
+<p>Inflate to retirement: PV=150,000, N=20, I=6% &rarr; FV = R481,070</p>
+<p>Capital for income (BEGIN): PMT=481,070, N=20, I=(12-6)/1.06 = 5.66% &rarr; PV = R5,994,536</p>
+<p>Car at retirement: PV=180,000, N=20, I=6% &rarr; FV = R577,284</p>
+<p><strong>Total Required: R6,571,820</strong></p>
+
+<p><strong>Step B &mdash; Capital Available:</strong></p>
+<p>Pension fund value: PV=420,000, N=20, I=10% &rarr; FV = R2,825,550</p>
+<p>Pension contributions (R31,500/yr escalating 6%): Resultant rate = 3.7736%</p>
+<p>PV of contributions (BEGIN): PMT=31,500, N=20, I=3.7736% &rarr; PV = R453,291</p>
+<p>FV of that: PV=453,291, N=20, I=10% &rarr; FV = R3,049,515</p>
+<p>RA: R150,000</p>
+<p><strong>Total Available: R6,025,065</strong></p>
+
+<p><strong>Step C: Shortfall = R6,571,820 - R6,025,065 = R546,755</strong></p>
+
+<p><strong>Step D &mdash; Level investment:</strong> FV=546,755, N=20, I=10% &rarr; PMT = R8,678/year</p>
+<p><strong>Escalating investment:</strong> PV of shortfall = R81,271; PMT at resultant 3.7736% &rarr; R5,648/year (first year, escalating at 6%)</p>
+</div>
+</details>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- WEEK 3: FEES & PRODUCTS -->
+<!-- ============================================================ -->
+<div class="section" id="week3-fees">
+<h2 class="section-title"><span class="icon">&#128181;</span> Fees: TER, TC &amp; EAC</h2>
+
+<div class="card fund">
+<h3>Fee Hierarchy</h3>
+<table>
+<tr><th>Acronym</th><th>Full Name</th><th>What It Measures</th><th>Direction</th></tr>
+<tr><td><strong>TER</strong></td><td>Total Expense Ratio</td><td>All admin expenses as % of daily NAV (3-year rolling, annualised)</td><td>Backward-looking</td></tr>
+<tr><td><strong>TC</strong></td><td>Transaction Costs</td><td>Costs of buying/selling underlying assets as % of NAV</td><td>Backward-looking</td></tr>
+<tr><td><strong>TIC</strong></td><td>Total Investment Charge</td><td>TER + TC (shown on the MDD)</td><td>Backward-looking</td></tr>
+<tr><td><strong>EAC</strong></td><td>Effective Annual Cost</td><td>Total charges (IMC + Advice + Admin + Other) as annualised reduction in yield</td><td>Forward-looking</td></tr>
+</table>
+
+<h4>TER Includes</h4>
+<ul>
+<li>Management fees (fixed and performance)</li>
+<li>Admin costs, custody fees, trustee fees, audit fees, bank charges, taxes</li>
+<li>Underlying fund expenses for fund-of-funds</li>
+</ul>
+<p><strong>TER Excludes:</strong> All transaction costs; scrip lending fees earned</p>
+
+<h4>EAC Components</h4>
+<div class="formula-box">EAC[total] = EAC[IMC] + EAC[Advice] + EAC[Admin] + EAC[Other]</div>
+<p>Disclosed at 1, 3, 5 years, and end of term. Uses RIY (Reduction in Yield) methodology. Prescribed growth rate: 6% effective per annum.</p>
+<div class="dummy-box"><strong>TER vs EAC:</strong> TER looks BACKWARD (what was spent). EAC looks FORWARD (what will be spent). TER is a component of EAC through the Investment Management Charge.</div>
+</div>
+</div>
+
+<!-- MDD -->
+<div class="section" id="week3-mdd">
+<h2 class="section-title"><span class="icon">&#128196;</span> Reading Minimum Disclosure Documents (MDDs)</h2>
+
+<div class="card fund">
+<h3>Key Elements on an MDD</h3>
+<ul>
+<li><strong>Fund objective:</strong> What the fund aims to achieve</li>
+<li><strong>Benchmark:</strong> The index/rate the fund is measured against</li>
+<li><strong>Fund category (ASISA):</strong> Three-tier: Geographic &rarr; Asset Type &rarr; Sub-category</li>
+<li><strong>Risk profile:</strong> Low / Medium / High</li>
+<li><strong>Minimum investment term:</strong> Recommended holding period</li>
+<li><strong>TIC (TER + TC):</strong> Average annual cost over 3 years</li>
+<li><strong>Performance data:</strong> 1yr, 3yr, 5yr, 10yr (annualised)</li>
+<li><strong>Standard deviation:</strong> Measure of return volatility</li>
+</ul>
+<div class="dummy-box"><strong>Remember:</strong> Expenses on MDDs are ALWAYS expressed on an annualised basis, regardless of the measurement period.</div>
+</div>
+</div>
+
+<!-- FUND MATCHING -->
+<div class="section" id="week3-funds">
+<h2 class="section-title"><span class="icon">&#127919;</span> Fund Matching Framework</h2>
+
+<div class="card fund">
+<h3>Match the Fund to the Need</h3>
+<table>
+<tr><th>Time Horizon</th><th>Risk Level</th><th>Target Return</th><th>Suitable Fund Type</th></tr>
+<tr><td>0&ndash;3 years (income)</td><td>Low</td><td>CPI to CPI+2%</td><td>Money market, high interest, short-duration bond</td></tr>
+<tr><td>3&ndash;5 years (capital)</td><td>Low-Medium</td><td>CPI+2% to CPI+4%</td><td>Stable/cautious multi-asset (max ~40% equity)</td></tr>
+<tr><td>5&ndash;7 years (growth)</td><td>Medium</td><td>CPI+4% to CPI+5%</td><td>Balanced/high equity multi-asset (up to 75% equity)</td></tr>
+<tr><td>7&ndash;10+ years (wealth)</td><td>High</td><td>Aggressive</td><td>Pure equity or high-equity funds</td></tr>
+</table>
+<div class="dummy-box"><strong>Key principle:</strong> Longer horizon = more risk capacity. But MORE IMPORTANT needs (like essential income) require LESS risk than discretionary needs (like holidays), even at the same horizon.</div>
+</div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="section" id="week3-products">
+<h2 class="section-title"><span class="icon">&#128230;</span> Investment Products (SA)</h2>
+
+<div class="card fund">
+<h3>Comparison of Discretionary Vehicles</h3>
+<table>
+<tr><th>Feature</th><th>Unit Trust (CIS)</th><th>Endowment</th><th>Sinking Fund</th><th>TFSA</th></tr>
+<tr><td>Liquidity</td><td>3-4 working days</td><td>5-year restriction</td><td>5-year restriction</td><td>Accessible (overrides vehicle rules)</td></tr>
+<tr><td>Tax on income</td><td>In investor's hands</td><td>30% (insurer pays)</td><td>30% (insurer pays)</td><td>TAX-FREE</td></tr>
+<tr><td>CGT</td><td>40% inclusion (individual)</td><td>12% effective (insurer)</td><td>12% effective (insurer)</td><td>TAX-FREE</td></tr>
+<tr><td>On death</td><td>In estate; executor's fees</td><td>Beneficiary gets proceeds; no executor's fees</td><td>Beneficiary gets ownership; no executor's fees</td><td>Depends on vehicle type</td></tr>
+<tr><td>Creditor protection</td><td>None</td><td>Yes (Section 63)</td><td>No</td><td>Depends on vehicle</td></tr>
+<tr><td>Life assured</td><td>N/A</td><td>Yes (required)</td><td>No</td><td>N/A</td></tr>
+</table>
+
+<div class="dummy-box"><strong>Key insight about TFSAs:</strong> A TFSA is NOT its own vehicle type. It is ALWAYS housed inside one of the other vehicles (unit trust, endowment, sinking fund, or bank deposit). The TFSA rules on accessibility OVERRIDE vehicle-specific restrictions like the 5-year endowment lock-in.</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- WEEK 4: ASSET CLASSES -->
+<!-- ============================================================ -->
+<div class="section" id="week4-returns">
+<h2 class="section-title"><span class="icon">&#128200;</span> Measures of Return</h2>
+
+<div class="card calc">
+<h3>Key Return Formulas</h3>
+
+<div class="formula-box">Holding Period Return (HPR) = (Capital gain/loss + Income) / Start value</div>
+<div class="formula-box">Annual HPR (EAR) = (1 + HPR)^(365/days) - 1</div>
+
+<div class="example-box">
+<p><strong>Example:</strong> Buy unit trust at R325, sell at R328, receive R3.50 dividend. Held 59 days.</p>
+<p>HPR = (3 + 3.50) / 325 = 2%</p>
+<p>Annual HPR = (1.02)^(365/59) - 1 = <strong>13.03%</strong></p>
+</div>
+
+<h4>Comparing Different Holding Periods</h4>
+<div class="example-box">
+<p>Fund A: R100 to R150 + R5 dividends over 3 years. Fund B: R200 to R320 + R10 over 4 years.</p>
+<p>HPR A = 55% | HPR B = 65%</p>
+<p>EAR A = (1.55)^(1/3) - 1 = <strong>15.73%</strong> | EAR B = (1.65)^(1/4) - 1 = <strong>13.34%</strong></p>
+<p><strong>Fund A wins</strong> on an annualised basis despite lower total HPR.</p>
+</div>
+</div>
+</div>
+
+<!-- RISK -->
+<div class="section" id="week4-risk">
+<h2 class="section-title"><span class="icon">&#9888;</span> Measures of Risk</h2>
+
+<div class="card calc">
+<h3>Sharpe Ratio</h3>
+<div class="formula-box">Sharpe Ratio = (Portfolio return - Risk-free rate) / Standard deviation of portfolio</div>
+<div class="dummy-box"><strong>What it tells you:</strong> How much EXTRA return you earned for each unit of TOTAL risk. Higher = better. Negative = you earned less than the risk-free rate.</div>
+
+<h4>Other Risk Measures</h4>
+<table>
+<tr><th>Measure</th><th>What It Measures</th><th>Interpretation</th></tr>
+<tr><td>Standard Deviation</td><td>Total volatility of returns</td><td>Higher = more volatile = more risky</td></tr>
+<tr><td>Beta</td><td>Sensitivity to market movements</td><td>1.15 = 15% more volatile than market; 0.85 = less volatile</td></tr>
+<tr><td>Alpha</td><td>Excess return above benchmark</td><td>Positive = manager added value</td></tr>
+<tr><td>Treynor Ratio</td><td>Return per unit of systematic (beta) risk</td><td>Higher = better risk-adjusted return</td></tr>
+<tr><td>Sortino Ratio</td><td>Return per unit of downside risk only</td><td>Higher = better; ignores upside volatility</td></tr>
+</table>
+</div>
+</div>
+
+<!-- MONEY MARKET -->
+<div class="section" id="week4-money">
+<h2 class="section-title"><span class="icon">&#128178;</span> Money Market Instruments</h2>
+
+<div class="card calc">
+<h3>Interest Rate vs Discount Instruments</h3>
+<table>
+<tr><th></th><th>Interest Rate (e.g., NCD)</th><th>Discount (e.g., Treasury Bill)</th></tr>
+<tr><td>How it works</td><td>Buy at face value, earn interest on top</td><td>Buy BELOW face value, redeem AT face value</td></tr>
+<tr><td>Rate convention</td><td>NACQ (quarterly)</td><td>NACA (annual)</td></tr>
+<tr><td>Examples</td><td>NCDs, short-term debentures</td><td>Treasury Bills, Land Bank Bills</td></tr>
+</table>
+
+<h4>NCD (Interest Rate Instrument)</h4>
+<div class="formula-box">Maturity Value = Amount x [1 + (Days/365) x (Rate/100)]</div>
+<div class="example-box">
+<p>R1,000,000 NCD, 90 days, 13%:</p>
+<p>= 1,000,000 x [1 + (90/365) x 0.13] = <strong>R1,032,050</strong></p>
+</div>
+
+<h4>Treasury Bill / Discount Instrument</h4>
+<div class="formula-box">Price = Face Value - [Face Value x Discount Rate x (Days/365)]
+Nominal Yield = (Discount / Price) x (365 / Days)
+EAR = [1 + Yield x (Days/365)]^(365/Days) - 1</div>
+<div class="example-box">
+<p>TB: Face R100, discount rate 8%, 91 days:</p>
+<p>Price = 100 - 100 x 0.08 x 91/365 = <strong>R98.01</strong></p>
+<p>Nominal Yield = (1.99/98.01) x (365/91) = <strong>8.14%</strong></p>
+<p>EAR = [1 + 0.0814 x 91/365]^(365/91) - 1 = <strong>8.39%</strong></p>
+</div>
+</div>
+</div>
+
+<!-- BONDS -->
+<div class="section" id="week4-bonds">
+<h2 class="section-title"><span class="icon">&#128203;</span> Bonds</h2>
+
+<div class="card calc">
+<h3>Bond Pricing (Calculator Method)</h3>
+<p>FV = face value | PMT = coupon payment | I/YR = current yield | N = years to maturity | PV = price</p>
+
+<div class="example-box">
+<p><strong>Annual coupon:</strong> R1,000,000 face, 9% coupon, 5 years, 7.5% yield</p>
+<p>PMT = 90,000 | FV = 1,000,000 | I = 7.5 | N = 5</p>
+<p><strong>PV = R1,060,688</strong> (premium &mdash; because coupon &gt; yield)</p>
+</div>
+
+<h4>Bond Yield Types</h4>
+<table>
+<tr><th>Yield Type</th><th>Formula</th></tr>
+<tr><td>Nominal Yield</td><td>= Coupon rate</td></tr>
+<tr><td>Current Yield</td><td>= Annual coupon / Market price</td></tr>
+<tr><td>Yield to Maturity</td><td>= IRR of all cash flows (solve for I/YR on calculator)</td></tr>
+</table>
+<div class="dummy-box"><strong>Rule:</strong> When coupon rate &gt; current yield, bond trades at a PREMIUM. When coupon rate &lt; current yield, bond trades at a DISCOUNT.</div>
+</div>
+</div>
+
+<!-- DDM -->
+<div class="section" id="week4-ddm">
+<h2 class="section-title"><span class="icon">&#128201;</span> Dividend Discount Model (DDM)</h2>
+
+<div class="card calc">
+<h3>Gordon Growth Model (Constant Growth)</h3>
+<div class="formula-box">Share Price = DPS1 / (k - g)
+
+where: DPS1 = expected dividend next year
+       k = required rate of return
+       g = constant growth rate</div>
+<div class="example-box">
+<p>DPS1 = R1.50, k = 12%, g = 5%</p>
+<p>Price = 1.50 / (0.12 - 0.05) = <strong>R21.43</strong></p>
+</div>
+
+<h3>Two-Stage DDM</h3>
+<div class="formula-box">V0 = SUM[DPSt/(1+k)^t] + Pn/(1+k)^n
+
+Terminal Value: Pn = DPS(n+1) / (k - gn)</div>
+
+<details>
+<summary>Full Two-Stage DDM Worked Example</summary>
+<div class="example-box">
+<p><strong>Given:</strong> D1 = R1.20, Year 2 growth = 12%, perpetual growth = 3%, k = 10%</p>
+<p><strong>Step 1 &mdash; Dividends:</strong></p>
+<p>D1 = R1.20 | D2 = 1.20 x 1.12 = R1.344 | D3 = 1.344 x 1.03 = R1.38432</p>
+<p><strong>Step 2 &mdash; Terminal Value at Year 2:</strong></p>
+<p>V2 = 1.38432 / (0.10 - 0.03) = <strong>R19.776</strong></p>
+<p><strong>Step 3 &mdash; Intrinsic Value:</strong></p>
+<p>V0 = 1.20/1.1 + (1.344 + 19.776)/1.21</p>
+<p>V0 = 1.0909 + 17.4545 = <strong>R18.55</strong></p>
+</div>
+</details>
+
+<h3>Equity Relative Valuation</h3>
+<div class="formula-box">P/E Ratio = Price per share / EPS
+Earnings Yield = (EPS / Price) x 100
+Dividend Yield = (DPS / Price) x 100</div>
+<div class="dummy-box"><strong>Note:</strong> P/E and Earnings Yield are INVERSES of each other. Convert EPS/DPS from cents to rands by dividing by 100.</div>
+</div>
+</div>
+
+<!-- DERIVATIVES -->
+<div class="section" id="week4-derivatives">
+<h2 class="section-title"><span class="icon">&#128293;</span> Derivatives: Futures &amp; Options</h2>
+
+<div class="card calc">
+<h3>Options Quick Reference</h3>
+<table>
+<tr><th>Position</th><th>Market View</th><th>Best Case</th><th>Worst Case</th></tr>
+<tr><td><strong>Long Call</strong> (buy right to BUY)</td><td>Bullish (price rises)</td><td>Unlimited profit</td><td>Lose premium only</td></tr>
+<tr><td><strong>Long Put</strong> (buy right to SELL)</td><td>Bearish (price falls)</td><td>Strike - market - premium</td><td>Lose premium only</td></tr>
+<tr><td><strong>Short Call</strong> (sell right to BUY)</td><td>Bearish (price falls)</td><td>Keep premium</td><td>Unlimited loss</td></tr>
+<tr><td><strong>Short Put</strong> (sell right to SELL)</td><td>Bullish (price rises)</td><td>Keep premium</td><td>Strike - market - premium</td></tr>
+</table>
+
+<h4>Futures: Mark-to-Market</h4>
+<div class="dummy-box"><strong>Key terms:</strong> Initial margin = deposit paid upfront. Maintenance margin = minimum account balance (typically 80% of initial). If your account drops below maintenance margin, you get a margin call and must top up to initial margin level.</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- WEEK 5: REPORTS & RISK PROFILING -->
+<!-- ============================================================ -->
+<div class="section" id="week5-reports">
+<h2 class="section-title"><span class="icon">&#128221;</span> Investment Planning Report Writing</h2>
+
+<div class="card invest">
+<h3>Report Structure Template</h3>
+<ol>
+<li>Opening salutation / introduction</li>
+<li>Summary of client information gathered</li>
+<li>Client objectives, needs, and priorities</li>
+<li>Investment planning approach</li>
+<li>For EACH goal:
+  <ul>
+    <li>Investment vehicle recommendation + motivation (1 mark)</li>
+    <li>Investment strategy + motivation (2 marks)</li>
+    <li>Funds considered + recommended fund with reasons (2 marks)</li>
+    <li>Tax consequences (1 mark)</li>
+  </ul>
+</li>
+<li>Consolidated recommendations table</li>
+<li>Next steps (implementation and review)</li>
+<li>Annexures with detailed calculations</li>
+</ol>
+
+<h4>Two-Component Framework</h4>
+<table>
+<tr><th>Decision</th><th>Question</th><th>Examples</th></tr>
+<tr><td><strong>Investment Vehicle</strong></td><td>WHERE do we invest?</td><td>Unit trust, endowment, RA, TFSA, sinking fund</td></tr>
+<tr><td><strong>Investment Strategy</strong></td><td>HOW do we invest?</td><td>CPI+2% (conservative), CPI+4% (moderate), CPI+6% (aggressive)</td></tr>
+</table>
+
+<h4>Tax Efficiency Ladder</h4>
+<p>From most to least tax-efficient for high marginal rate taxpayers:</p>
+<ol>
+<li><strong>Retirement Annuity</strong> &mdash; deductible contributions, tax-free growth</li>
+<li><strong>TFSA</strong> &mdash; completely tax-free growth (but limited contributions)</li>
+<li><strong>Endowment / Sinking Fund</strong> &mdash; 30% income tax, 12% effective CGT (better than 45%/18%)</li>
+<li><strong>Unit Trust / Direct</strong> &mdash; full marginal rate on income, 18% effective CGT at 45% marginal</li>
+</ol>
+</div>
+</div>
+
+<!-- RISK PROFILING -->
+<div class="section" id="week5-risk">
+<h2 class="section-title"><span class="icon">&#127919;</span> Risk Profiling (Geoff Davey / FinaMetrica)</h2>
+
+<div class="card behav">
+<h3>The Three Components of Risk</h3>
+<table>
+<tr><th>Component</th><th>Type</th><th>What It Measures</th><th>How to Assess</th></tr>
+<tr><td><strong>Risk Required</strong></td><td>Financial</td><td>Risk associated with the return needed to achieve goals</td><td>Financial planning software</td></tr>
+<tr><td><strong>Risk Capacity</strong></td><td>Financial</td><td>How much the plan can withstand if things go wrong</td><td>Monte Carlo / stochastic modelling</td></tr>
+<tr><td><strong>Risk Tolerance</strong></td><td>Psychological</td><td>How the client FEELS about taking risk</td><td>Psychometric questionnaire</td></tr>
+</table>
+<div class="dummy-box"><strong>Critical rule:</strong> These three must ALWAYS be assessed separately. Conflating them into a single score is a fundamental flaw that most firms still make.</div>
+
+<h4>Mismatch Resolution</h4>
+<table>
+<tr><th>Scenario (60% of cases)</th><th>Problem</th><th>Resolution Options</th></tr>
+<tr><td><strong>Undershoot</strong></td><td>Risk tolerance &lt; risk required</td><td>Lower the goal, delay it, save more, convert assets, or stretch tolerance slightly</td></tr>
+<tr><td><strong>Aligned</strong> (30%)</td><td>All three match</td><td>Proceed as planned</td></tr>
+<tr><td><strong>Overshoot</strong> (10%)</td><td>Risk tolerance &gt; risk required</td><td>Add/increase/accelerate goals, accept less volatility</td></tr>
+</table>
+<div class="dummy-box"><strong>Key principle:</strong> Mismatch resolution is the CLIENT's decision, not the adviser's. The adviser illustrates alternatives and guides &mdash; the client decides based on their own values.</div>
+
+<h4>Common Risk Profiling Mistakes</h4>
+<ul>
+<li>Ignoring risk capacity entirely (most common single mistake)</li>
+<li>Relying on interview alone &mdash; advisers' estimates correlate at only ~0.4 with actual risk tolerance</li>
+<li>Couples completing a single questionnaire jointly instead of separately</li>
+<li>Overweighting time horizon ("longer = safer" is misleading)</li>
+<li>Using simplistic questionnaires just for compliance</li>
+<li>Not identifying or resolving mismatches</li>
+</ul>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MASTER FORMULA SHEET -->
+<!-- ============================================================ -->
+<div class="section" id="formulas">
+<h2 class="section-title"><span class="icon">&#128209;</span> Master Formula Reference Sheet</h2>
+
+<div class="card calc">
+<h3>Capital Needs Analysis</h3>
+<div class="formula-box">Resultant Rate = (Investment Return - Escalation) / (1 + Escalation)
+
+Pre-tax Income = After-tax Income / (1 - Tax Rate)
+
+Three-Step Income Stream:
+  Step 1: PV &rarr; FV at escalation rate (grow payment to future date)
+  Step 2: PMT &rarr; PV at resultant rate, BEGIN mode (capital at income start)
+  Step 3: FV &rarr; PV at investment return, END mode (capital needed today)
+
+Lump-Sum Capital Need:
+  Step 1: PV &rarr; FV at inflation
+  Step 2: FV &rarr; PV at investment return
+
+Escalating Investment to Eliminate Shortfall:
+  Step 1: FV &rarr; PV at investment return
+  Step 2: PV &rarr; PMT at resultant rate, BEGIN mode</div>
+</div>
+
+<div class="card calc">
+<h3>Returns &amp; Risk</h3>
+<div class="formula-box">HPR = (Capital Gain + Income) / Start Value
+Annual HPR = (1 + HPR)^(365/days) - 1
+Sharpe Ratio = (Return - Rf) / Std Dev</div>
+</div>
+
+<div class="card calc">
+<h3>Money Market</h3>
+<div class="formula-box">NCD Maturity Value = Amount x [1 + (Days/365) x Rate]
+
+TB Price = Face Value - [Face Value x Discount Rate x (Days/365)]
+TB Nominal Yield = (Discount / Price) x (365 / Days)
+TB EAR = [1 + Yield x (Days/365)]^(365/Days) - 1</div>
+</div>
+
+<div class="card calc">
+<h3>Bonds &amp; Equities</h3>
+<div class="formula-box">Bond Price: FV, PMT (coupon), I (yield), N &rarr; solve PV
+Current Yield = Annual Coupon / Market Price
+YTM: solve for I/YR given PV, PMT, FV, N
+
+Gordon Growth: P = DPS1 / (k - g)
+Two-Stage DDM: V0 = &Sigma;[DPSt/(1+k)^t] + [DPS(n+1)/(k-g)] / (1+k)^n
+
+P/E = Price / EPS
+Earnings Yield = EPS / Price
+Dividend Yield = DPS / Price</div>
+</div>
+
+<div class="card calc">
+<h3>Fund Analysis</h3>
+<div class="formula-box">Units Purchased = Capital Invested / NAV per unit
+Annual Income = Units x CPU (cents per unit)
+TIC = TER + TC
+EAC = EAC(IMC) + EAC(Advice) + EAC(Admin) + EAC(Other)</div>
+</div>
+</div>
+
+<!-- EXAM TIPS -->
+<div class="section" id="exam-tips">
+<h2 class="section-title"><span class="icon">&#9989;</span> Exam Tips &amp; Key Rules</h2>
+
+<div class="card invest">
+<h3>Calculator &amp; Calculation Rules</h3>
+<ol>
+<li><strong>Always use BEGIN mode</strong> for income annuities (payments received at start of period)</li>
+<li><strong>Never use resultant rate in the accumulation step</strong> (Step 3 always uses full investment return)</li>
+<li><strong>Split income phases</strong> whenever different return rates apply to different time periods</li>
+<li><strong>Education costs escalate faster</strong> than general inflation (typically 8-9% vs 5-7%)</li>
+<li><strong>Use 365 days</strong> for all SA money market calculations</li>
+<li><strong>NCD rates are NACQ</strong>; Discount instrument rates are NACA</li>
+<li><strong>Convert EPS/DPS from cents to rands</strong> by dividing by 100</li>
+</ol>
+</div>
+
+<div class="card invest">
+<h3>Report Writing Rules</h3>
+<ol>
+<li>Vehicle choice and strategy are SEPARATE decisions</li>
+<li>Trust constraints matter: income-only trusts CANNOT make capital withdrawals</li>
+<li>Always state tax consequences for each recommendation</li>
+<li>Consider risk capacity AND time horizon when selecting return assumptions</li>
+<li>A financial plan is a living document &mdash; emphasise ongoing review</li>
+<li>Maximum 10 pages; Arial 12pt, 1.5 line spacing; client-specific, not generic</li>
+</ol>
+</div>
+</div>
+
+</div><!-- end main-content -->
+
+<script>
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? '' : 'dark');
+  localStorage.setItem('theme', html.getAttribute('data-theme'));
+}
+if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+// Search
+document.getElementById('searchBox').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.card').forEach(c => {
+    c.style.display = !q || c.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+// Expand/Collapse
+function expandAll() { document.querySelectorAll('details').forEach(d => d.open = true); }
+function collapseAll() { document.querySelectorAll('details').forEach(d => d.open = false); }
+
+// Progress tracking
+const sections = document.querySelectorAll('.section');
+const observer = new IntersectionObserver(entries => {
+  let maxRatio = 0;
+  entries.forEach(e => { if (e.intersectionRatio > maxRatio) maxRatio = e.intersectionRatio; });
+  const scrollPct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+  document.getElementById('progress-pct').textContent = scrollPct + '%';
+  document.getElementById('progress-fill').style.width = scrollPct + '%';
+}, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+sections.forEach(s => observer.observe(s));
+window.addEventListener('scroll', () => {
+  const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+  document.getElementById('progress-pct').textContent = Math.min(pct, 100) + '%';
+  document.getElementById('progress-fill').style.width = Math.min(pct, 100) + '%';
+});
+
+// Active nav
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (s.getBoundingClientRect().top < 200) current = s.id; });
+  document.querySelectorAll('.sidebar-nav a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>
