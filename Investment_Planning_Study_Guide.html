@@ -1149,5 +1149,591 @@ window.addEventListener('scroll', () => {
 });
 </script>
 
+<!-- ==================== STUDY TOOLS: Highlighter / Flagger / Ask Claude ==================== -->
+<style>
+/* Selection toolbar */
+.st-toolbar {
+  position: absolute;
+  z-index: 2000;
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 5px;
+  display: none;
+  gap: 3px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  white-space: nowrap;
+  align-items: center;
+}
+.st-toolbar.visible { display: flex; }
+.st-toolbar button {
+  background: transparent;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: inherit;
+}
+.st-toolbar button:hover { background: rgba(255,255,255,0.15); }
+.st-color-btn {
+  width: 24px !important; height: 24px !important;
+  border: 2px solid rgba(255,255,255,0.3) !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  transition: transform 0.1s;
+}
+.st-color-btn:hover { border-color: #fff !important; transform: scale(1.1); }
+.st-color-yellow { background: #fef08a !important; }
+.st-color-green { background: #86efac !important; }
+.st-color-pink { background: #f9a8d4 !important; }
+.st-color-blue { background: #93c5fd !important; }
+.st-toolbar .st-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.25); margin: 0 2px; }
+
+/* Highlight styles */
+.user-highlight {
+  padding: 1px 2px;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #000 !important;
+}
+.user-highlight.color-yellow { background: #fef08a; }
+.user-highlight.color-green { background: #86efac; }
+.user-highlight.color-pink { background: #f9a8d4; }
+.user-highlight.color-blue { background: #93c5fd; }
+
+/* Notes panel */
+.st-panel {
+  position: fixed;
+  top: 0;
+  right: -440px;
+  width: 420px;
+  max-width: 90vw;
+  height: 100vh;
+  background: #ffffff;
+  color: #1a1a2e;
+  border-left: 1px solid #d1d5db;
+  box-shadow: -4px 0 18px rgba(0,0,0,0.18);
+  z-index: 1500;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  padding: 20px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+[data-theme="dark"] .st-panel { background: #1e293b; color: #e2e8f0; border-left-color: #334155; }
+.st-panel.open { right: 0; }
+.st-panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 14px; margin-bottom: 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+[data-theme="dark"] .st-panel-header { border-bottom-color: #334155; }
+.st-panel-header h3 { font-size: 1.1rem; margin: 0; color: inherit; border: none; padding: 0; }
+.st-panel-close {
+  background: transparent; border: none; font-size: 1.6rem;
+  cursor: pointer; color: inherit; line-height: 1; padding: 0 6px;
+}
+.st-panel-actions { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.st-panel-actions button {
+  padding: 6px 12px; font-size: 0.76rem; font-weight: 600;
+  background: #f3f4f6; border: 1px solid #d1d5db;
+  border-radius: 4px; cursor: pointer; color: inherit;
+  font-family: inherit;
+}
+.st-panel-actions button:hover { background: #e5e7eb; }
+[data-theme="dark"] .st-panel-actions button {
+  background: #334155; border-color: #475569; color: #e2e8f0;
+}
+[data-theme="dark"] .st-panel-actions button:hover { background: #475569; }
+.st-item {
+  background: #f9fafb;
+  border-left: 3px solid #f59e0b;
+  padding: 10px 30px 10px 14px;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  line-height: 1.45;
+  position: relative;
+}
+[data-theme="dark"] .st-item { background: #0f172a; }
+.st-item:hover { background: #f3f4f6; }
+[data-theme="dark"] .st-item:hover { background: #1e293b; }
+.st-item.flag { border-left-color: #dc2626; }
+.st-item.color-yellow { border-left-color: #eab308; }
+.st-item.color-green { border-left-color: #16a34a; }
+.st-item.color-pink { border-left-color: #ec4899; }
+.st-item.color-blue { border-left-color: #2563eb; }
+.st-item .delete {
+  position: absolute; top: 6px; right: 8px;
+  background: transparent; border: none; font-size: 0.95rem;
+  color: #dc2626; cursor: pointer; padding: 2px 5px;
+  line-height: 1; border-radius: 3px;
+}
+.st-item .delete:hover { background: rgba(220,38,38,0.1); }
+.st-item .section-ref {
+  font-size: 0.7rem; color: #6b7280; font-weight: 600;
+  margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px;
+}
+[data-theme="dark"] .st-item .section-ref { color: #94a3b8; }
+.st-item-ask {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: #2563eb;
+  background: transparent;
+  border: 1px solid #2563eb;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+}
+.st-item-ask:hover { background: #2563eb; color: #fff; }
+[data-theme="dark"] .st-item-ask { color: #60a5fa; border-color: #60a5fa; }
+[data-theme="dark"] .st-item-ask:hover { background: #60a5fa; color: #0f172a; }
+.st-empty { color: #6b7280; padding: 24px 12px; text-align: center; font-size: 0.88rem; line-height: 1.6; }
+[data-theme="dark"] .st-empty { color: #94a3b8; }
+.st-section-heading {
+  margin: 12px 0 8px; font-size: 0.82rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Notes toggle button */
+.st-toggle {
+  position: fixed;
+  bottom: 80px; right: 20px;
+  z-index: 1400;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff; border: none;
+  font-size: 1.4rem; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  transition: transform 0.15s;
+}
+.st-toggle:hover { transform: scale(1.08); }
+.st-toggle .count {
+  position: absolute; top: -5px; right: -5px;
+  background: #dc2626; color: #fff;
+  border-radius: 12px; padding: 2px 7px;
+  font-size: 0.68rem; font-weight: 800;
+  border: 2px solid #fff;
+}
+
+/* Toast */
+.st-toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b; color: #fff;
+  padding: 12px 22px; border-radius: 8px;
+  font-size: 0.88rem; font-weight: 500; z-index: 3000;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s, transform 0.22s;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  max-width: 90vw;
+  text-align: center;
+}
+.st-toast.visible { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+@media (max-width: 900px) {
+  .st-toggle { bottom: 78px; right: 12px; width: 44px; height: 44px; font-size: 1.2rem; }
+}
+
+@media print {
+  .st-toolbar, .st-panel, .st-toggle, .st-toast { display: none !important; }
+  .user-highlight { background: transparent !important; border-bottom: 1.5px dashed #000; padding: 0; }
+}
+</style>
+
+<div class="st-toolbar" id="stToolbar">
+  <button onclick="stHighlight('yellow')" class="st-color-btn st-color-yellow" title="Highlight yellow"></button>
+  <button onclick="stHighlight('green')" class="st-color-btn st-color-green" title="Highlight green"></button>
+  <button onclick="stHighlight('pink')" class="st-color-btn st-color-pink" title="Highlight pink"></button>
+  <button onclick="stHighlight('blue')" class="st-color-btn st-color-blue" title="Highlight blue"></button>
+  <div class="st-sep"></div>
+  <button onclick="stFlag()" title="Flag for review">🚩 Flag</button>
+  <button onclick="stAskClaude()" title="Open Claude.ai with this text">💬 Ask Claude</button>
+</div>
+
+<button class="st-toggle" onclick="stTogglePanel()" title="My Notes &amp; Flags">
+  📝<span class="count" id="stCount" style="display:none;">0</span>
+</button>
+
+<div class="st-panel" id="stPanel">
+  <div class="st-panel-header">
+    <h3>📝 My Study Notes</h3>
+    <button class="st-panel-close" onclick="stTogglePanel()" title="Close">✕</button>
+  </div>
+  <div class="st-panel-actions">
+    <button onclick="stExport()" title="Download your notes as JSON">Export</button>
+    <button onclick="stImport()" title="Load notes from a file">Import</button>
+    <button onclick="stClearAll()" style="color:#dc2626;" title="Delete everything">Clear All</button>
+  </div>
+  <div id="stList"></div>
+</div>
+
+<div class="st-toast" id="stToast"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  var STORAGE_KEY = 'pfpres-study-notes-' + (window.location.pathname.split('/').pop() || 'default');
+  var notes = { highlights: [], flags: [] };
+
+  try {
+    var stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) notes = JSON.parse(stored);
+    if (!notes.highlights) notes.highlights = [];
+    if (!notes.flags) notes.flags = [];
+  } catch(e) { console.warn('Failed to load notes', e); }
+
+  function saveNotes() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(notes)); } catch(e) {}
+    updateCount();
+  }
+
+  function updateCount() {
+    var total = notes.highlights.length + notes.flags.length;
+    var el = document.getElementById('stCount');
+    if (!el) return;
+    if (total > 0) { el.textContent = total; el.style.display = 'inline-block'; }
+    else { el.style.display = 'none'; }
+  }
+
+  function toast(msg) {
+    var t = document.getElementById('stToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('visible');
+    setTimeout(function(){ t.classList.remove('visible'); }, 2400);
+  }
+
+  function getSelectionInfo() {
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return null;
+    var text = sel.toString().trim();
+    if (text.length < 2) return null;
+    var range = sel.getRangeAt(0);
+    var node = sel.anchorNode;
+    var section = null;
+    if (node) {
+      var el = node.nodeType === 1 ? node : node.parentElement;
+      if (el) section = el.closest('.section-card, .paper-card, .how-to-use, [id]');
+    }
+    var sectionId = section ? section.id : null;
+    var sectionTitle = '';
+    if (section) {
+      var titleEl = section.querySelector('.section-title, .paper-title, h2, h3');
+      if (titleEl) sectionTitle = titleEl.textContent.trim().substring(0, 60);
+    }
+    return { text: text, range: range, sectionId: sectionId, sectionTitle: sectionTitle };
+  }
+
+  function showToolbar() {
+    var info = getSelectionInfo();
+    if (!info) { hideToolbar(); return; }
+    var rect = info.range.getBoundingClientRect();
+    if (!rect || (rect.top === 0 && rect.left === 0)) return;
+    var tb = document.getElementById('stToolbar');
+    tb.style.top = (rect.top + window.scrollY - 48) + 'px';
+    tb.style.left = Math.max(10, rect.left + window.scrollX) + 'px';
+    tb.classList.add('visible');
+  }
+
+  function hideToolbar() {
+    var tb = document.getElementById('stToolbar');
+    if (tb) tb.classList.remove('visible');
+  }
+
+  document.addEventListener('mouseup', function(e) {
+    if (e.target.closest && e.target.closest('.st-toolbar')) return;
+    setTimeout(function() {
+      var info = getSelectionInfo();
+      if (info) showToolbar();
+      else hideToolbar();
+    }, 10);
+  });
+
+  document.addEventListener('mousedown', function(e) {
+    if (!e.target.closest || !e.target.closest('.st-toolbar')) hideToolbar();
+  });
+
+  document.addEventListener('scroll', function() { hideToolbar(); }, true);
+
+  window.stHighlight = function(color) {
+    var info = getSelectionInfo();
+    if (!info) return;
+    var id = 'h-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
+    try {
+      var mark = document.createElement('mark');
+      mark.className = 'user-highlight color-' + color;
+      mark.setAttribute('data-highlight-id', id);
+      try {
+        info.range.surroundContents(mark);
+      } catch (e) {
+        var contents = info.range.extractContents();
+        mark.appendChild(contents);
+        info.range.insertNode(mark);
+      }
+    } catch (e) { console.warn('Highlight failed', e); }
+    notes.highlights.push({
+      id: id, text: info.text.substring(0, 300),
+      color: color, sectionId: info.sectionId,
+      sectionTitle: info.sectionTitle, time: Date.now()
+    });
+    saveNotes();
+    renderPanel();
+    window.getSelection().removeAllRanges();
+    hideToolbar();
+    toast('Highlighted');
+  };
+
+  window.stFlag = function() {
+    var info = getSelectionInfo();
+    if (!info) return;
+    notes.flags.push({
+      id: 'f-' + Date.now(), text: info.text.substring(0, 300),
+      sectionId: info.sectionId, sectionTitle: info.sectionTitle,
+      time: Date.now()
+    });
+    saveNotes();
+    renderPanel();
+    window.getSelection().removeAllRanges();
+    hideToolbar();
+    toast('🚩 Flagged for review');
+  };
+
+  window.stAskClaude = function(explicitText) {
+    var text;
+    if (explicitText) {
+      text = explicitText;
+    } else {
+      var info = getSelectionInfo();
+      if (!info) return;
+      text = info.text;
+    }
+    var prompt = "I'm studying for the Milpark PFPRES-8 Risk & Estate Planning exam (2026/27 SA tax year). Please explain this concept from my study guide in plain English, with an example if helpful:\n\n\"" + text + "\"";
+
+    var openClaude = function() {
+      window.open('https://claude.ai/new', '_blank');
+      toast('Copied! Paste (⌘V / Ctrl+V) in the Claude tab that just opened');
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(prompt).then(openClaude).catch(function() {
+        fallbackCopy(prompt); openClaude();
+      });
+    } else {
+      fallbackCopy(prompt); openClaude();
+    }
+    hideToolbar();
+  };
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  window.stTogglePanel = function() {
+    document.getElementById('stPanel').classList.toggle('open');
+    renderPanel();
+  };
+
+  window.stJumpTo = function(sectionId) {
+    if (!sectionId) return;
+    var el = document.getElementById(sectionId);
+    if (el) {
+      if (el.classList.contains('paper-card') && el.classList.contains('collapsed')) {
+        el.classList.remove('collapsed');
+      }
+      if (el.classList.contains('section-card') && !el.classList.contains('open')) {
+        el.classList.add('open');
+      }
+      setTimeout(function() {
+        el.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }, 100);
+    }
+  };
+
+  window.stRemoveItem = function(type, id) {
+    if (type === 'highlight') {
+      notes.highlights = notes.highlights.filter(function(h) { return h.id !== id; });
+      var mark = document.querySelector('[data-highlight-id="' + id + '"]');
+      if (mark && mark.parentNode) {
+        var parent = mark.parentNode;
+        while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+        parent.removeChild(mark);
+        parent.normalize();
+      }
+    } else {
+      notes.flags = notes.flags.filter(function(f) { return f.id !== id; });
+    }
+    saveNotes();
+    renderPanel();
+  };
+
+  window.stClearAll = function() {
+    if (!confirm('Delete all highlights and flags? This cannot be undone.')) return;
+    notes.highlights.forEach(function(h) {
+      var mark = document.querySelector('[data-highlight-id="' + h.id + '"]');
+      if (mark && mark.parentNode) {
+        var parent = mark.parentNode;
+        while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+        parent.removeChild(mark);
+      }
+    });
+    notes = { highlights: [], flags: [] };
+    saveNotes();
+    renderPanel();
+    toast('All cleared');
+  };
+
+  window.stExport = function() {
+    var data = JSON.stringify(notes, null, 2);
+    var blob = new Blob([data], {type: 'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'pfpres-notes-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Notes exported');
+  };
+
+  window.stImport = function() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          var data = JSON.parse(evt.target.result);
+          if (data.highlights && data.flags) {
+            if (!confirm('Import ' + data.highlights.length + ' highlights and ' + data.flags.length + ' flags? This will REPLACE your current notes.')) return;
+            notes = data;
+            saveNotes();
+            restoreHighlights();
+            renderPanel();
+            toast('Notes imported');
+          } else {
+            alert('Invalid notes file — must contain "highlights" and "flags" arrays.');
+          }
+        } catch(e) {
+          alert('Could not read notes file.');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
+  function renderPanel() {
+    var list = document.getElementById('stList');
+    if (!list) return;
+    var html = '';
+
+    if (notes.flags.length > 0) {
+      html += '<div class="st-section-heading">🚩 Flagged (' + notes.flags.length + ')</div>';
+      notes.flags.slice().reverse().forEach(function(f) {
+        html += '<div class="st-item flag" onclick="stJumpTo(\'' + f.sectionId + '\')">';
+        html += '<button class="delete" onclick="event.stopPropagation(); stRemoveItem(\'flag\', \'' + f.id + '\')" title="Delete">✕</button>';
+        if (f.sectionTitle) html += '<div class="section-ref">' + escapeHtml(f.sectionTitle) + '</div>';
+        html += escapeHtml(f.text.substring(0, 180)) + (f.text.length > 180 ? '…' : '');
+        html += '<br><button class="st-item-ask" onclick="event.stopPropagation(); stAskClaude(' + JSON.stringify(f.text).replace(/"/g, '&quot;') + ')">💬 Ask Claude</button>';
+        html += '</div>';
+      });
+    }
+
+    if (notes.highlights.length > 0) {
+      html += '<div class="st-section-heading" style="margin-top:18px;">✏️ Highlights (' + notes.highlights.length + ')</div>';
+      notes.highlights.slice().reverse().forEach(function(h) {
+        html += '<div class="st-item color-' + h.color + '" onclick="stJumpTo(\'' + h.sectionId + '\')">';
+        html += '<button class="delete" onclick="event.stopPropagation(); stRemoveItem(\'highlight\', \'' + h.id + '\')" title="Delete">✕</button>';
+        if (h.sectionTitle) html += '<div class="section-ref">' + escapeHtml(h.sectionTitle) + '</div>';
+        html += escapeHtml(h.text.substring(0, 180)) + (h.text.length > 180 ? '…' : '');
+        html += '<br><button class="st-item-ask" onclick="event.stopPropagation(); stAskClaude(' + JSON.stringify(h.text).replace(/"/g, '&quot;') + ')">💬 Ask Claude</button>';
+        html += '</div>';
+      });
+    }
+
+    if (!html) {
+      html = '<div class="st-empty">No highlights or flags yet.<br><br>Select any text in the guide and a toolbar appears with:<br><br>🟡 <strong>4-colour highlighter</strong><br>🚩 <strong>Flag for review</strong><br>💬 <strong>Ask Claude</strong> for a live explanation</div>';
+    }
+
+    list.innerHTML = html;
+    updateCount();
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function(c) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function restoreHighlights() {
+    notes.highlights.forEach(function(h) {
+      if (!h.sectionId) return;
+      var section = document.getElementById(h.sectionId);
+      if (!section) return;
+      if (section.querySelector('[data-highlight-id="' + h.id + '"]')) return;
+      findAndWrap(section, h.text, h.color, h.id);
+    });
+  }
+
+  function findAndWrap(root, searchText, color, id) {
+    if (!searchText || searchText.length < 2) return false;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node) {
+        if (node.parentElement && node.parentElement.closest && node.parentElement.closest('.st-toolbar, .st-panel, .st-toast, script, style')) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    }, false);
+    var node;
+    while (node = walker.nextNode()) {
+      var idx = node.textContent.indexOf(searchText);
+      if (idx !== -1) {
+        try {
+          var range = document.createRange();
+          range.setStart(node, idx);
+          range.setEnd(node, idx + searchText.length);
+          var mark = document.createElement('mark');
+          mark.className = 'user-highlight color-' + color;
+          mark.setAttribute('data-highlight-id', id);
+          range.surroundContents(mark);
+          return true;
+        } catch(e) { /* skip */ }
+      }
+    }
+    return false;
+  }
+
+  function init() {
+    restoreHighlights();
+    renderPanel();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- ==================== END STUDY TOOLS ==================== -->
+
 </body>
 </html>
