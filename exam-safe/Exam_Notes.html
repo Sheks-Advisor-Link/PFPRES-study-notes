@@ -1,0 +1,2424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes</title>
+<style>
+:root {
+  --bg: #f5f6fa;
+  --bg-card: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #555;
+  --border: #d1d5db;
+  --accent-q: #2563eb;
+  --accent-a: #16a34a;
+  --accent-facts: #7c3aed;
+  --accent-q-bg: #eff6ff;
+  --accent-a-bg: #f0fdf4;
+  --accent-facts-bg: #f5f3ff;
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #e2e8f0;
+  --sidebar-hover: #334155;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
+  --radius: 8px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'Courier New', monospace;
+  --transition: 0.25s ease;
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --bg-card: #1e293b;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --accent-q-bg: #1e2a4a;
+  --accent-a-bg: #1a2e1a;
+  --accent-facts-bg: #241a3e;
+  --sidebar-bg: #0b1120;
+  --sidebar-text: #cbd5e1;
+  --sidebar-hover: #1e293b;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; }
+
+.sidebar {
+  position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
+  background: var(--sidebar-bg); color: var(--sidebar-text);
+  overflow-y: auto; z-index: 1000;
+  display: flex; flex-direction: column;
+}
+.sidebar-header { padding: 18px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.sidebar-header h2 { font-size: 1rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.5px; }
+.sidebar-header p { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 8px 0; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 18px; color: var(--sidebar-text);
+  text-decoration: none; font-size: 0.82rem;
+  border-left: 3px solid transparent;
+}
+.sidebar-nav a:hover, .sidebar-nav a.active { background: var(--sidebar-hover); border-left-color: #60a5fa; }
+.sidebar-nav .nav-heading {
+  padding: 12px 18px 6px; font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; color: #60a5fa;
+  border-top: 1px solid rgba(255,255,255,0.08); margin-top: 4px;
+}
+.sidebar-nav .nav-heading:first-of-type { border-top: none; margin-top: 0; }
+
+.main-content { margin-left: 300px; padding: 28px 38px 80px; max-width: 1000px; }
+
+.page-header { text-align: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 2px solid var(--border); }
+.page-header h1 {
+  font-size: 1.9rem; font-weight: 800;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.page-header .subtitle { color: var(--text-muted); margin-top: 6px; font-size: 0.95rem; }
+.page-header .tax-badge { display: inline-block; margin-top: 10px; padding: 4px 14px; background: #16a34a; color: #fff; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+
+.toolbar {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 24px; padding: 12px 14px;
+  background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.search-box {
+  flex: 1; min-width: 200px; padding: 8px 12px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg); color: var(--text); outline: none; font-size: 0.88rem;
+}
+.btn {
+  padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-card); color: var(--text); cursor: pointer;
+  font-size: 0.82rem; font-weight: 600;
+}
+.btn:hover { background: var(--bg); }
+.btn-primary { background: #16a34a; color: #fff; border-color: #16a34a; }
+.btn-primary:hover { background: #15803d; }
+
+.paper-card {
+  background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow);
+  margin-bottom: 22px; overflow: hidden; border-left: 4px solid var(--accent-q);
+}
+.paper-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; cursor: pointer; background: rgba(37,99,235,0.04);
+  border-bottom: 1px solid var(--border);
+}
+.paper-header:hover { background: rgba(37,99,235,0.08); }
+.paper-title { flex: 1; font-size: 1.05rem; font-weight: 700; }
+.paper-meta { font-size: 0.75rem; color: var(--text-muted); }
+.paper-body { padding: 18px; display: block; }
+.paper-card.collapsed .paper-body { display: none; }
+.chevron { transition: transform 0.2s; font-size: 0.9rem; color: var(--text-muted); }
+.paper-card.collapsed .chevron { transform: rotate(-90deg); }
+
+.scenario-box {
+  background: var(--accent-facts-bg); border-left: 3px solid var(--accent-facts);
+  padding: 14px 18px; border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 14px 0; font-size: 0.92rem;
+}
+.scenario-box h4 { color: var(--accent-facts); margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.question-block {
+  background: var(--accent-q-bg); border-left: 3px solid var(--accent-q);
+  padding: 14px 18px; border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 14px 0 8px; font-size: 0.93rem;
+}
+.question-block h4 { color: var(--accent-q); margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.question-block .marks { float: right; font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+
+.answer-block {
+  background: var(--accent-a-bg); border-left: 3px solid var(--accent-a);
+  padding: 14px 18px; border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 8px 0 16px; font-size: 0.92rem;
+  display: none;
+}
+.answer-block.shown { display: block; }
+.answer-block h4 { color: var(--accent-a); margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.answer-toggle {
+  background: var(--accent-a); color: #fff; border: none;
+  padding: 6px 14px; border-radius: 4px; cursor: pointer;
+  font-size: 0.82rem; font-weight: 600; margin: 4px 0 10px;
+}
+.answer-toggle:hover { background: #15803d; }
+
+h3 { font-size: 1.05rem; margin: 16px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+h4 { font-size: 0.95rem; margin: 12px 0 6px; color: var(--accent-q); }
+h5 { font-size: 0.88rem; margin: 10px 0 4px; font-weight: 700; }
+p { margin-bottom: 8px; }
+ul, ol { margin: 8px 0 12px 22px; }
+li { margin-bottom: 4px; }
+strong { font-weight: 700; }
+
+table {
+  width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.85rem;
+}
+th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+th { background: var(--bg); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; }
+tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+[data-theme="dark"] tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+.formula-box {
+  background: #fef3c7; border: 1px solid #f59e0b;
+  border-radius: var(--radius); padding: 12px 16px; margin: 10px 0;
+  font-family: var(--mono); font-size: 0.88rem;
+}
+[data-theme="dark"] .formula-box { background: #451a0333; border-color: #d97706; color: #fcd34d; }
+
+.tip-box {
+  background: #dbeafe; border-left: 3px solid #2563eb;
+  padding: 10px 14px; border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 10px 0; font-size: 0.88rem;
+}
+[data-theme="dark"] .tip-box { background: #1e3a8a33; }
+
+.how-to-use {
+  background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 22px; margin-bottom: 22px;
+}
+.how-to-use h2 { font-size: 1.2rem; margin-bottom: 10px; color: var(--accent-q); }
+
+.progress-strip {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin: 10px 0;
+}
+.progress-chip {
+  padding: 3px 10px; font-size: 0.72rem; background: #e5e7eb; color: #374151;
+  border-radius: 12px; font-weight: 600;
+}
+[data-theme="dark"] .progress-chip { background: #374151; color: #d1d5db; }
+.progress-chip.done { background: #16a34a; color: #fff; }
+
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 16px; }
+  .hamburger { display: flex !important; }
+}
+
+.hamburger {
+  display: none; position: fixed; top: 12px; left: 12px; z-index: 1100;
+  background: var(--sidebar-bg); color: #fff; border: none;
+  border-radius: 6px; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer;
+  align-items: center; justify-content: center;
+}
+
+@media print {
+  .sidebar, .hamburger, .toolbar, .answer-toggle { display: none !important; }
+  .main-content { margin-left: 0; padding: 0; max-width: 100%; }
+  body { font-size: 10.5pt; color: #000; background: #fff; font-family: Georgia, 'Times New Roman', serif; }
+  .paper-card { page-break-before: always; box-shadow: none; border: 1px solid #999; }
+  .paper-card:first-of-type { page-break-before: auto; }
+  .paper-card.collapsed .paper-body { display: block !important; }
+  .answer-block { display: block !important; background: #f5f5f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .question-block, .scenario-box, .answer-block, .formula-box, .tip-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  h3 { page-break-after: avoid; }
+  table { page-break-inside: auto; font-size: 9pt; }
+  tr { page-break-inside: avoid; }
+  @page { size: A4; margin: 18mm 16mm; }
+}
+</style>
+
+<style>
+/* ========== NOTES-STYLE OVERRIDES ========== */
+/* Hide all interactive chrome */
+.toolbar, .hamburger, .sidebar, .search-box, .print-menu, .btn,
+.how-to-use, #exam-tips, .flashcard-container, #sec-flashcards, #sec-quiz,
+.quiz-question, .quiz-score-bar, .flashcard-controls,
+.answer-toggle, .quick-ref-toggle, .quick-ref-panel { display: none !important; }
+
+/* All sections open by default */
+.section-card .section-body,
+.paper-card .paper-body,
+.answer-block { display: block !important; max-height: none !important; overflow: visible !important; }
+.chevron, .section-check, .section-badge, .paper-meta { display: none !important; }
+
+/* Reset to plain notes look */
+body {
+  font-family: Georgia, 'Times New Roman', serif !important;
+  background: #fff !important;
+  color: #000 !important;
+  font-size: 11pt !important;
+  line-height: 1.5 !important;
+}
+.main-content { margin-left: 0 !important; padding: 20px 28px !important; max-width: 100% !important; }
+
+/* Plain headings */
+h1, h2, h3, h4, h5 { color: #000 !important; font-family: Georgia, serif !important; }
+h1 { font-size: 16pt !important; background: none !important; -webkit-text-fill-color: #000 !important; }
+h2 { font-size: 14pt !important; }
+h3 { font-size: 12.5pt !important; border-bottom: 1px solid #666; padding-bottom: 3px; margin-top: 18px; }
+h4 { font-size: 11.5pt !important; margin-top: 12px; color: #000 !important; border-bottom: 1px dashed #bbb; padding-bottom: 2px; }
+h5 { font-size: 11pt !important; font-style: italic; }
+
+/* Paper cards become plain sections */
+.paper-card {
+  background: transparent !important;
+  border: none !important;
+  border-top: 2px solid #333 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 30px 0 !important;
+  padding-top: 14px !important;
+  page-break-before: always;
+}
+.paper-card:first-of-type { page-break-before: auto; }
+.paper-header {
+  background: none !important;
+  border: none !important;
+  padding: 0 0 10px 0 !important;
+  cursor: default !important;
+}
+.paper-title {
+  font-size: 14pt !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+  font-family: Georgia, serif !important;
+}
+.paper-body { padding: 0 !important; }
+
+/* Section cards — plain */
+.section-card {
+  background: transparent !important;
+  border: none !important;
+  border-left: none !important;
+  box-shadow: none !important;
+  margin: 16px 0 !important;
+}
+.section-header {
+  background: none !important;
+  padding: 0 !important;
+  cursor: default !important;
+}
+.section-title {
+  font-size: 13pt !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+}
+.section-content { padding: 0 !important; }
+
+/* Scenario / question / answer boxes — plain handwritten-style */
+.scenario-box {
+  background: #f7f7f7 !important;
+  border: none !important;
+  border-left: 3px solid #333 !important;
+  padding: 10px 14px !important;
+  margin: 12px 0 !important;
+  font-family: Georgia, serif !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.scenario-box h4 { color: #000 !important; text-transform: none !important; letter-spacing: normal !important; }
+
+.question-block {
+  background: transparent !important;
+  border: none !important;
+  border-left: 3px solid #000 !important;
+  padding: 8px 14px !important;
+  margin: 12px 0 6px !important;
+  font-family: Georgia, serif !important;
+  font-weight: 500 !important;
+}
+.question-block h4 { color: #000 !important; text-transform: none !important; letter-spacing: normal !important; }
+.question-block .marks { font-weight: 600 !important; color: #555 !important; }
+
+.answer-block {
+  background: #fafafa !important;
+  border: none !important;
+  border-left: 3px solid #666 !important;
+  padding: 10px 14px !important;
+  margin: 6px 0 16px 12px !important;
+  font-family: Georgia, serif !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.answer-block h4 {
+  color: #000 !important;
+  font-style: italic;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: 11pt !important;
+}
+
+/* Formula / info / tip / warn boxes — plain margins */
+.formula-box, .info-box, .tip-box, .warn-box, .case-card {
+  background: #f5f5f5 !important;
+  border: 1px solid #999 !important;
+  border-left: 3px solid #333 !important;
+  padding: 8px 12px !important;
+  margin: 10px 0 !important;
+  font-family: Georgia, serif !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.formula-box { font-family: 'Courier New', monospace !important; font-size: 10pt !important; }
+
+/* Tables — plain, simple */
+table, .comparison-table {
+  border-collapse: collapse !important;
+  font-family: Georgia, serif !important;
+  font-size: 10pt !important;
+  width: 100% !important;
+  margin: 10px 0 !important;
+  page-break-inside: auto;
+}
+th, td {
+  border: 1px solid #999 !important;
+  padding: 5px 8px !important;
+  background: transparent !important;
+  color: #000 !important;
+  text-align: left !important;
+}
+th {
+  background: #eee !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: 10pt !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+tr:nth-child(even) td { background: transparent !important; }
+tr { page-break-inside: avoid; }
+
+/* Paragraph spacing */
+p { margin: 6px 0 !important; }
+ul, ol { margin: 6px 0 6px 22px !important; }
+li { margin-bottom: 3px !important; }
+
+/* Badges — hide */
+.tax-year-badge, .tax-badge, .section-badge, .st-toggle, .st-toast, .st-panel,
+.st-toolbar, .user-highlight { display: none !important; }
+
+/* Remove gradients / fancy colors */
+* { text-shadow: none !important; }
+
+/* Page setup */
+@page { size: A4; margin: 20mm 18mm; }
+@media print {
+  .toolbar, .hamburger, .sidebar, .st-toolbar, .st-panel, .st-toggle, .st-toast { display: none !important; }
+  a { color: #000 !important; text-decoration: none !important; }
+}
+</style>
+
+</head>
+<body>
+
+<button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2></h2>
+    <p>Exam Prep Compilation</p>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-heading">Getting Started</div>
+    <a href="#how-to-use">How to Use This Guide</a>
+    <a href="#exam-tips">Exam Strategy &amp; Tips</a>
+
+    <div class="nav-heading">Worked Examples (with memos)</div>
+    <a href="#kevin-maria">Accrual &amp; Estate Duty — Kevin &amp; Maria</a>
+    <a href="#three-estate-examples">3 Estate Duty Examples (marital regimes)</a>
+    <a href="#assignment-memo">Assignment Memo 2025</a>
+
+    <div class="nav-heading">Sample Q&amp;A</div>
+    <a href="#trust-tax-samples">Trust Taxation Sample Questions</a>
+
+    <div class="nav-heading">Past Exam Papers</div>
+    <a href="#may-2014">May 2014 Extract</a>
+    <a href="#may-2015">May 2015 Extract</a>
+    <a href="#may-2016">May 2016 Extract</a>
+    <a href="#mock-2017">Mock Exam May 2017 (with memo)</a>
+    <a href="#march-2021">March 2021 Exam</a>
+    <a href="#dec-2024">December 2024 Exam</a>
+
+    <div class="nav-heading">Case Studies</div>
+    <a href="#johan-sarah">Johan &amp; Sarah</a>
+    <a href="#albert-emma">Albert &amp; Emma Cameron</a>
+  </div>
+</nav>
+
+<div class="main-content">
+
+  <div style="margin-bottom:24px;border-bottom:1px solid #999;padding-bottom:10px;"><div style="font-family:Georgia,serif;font-size:13pt;font-weight:600;">Estate Planning Notes</div><div style="font-family:Georgia,serif;font-size:10pt;color:#555;margin-top:2px;">Past papers and worked examples</div></div>
+
+  <div class="toolbar">
+    <input type="text" class="search-box" id="searchBox" placeholder="Search questions / topics..." oninput="searchContent()">
+    <button class="btn" onclick="toggleAllAnswers(true)">Show All Memos</button>
+    <button class="btn" onclick="toggleAllAnswers(false)">Hide All Memos</button>
+    <button class="btn btn-primary" onclick="window.print()">&#128424; Print / Save PDF</button>
+    <button class="btn" onclick="toggleTheme()" id="themeBtn">Dark Mode</button>
+  </div>
+
+  <div class="how-to-use" id="how-to-use">
+    <h2>How to Use This Guide</h2>
+    <p>This compilation brings together <strong>every past exam, sample paper, and case study</strong> you shared, with memos provided where the original paper had one, and memos I drafted in plain language where they didn't.</p>
+    <h3>The Exam-Day Study Plan (One Full Day, 3 Days Before)</h3>
+    <ol>
+      <li><strong>Morning (3&ndash;4 hours):</strong> Work through the 3 foundational worked examples (Kevin &amp; Maria accrual; 3 Estate Duty marital regime examples; Assignment 2025 memo). These teach you the CALCULATION METHOD — learn the <em>template</em>, not the numbers.</li>
+      <li><strong>Midday (2 hours):</strong> Do the Trust Taxation Sample Questions (6 x Q&amp;A). Trusts always come up in some form.</li>
+      <li><strong>Afternoon (3&ndash;4 hours):</strong> Tackle 2-3 past papers under exam conditions. Start with Mock 2017 (has memo so you can self-mark). Then Dec 2024 (most recent). Then March 2021.</li>
+      <li><strong>Evening (1&ndash;2 hours):</strong> Review the case studies (Johan &amp; Sarah; Albert &amp; Emma). These are the style of scenario you'll see in the exam.</li>
+    </ol>
+    <h3>How to Read Each Question</h3>
+    <ol>
+      <li>Read the <span style="color:var(--accent-facts);font-weight:700;">purple facts box</span> carefully.</li>
+      <li>Try answering the <span style="color:var(--accent-q);font-weight:700;">blue question</span> on paper FIRST before clicking "Show Memo".</li>
+      <li>Click "Show Memo" to reveal the <span style="color:var(--accent-a);font-weight:700;">green memo/answer</span>.</li>
+      <li>Compare your approach to the memo. Focus on METHOD not just final numbers.</li>
+    </ol>
+
+    <div class="tip-box">
+      <strong>Tax-rate caveat:</strong> These past papers use the tax rates of THEIR YEAR (e.g. 2017 papers use R300,000 CGT death exclusion, R2M primary residence exclusion). Your exam uses <strong>current 2026/27 rates</strong>: R440,000 death exclusion, R50,000 annual exclusion, R3,000,000 primary residence, R2,700,000 small business. Apply these in your actual exam — but when checking memos, use the paper's year rates.
+    </div>
+  </div>
+
+  <!-- ============ EXAM TIPS ============ -->
+  <div class="paper-card" id="exam-tips">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Exam Strategy &amp; Top Tips</span>
+      <span class="paper-meta">Read first</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <h3>Structure of the  Exam</h3>
+      <ul>
+        <li><strong>100 marks total, 4 hours writing time</strong> (about 2.4 minutes per mark)</li>
+        <li>Typically 2&ndash;4 case-study-based questions</li>
+        <li>Open book — but KNOW WHERE THINGS ARE. Fumbling pages costs time.</li>
+        <li>Topics almost always covered: <strong>Estate duty calculation, Accrual, CGT on death, Trusts (s7C, conduit, attribution), Life insurance, Buy-and-sell</strong></li>
+      </ul>
+
+      <h3>Top 10 Exam-Day Tips</h3>
+      <ol>
+        <li><strong>Attack the easiest/highest marks first.</strong> Don't get bogged down on Q1 if Q3 has marks you can bank quickly.</li>
+        <li><strong>Show your working.</strong> Examiners give method marks even if arithmetic is off by a rand.</li>
+        <li><strong>Label every number.</strong> E.g. "Primary residence (s4(q) deduction): R3,000,000". Never leave a number naked.</li>
+        <li><strong>State the section.</strong> Each time you apply a rule, cite: "s3(3)(a) Estate Duty Act deems life insurance on deceased's life as property..."</li>
+        <li><strong>Link to the scenario.</strong> Don't just quote theory — APPLY it. "In this case, the policy was owned by Mick on Albert's life, which means s3(3)(a) applies because..."</li>
+        <li><strong>Watch for buy-and-sell 3 requirements &amp; keyman 4 requirements.</strong> These come up constantly. Memorise them.</li>
+        <li><strong>Know the CPI formula for accrual:</strong> Commencement value &times; (CPI at death &divide; CPI at marriage).</li>
+        <li><strong>Know the "grossing-up" divisor 0.7678</strong> for life cover to estate (15% VAT + 20% duty).</li>
+        <li><strong>Always do the liquidity analysis</strong> even if not explicitly asked — showing it carries method marks.</li>
+        <li><strong>Time management:</strong> If you're stuck for &gt;5 minutes on any sub-question, move on. Come back.</li>
+      </ol>
+
+      <h3>Most Common Errors Students Make</h3>
+      <ul>
+        <li>Forgetting to <strong>halve</strong> in a COP estate (only 50% is in deceased's estate).</li>
+        <li>Including <strong>retirement fund benefits</strong> in estate duty (they're excluded by s3(2)(i)). But don't forget <strong>s3(3)(e)</strong> for disallowed contributions.</li>
+        <li>Forgetting the <strong>s4(1A) accrual claim deduction</strong> before calculating s4(q).</li>
+        <li>Valuing the <strong>usufruct at full property value</strong> instead of using 12% &times; MV &times; table factor.</li>
+        <li>Using <strong>current age</strong> instead of age-next-birthday for table lookups.</li>
+        <li>Forgetting to add the <strong>s3(3)(a) deemed life policies</strong> (especially ones paid to children/third parties).</li>
+      </ul>
+
+      <h3>Memorise These Numbers (2026/27)</h3>
+      <table>
+        <tr><th>Item</th><th>Amount</th></tr>
+        <tr><td>Estate duty abatement (s4A)</td><td>R3,500,000 (R7M if rollover from spouse)</td></tr>
+        <tr><td>Estate duty rate</td><td>20% up to R30M; 25% above</td></tr>
+        <tr><td>CGT annual exclusion (alive)</td><td>R50,000</td></tr>
+        <tr><td>CGT annual exclusion (death)</td><td>R440,000</td></tr>
+        <tr><td>Primary residence CGT exclusion</td><td>R3,000,000</td></tr>
+        <tr><td>Small business exclusion (55+)</td><td>R2,700,000 (MV ≤ R15M)</td></tr>
+        <tr><td>CGT inclusion rate (individuals)</td><td>40% (max effective 18%)</td></tr>
+        <tr><td>CGT inclusion rate (trusts/companies)</td><td>80% (max effective 36%)</td></tr>
+        <tr><td>Donations tax annual exemption</td><td>R100,000</td></tr>
+        <tr><td>Donations tax rate</td><td>20% up to R30M; 25% above</td></tr>
+        <tr><td>Executor's fee (incl VAT)</td><td>3.99% of gross estate assets</td></tr>
+        <tr><td>Max Master's fee</td><td>R7,000</td></tr>
+        <tr><td>Retirement fund lump sum tax-free (death)</td><td>R550,000</td></tr>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ============ KEVIN & MARIA — ACCRUAL WORKED EXAMPLE ============ -->
+  <div class="paper-card" id="kevin-maria">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Kevin &amp; Maria — Full Accrual &amp; Estate Duty Worked Example</span>
+      <span class="paper-meta">Marius Botha (), Feb 2018 — 6 Annexures</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Kevin (45) and Maria (44) married 20 years ago, <strong>out of community of property WITH accrual</strong>. Maria's town house at date of marriage is EXCLUDED from accrual per ANC. Commencement values: Kevin R690,000, Maria R150,000. Two children: Michael (18), Eleanor (15).</p>
+        <p><strong>Sistema (Pty) Ltd:</strong> Kevin founded 19 years ago. Previously owned 52%, sold to the Kevin Family Trust 6 years ago for R4,500,000. Loan to trust is interest-free, still outstanding. Two friends James and Harry each own 24%. No buy-and-sell. Value of 52% now R6,750,000. Kevin is MD. When company was formed, Kevin loaned R250,000 to the company (still outstanding, no interest).</p>
+        <h5>Kevin's assets &amp; base costs</h5>
+        <table>
+          <tr><th>Asset</th><th>MV</th><th>Base Cost</th></tr>
+          <tr><td>Shares (JSE)</td><td>R2,100,000</td><td>R100,000</td></tr>
+          <tr><td>Loan Account: Kevin Family Trust</td><td>R4,500,000</td><td>R4,500,000</td></tr>
+          <tr><td>Loan account: Sistema (Pty) Ltd</td><td>R250,000</td><td>R250,000</td></tr>
+          <tr><td>Investment in CIS</td><td>R2,000,000</td><td>R600,000</td></tr>
+          <tr><td>Money Market</td><td>R250,000</td><td>R250,000</td></tr>
+          <tr><td>Vehicles</td><td>R450,000</td><td>R500,000</td></tr>
+          <tr><td>Vacant industrial land</td><td>R1,800,000</td><td>R1,400,000</td></tr>
+          <tr><td>Holiday house</td><td>R1,650,000</td><td>R1,100,000</td></tr>
+        </table>
+        <h5>Kevin's Life insurance (own life)</h5>
+        <ul>
+          <li>Pure risk — payable to his estate: R2,850,000</li>
+          <li>Pure risk — Maria nominated as beneficiary: R1,000,000</li>
+          <li>Pure risk — children nominated: R400,000</li>
+        </ul>
+        <h5>Kevin's Liabilities</h5>
+        <ul><li>Holiday house loan: R800,000 | Industrial land loan: R600,000 | <strong>Total R1,400,000</strong> (both 15 years, 9% p.a.)</li></ul>
+        <h5>Maria's assets</h5>
+        <table>
+          <tr><th>Asset</th><th>Value</th></tr>
+          <tr><td>Town house (EXCLUDED from accrual per ANC)</td><td>R3,000,000</td></tr>
+          <tr><td>Investment in CIS</td><td>R2,450,000</td></tr>
+          <tr><td>Money Market</td><td>R350,000</td></tr>
+          <tr><td>Family house (inherited 6 months before marriage)</td><td>R3,200,000</td></tr>
+          <tr><td>Motor vehicle</td><td>R220,000</td></tr>
+          <tr><td>Furniture</td><td>R200,000</td></tr>
+        </table>
+        <p><strong>Kevin's will:</strong> Cash legacy R2,250,000 to each child; residue to Maria.</p>
+        <p><strong>GrandPa Trust:</strong> Kevin formed trust 10+ years ago with nominal R100. His father bequeathed shares (now worth R3,000,000). Kevin, Maria &amp; kids are income &amp; capital beneficiaries. Discretionary. Trustees: Kevin, his attorney, his accountant.</p>
+      </div>
+
+      <h3>Annexure A — Accrual Claim</h3>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-A')">Show/Hide Annexure A</button>
+      <div class="answer-block shown" id="ans-kevin-A">
+        <h4>Annexure A — Accrual Calculation</h4>
+        <h5>Kevin (dies today)</h5>
+        <table>
+          <tr><td>Life insurance payable to estate</td><td>R2,850,000</td></tr>
+          <tr><td>Loan account Sistema</td><td>R250,000</td></tr>
+          <tr><td>Shares (JSE)</td><td>R2,100,000</td></tr>
+          <tr><td>Loan Account Kevin Family Trust</td><td>R4,500,000</td></tr>
+          <tr><td>Investments in CIS</td><td>R2,000,000</td></tr>
+          <tr><td>Money market</td><td>R250,000</td></tr>
+          <tr><td>Vehicles</td><td>R450,000</td></tr>
+          <tr><td>Industrial land</td><td>R1,800,000</td></tr>
+          <tr><td>Holiday house</td><td>R1,650,000</td></tr>
+          <tr><td><strong>Total assets</strong></td><td><strong>R15,850,000</strong></td></tr>
+          <tr><td>Less: Liabilities</td><td>(R1,400,000)</td></tr>
+          <tr><td></td><td>R14,450,000</td></tr>
+          <tr><td>Less: CPI-adjusted commencement value</td><td>(R3,727,352)</td></tr>
+          <tr><td><strong>Kevin's accrual</strong></td><td><strong>R10,722,648</strong></td></tr>
+        </table>
+        <h5>Maria (surviving spouse)</h5>
+        <table>
+          <tr><td>Investments CIS</td><td>R2,450,000</td></tr>
+          <tr><td>Money market</td><td>R350,000</td></tr>
+          <tr><td>Motor vehicle</td><td>R220,000</td></tr>
+          <tr><td>Furniture</td><td>R200,000</td></tr>
+          <tr><td>Family home</td><td>R3,200,000</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>R6,420,000</strong></td></tr>
+          <tr><td>Less: CPI-adjusted commencement value</td><td>(R810,294)</td></tr>
+          <tr><td><strong>Maria's accrual</strong></td><td><strong>R5,609,706</strong></td></tr>
+        </table>
+        <p><em>Note: Town house is excluded by ANC — not in accrual calc.</em></p>
+        <div class="formula-box">
+          Accrual claim = (Kevin's accrual &minus; Maria's accrual) &divide; 2<br>
+          = (R10,722,648 &minus; R5,609,706) &divide; 2 = <strong>R2,556,471</strong><br>
+          <em>Maria has a claim against Kevin's estate for R2,556,471</em>
+        </div>
+      </div>
+
+      <h3>Annexure B — Estate Duty Calculation (Kevin)</h3>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-B')">Show/Hide Annexure B</button>
+      <div class="answer-block shown" id="ans-kevin-B">
+        <table>
+          <tr><th colspan="2">Property s3(2)</th></tr>
+          <tr><td>Loan account Sistema</td><td>R250,000</td></tr>
+          <tr><td>Shares (JSE)</td><td>R2,100,000</td></tr>
+          <tr><td>Loan Account Kevin Family Trust</td><td>R4,500,000</td></tr>
+          <tr><td>Investments in CIS</td><td>R2,000,000</td></tr>
+          <tr><td>Money market</td><td>R250,000</td></tr>
+          <tr><td>Vehicles</td><td>R450,000</td></tr>
+          <tr><td>Industrial land</td><td>R1,800,000</td></tr>
+          <tr><td>Holiday house</td><td>R1,650,000</td></tr>
+          <tr><td><strong>Subtotal Property</strong></td><td><strong>R13,000,000</strong></td></tr>
+          <tr><th colspan="2">Deemed Property s3(3)(a)</th></tr>
+          <tr><td>Life insurance payable to estate</td><td>R2,850,000</td></tr>
+          <tr><td>Life insurance payable to Maria</td><td>R1,000,000</td></tr>
+          <tr><td>Life insurance payable to children</td><td>R400,000</td></tr>
+          <tr><td><strong>Subtotal Deemed Property</strong></td><td><strong>R4,250,000</strong></td></tr>
+          <tr><td><strong>TOTAL VALUE OF ESTATE</strong></td><td><strong>R17,250,000</strong></td></tr>
+          <tr><th colspan="2">Less: Deductions s4</th></tr>
+          <tr><td>Executor's fees (3.99% &times; R15,850,000)</td><td>(R632,415)</td></tr>
+          <tr><td>Funeral costs</td><td>(R30,000)</td></tr>
+          <tr><td>Liabilities</td><td>(R1,400,000)</td></tr>
+          <tr><td>Valuation fees &amp; admin</td><td>(R10,000)</td></tr>
+          <tr><td>Accrual claim s4(1A)</td><td>(R2,556,471)</td></tr>
+          <tr><td>s4(q) — Policies to Maria</td><td>(R1,000,000)</td></tr>
+          <tr><td>s4(q) — Residue to Maria</td><td>(R6,721,114)</td></tr>
+          <tr><td><strong>Total deductions</strong></td><td><strong>(R12,350,000)</strong></td></tr>
+          <tr><td><strong>NET ESTATE</strong></td><td><strong>R4,900,000</strong></td></tr>
+          <tr><td>Less: s4A abatement</td><td>(R3,500,000)</td></tr>
+          <tr><td><strong>DUTIABLE ESTATE</strong></td><td><strong>R1,400,000</strong></td></tr>
+          <tr><td><strong>ESTATE DUTY (20%)</strong></td><td><strong>R280,000</strong></td></tr>
+        </table>
+        <p><strong>Apportionment:</strong> Legacies to children = R4,500,000 (cash) + R400,000 (policy).<br>
+        Portion apportioned to executor (from residue) = R4,500,000 / R4,900,000 &times; R280,000 = <strong>R257,143</strong></p>
+      </div>
+
+      <h3>Annexure C — Residue &amp; Annexure D — Surviving Spouse's Assets</h3>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-C')">Show/Hide</button>
+      <div class="answer-block shown" id="ans-kevin-C">
+        <h5>Residue (Annexure C)</h5>
+        <table>
+          <tr><td>Total assets in estate</td><td>R15,850,000</td></tr>
+          <tr><td>Less: Executor's fees</td><td>(R632,415)</td></tr>
+          <tr><td>Less: Funeral</td><td>(R30,000)</td></tr>
+          <tr><td>Less: Liabilities</td><td>(R1,400,000)</td></tr>
+          <tr><td>Less: Valuation fees/admin</td><td>(R10,000)</td></tr>
+          <tr><td>Less: Accrual claim to Maria</td><td>(R2,556,471)</td></tr>
+          <tr><td>Less: Legacies to children</td><td>(R4,500,000)</td></tr>
+          <tr><td><strong>Residue to Maria (s4(q))</strong></td><td><strong>R6,721,114</strong></td></tr>
+        </table>
+        <h5>Maria's total inheritance (Annexure D)</h5>
+        <table>
+          <tr><td>Residue (after estate duty share)</td><td>R6,463,972</td></tr>
+          <tr><td>Accrual claim</td><td>R2,556,471</td></tr>
+          <tr><td>Policies to Maria</td><td>R1,000,000</td></tr>
+          <tr><td><strong>Total accruing to Maria</strong></td><td><strong>R10,020,443</strong></td></tr>
+        </table>
+      </div>
+
+      <h3>Annexure E — Liquidity Analysis</h3>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-E')">Show/Hide</button>
+      <div class="answer-block shown" id="ans-kevin-E">
+        <table>
+          <tr><td>Estate duty payable by estate</td><td>R257,143</td></tr>
+          <tr><td>Cash needed for expenses</td><td>R2,072,415</td></tr>
+          <tr><td>Cash legacies to children</td><td>R4,500,000</td></tr>
+          <tr><td><strong>Total cash needed</strong></td><td><strong>R6,829,558</strong></td></tr>
+          <tr><td>Cash available (bank, MM, liquid investments)</td><td>R3,100,000</td></tr>
+          <tr><td><strong>Cash shortfall</strong></td><td><strong>(R3,729,558)</strong></td></tr>
+        </table>
+        <p>If Sistema and Kevin Trust repay their loans, there's a cash surplus. Without loan repayment, there's a R3.7M shortfall.</p>
+      </div>
+
+      <h3>Annexure F — CGT on Death</h3>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-F')">Show/Hide</button>
+      <div class="answer-block shown" id="ans-kevin-F">
+        <p>No CGT payable. All assets go to Maria (residue) — <strong>s9HA(2)(b) rollover</strong> applies. Maria inherits at Kevin's base cost. CGT deferred to Maria's death or disposal.</p>
+      </div>
+
+      <h3>Follow-up Questions &amp; Answers</h3>
+
+      <div class="question-block">
+        <span class="marks">Q1</span>
+        <h4>Question 1 — Liquidity planning</h4>
+        <p>Kevin's estate has a R3,729,558 shortfall. Advise a plan so there's no shortfall. If recommending life insurance, assume premium R18/month per R10,000 cover. Explain taking into account duty/tax the policy may attract.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-Q1')">Show/Hide Memo</button>
+      <div class="answer-block" id="ans-kevin-Q1">
+        <h4>Memo — Q1</h4>
+        <p><strong>Plan 1: Maria contributes from own assets.</strong></p>
+        <ul><li>CIS (R2,450,000) — risky, not liquid cash, would attract CGT on disposal</li>
+        <li>Money market R350,000</li>
+        <li>Policy proceeds to Maria: R1,000,000</li>
+        <li>She can pay the shortfall into the estate to prevent forced asset sales.</li></ul>
+
+        <p><strong>Plan 2: New life policy to Maria (recommended).</strong> Residue is bequeathed to Maria. Policy to her is free of executor's fee and qualifies for s4(q) deduction.</p>
+        <div class="formula-box">
+          Cover needed: R3,729,558<br>
+          Premium: R3,729,558 &times; 18 &divide; 10,000 = <strong>R6,713/month</strong>
+        </div>
+        <p><strong>Plan 3: Kevin Trust and Sistema insure Kevin's life.</strong> Loans of R4,500,000 and R250,000 can be repaid from policy proceeds. Policies must also fund any estate duty they attract.</p>
+      </div>
+
+      <div class="question-block">
+        <span class="marks">Q2</span>
+        <h4>Question 2 — Maria's retirement capital</h4>
+        <p>Maria needs R10 million capital. Advise total capital at her disposal after Kevin's death using Plan 1 policy, and any shortfall/surplus.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-Q2')">Show/Hide Memo</button>
+      <div class="answer-block" id="ans-kevin-Q2">
+        <h4>Memo — Q2</h4>
+        <table>
+          <tr><td>Maria's own CIS</td><td>R2,450,000</td></tr>
+          <tr><td>Maria's money market</td><td>R350,000</td></tr>
+          <tr><td>Policy proceeds from Kevin</td><td>R1,000,000</td></tr>
+          <tr><td>Residue after estate duty</td><td>R6,463,972</td></tr>
+          <tr><td>Accrual claim</td><td>R2,556,471</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>R12,820,443</strong></td></tr>
+        </table>
+        <p>Less non-income-producing: Vehicles (R450,000); Industrial land (R1,800,000 — can be sold).<br>
+        Income-producing capital: R12,820,443 &minus; R450,000 = <strong>R12,370,443</strong></p>
+        <p><strong>Surplus: R12,370,443 &minus; R10,000,000 = R2,370,443</strong></p>
+      </div>
+
+      <div class="question-block">
+        <span class="marks">Q3</span>
+        <h4>Question 3 — CGT on accrual satisfaction</h4>
+        <p>Maria has a R2,556,471 accrual claim against Kevin's estate. If the estate satisfies the claim by transferring assets, what are the CGT implications?</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-Q3')">Show/Hide Memo</button>
+      <div class="answer-block" id="ans-kevin-Q3">
+        <h4>Memo — Q3</h4>
+        <p>The accrual claim is a <strong>cash claim</strong> against the estate. If there's insufficient cash, assets can be transferred in settlement.</p>
+        <p>Those assets qualify for the <strong>spouse rollover — s9HA(2)(b) Income Tax Act</strong>. Maria inherits Kevin's base cost; no CGT is triggered at first death. Tax is deferred until Maria disposes of the asset or dies.</p>
+      </div>
+
+      <div class="question-block">
+        <span class="marks">Q4</span>
+        <h4>Question 4 — Bequeathing loan accounts</h4>
+        <p>Kevin has two credit loan accounts. He's been told NOT to bequeath the trust loan to the trust due to negative CGT implications. Advise.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-Q4')">Show/Hide Memo</button>
+      <div class="answer-block" id="ans-kevin-Q4">
+        <h4>Memo — Q4</h4>
+        <p><strong>Sistema loan (R250,000):</strong> If repaid on death, reduces cash shortfall. Recommend Sistema take out a policy on Kevin's life to fund repayment.</p>
+        <p><strong>Trust loan (R4,500,000):</strong> Two options:</p>
+        <ul>
+          <li>Trust takes out a policy on Kevin's life to repay the loan on his death; OR</li>
+          <li>Kevin bequeaths the loan to the trust as a legacy. <strong>Paragraph 12A Eighth Schedule</strong> — where the loan is bequeathed AND forms property in the estate for estate duty purposes, there is <strong>no CGT</strong> on the loan "write-off" in the trust's hands.</li>
+        </ul>
+        <p>The advice "don't bequeath" is outdated — Par 12A(6) provides relief.</p>
+      </div>
+
+      <div class="question-block">
+        <span class="marks">Q5</span>
+        <h4>Question 5 — Trust income taxation (Grandpa Trust)</h4>
+        <ul>
+          <li>5.1 Why is a portion of trust income taxed in Kevin's hands?</li>
+          <li>5.2 How can trust income avoid being taxed at 45% in the trust?</li>
+        </ul>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-Q5')">Show/Hide Memo</button>
+      <div class="answer-block" id="ans-kevin-Q5">
+        <h4>Memo — Q5</h4>
+        <p><strong>5.1:</strong> Income is retained in the trust subject to the trustees exercising their discretion. This triggers <strong>s7(5) Income Tax Act</strong> — income retained because of a conditional/discretionary disposition is deemed to be the donor's (Kevin's father originally; or Kevin indirectly).</p>
+        <p><strong>5.2:</strong> Trustees must <strong>distribute the income to beneficiaries</strong>. This triggers the <strong>s25B conduit principle</strong> — income retains its nature and is taxed in beneficiaries' hands (at their hopefully lower marginal rate). Also allows beneficiaries to use their interest exemption on interest income.</p>
+      </div>
+
+      <div class="question-block">
+        <span class="marks">Q6</span>
+        <h4>Question 6 — CGT on trust asset</h4>
+        <p>Grandpa Trust sold an asset for R1,500,000 (base cost R900,000). Advise the trustees how to ensure the gain is taxed at a lower rate.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-Q6')">Show/Hide Memo</button>
+      <div class="answer-block" id="ans-kevin-Q6">
+        <h4>Memo — Q6</h4>
+        <ul>
+          <li><strong>Vest the capital gain</strong> in one of the discretionary beneficiaries (if the trust deed authorises this).</li>
+          <li>The gain is then taxed in the <strong>natural person's hands</strong>: 40% inclusion rate (vs. 80% in trust); benefit of annual exclusion (R40,000 / now R50,000); lower marginal rate.</li>
+          <li>Effective CGT: 40% &times; individual marginal rate vs. 36% flat in trust.</li>
+        </ul>
+      </div>
+
+      <div class="question-block">
+        <span class="marks">Q7</span>
+        <h4>Question 7 — Testamentary trust for children</h4>
+        <p>Advise Kevin on the type of testamentary trust to use for his children and its tax implications.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-kevin-Q7')">Show/Hide Memo</button>
+      <div class="answer-block" id="ans-kevin-Q7">
+        <h4>Memo — Q7</h4>
+        <p>Use a <strong>Special Trust Type (b)</strong> — a testamentary trust where the youngest beneficiary is under 18 (Eleanor is 15).</p>
+        <ul>
+          <li>Taxed at <strong>individual rates</strong> for income (not 45% flat).</li>
+          <li>40% CGT inclusion rate (not 80%).</li>
+          <li><strong>BUT</strong> no R50,000 annual CGT exclusion; no primary residence exclusion.</li>
+          <li>Loses special status when youngest beneficiary turns 18 — becomes ordinary trust.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ THREE ESTATE DUTY EXAMPLES ============ -->
+  <div class="paper-card" id="three-estate-examples">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Three Estate Duty Examples — One Per Marital Regime</span>
+      <span class="paper-meta">Marius Botha (), April 2017 — WITH full worked solutions</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <p>This is the <strong>most valuable exam-prep asset</strong> — three fully worked estate duty calculations, one for each marital regime. Master these three templates and you can handle any estate duty question.</p>
+
+      <h3>Example 1 — Out of Community WITH Accrual (Adrian &amp; Avril)</h3>
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Adrian and Avril married OCP with accrual. 2 children (James 14, Kate 10). Married 1990. ANC values: Adrian R850,000, Avril R400,000. No excluded assets.</p>
+        <p><strong>Adrian's assets:</strong> House R3,200,000 | Holiday house (inherited 1995) R1,500,000 | Furniture R500,000 | Vehicles R600,000 | Lekker Bakery shares R4,000,000 | CIS R900,000 | JSE shares R80,000 | Cash R400,000</p>
+        <p><strong>Adrian's policies:</strong> R2,500,000 to estate | R1,000,000 to spouse | R500,000 to estate | Provident fund 2 &times; R900,000 salary to wife &amp; kids</p>
+        <p><strong>Adrian's liabilities:</strong> House loan R450,000 | Car loans R120,000</p>
+        <p><strong>Avril's assets:</strong> JSE shares R2,575,000 | Cash R100,000 | R50,000 defamation damages (non-patrimonial)</p>
+        <p><strong>Wills:</strong> Adrian → house, furniture, vehicles to Avril; residue to children. Avril → all to Adrian.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-ex1-accrual')">Show/Hide Accrual Calc</button>
+      <div class="answer-block shown" id="ans-ex1-accrual">
+        <h4>Accrual Calculation</h4>
+        <p>CPI adjustment (2017 = 141.81, 1990 = 44.91):<br>
+        Adrian commencement: (141.81 / 44.91) &times; 850,000 = <strong>R2,684,001</strong><br>
+        Avril commencement: (141.81 / 44.91) &times; 400,000 = <strong>R1,263,059</strong></p>
+        <table>
+          <tr><th></th><th>Adrian</th><th>Avril</th></tr>
+          <tr><td>Net estate value</td><td>R13,610,000</td><td>R2,675,000</td></tr>
+          <tr><td>Less: Inheritance (holiday house)</td><td>(R1,500,000)</td><td>—</td></tr>
+          <tr><td>Less: Non-patrimonial damages</td><td>—</td><td>(R50,000)</td></tr>
+          <tr><td>Subtotal</td><td>R12,110,000</td><td>R2,625,000</td></tr>
+          <tr><td>Less: Commencement (CPI-adjusted)</td><td>(R2,684,001)</td><td>(R1,263,059)</td></tr>
+          <tr><td><strong>Accrual</strong></td><td><strong>R9,425,999</strong></td><td><strong>R1,361,941</strong></td></tr>
+        </table>
+        <div class="formula-box">
+          Accrual claim = (R9,425,999 &minus; R1,361,941) &divide; 2 = <strong>R4,032,029</strong><br>
+          <em>Adrian's estate owes Avril R4,032,029</em>
+        </div>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-ex1-duty')">Show/Hide Estate Duty Calc</button>
+      <div class="answer-block shown" id="ans-ex1-duty">
+        <h4>Estate Duty Calculation</h4>
+        <table>
+          <tr><td>Total Property</td><td>R11,180,000</td></tr>
+          <tr><td>Plus Deemed property (3 life policies)</td><td>R4,000,000</td></tr>
+          <tr><td><strong>Gross Estate</strong></td><td><strong>R15,180,000</strong></td></tr>
+          <tr><td>Less deductions:</td><td></td></tr>
+          <tr><td>Funeral</td><td>R30,000</td></tr>
+          <tr><td>Admin fees</td><td>R10,000</td></tr>
+          <tr><td>Executor's fees (3.99%)</td><td>R565,782</td></tr>
+          <tr><td>Liabilities</td><td>R570,000</td></tr>
+          <tr><td>CGT</td><td>R100,000</td></tr>
+          <tr><td>Accrual claim s4(1A)</td><td>R4,032,029</td></tr>
+          <tr><td>s4(q) policy to spouse</td><td>R1,000,000</td></tr>
+          <tr><td>s4(q) legacies (house, furniture, vehicles)</td><td>R4,300,000</td></tr>
+          <tr><td>Total deductions</td><td>R10,607,811</td></tr>
+          <tr><td><strong>Net Estate</strong></td><td><strong>R4,572,189</strong></td></tr>
+          <tr><td>Less: s4A abatement</td><td>(R3,500,000)</td></tr>
+          <tr><td><strong>Dutiable Estate</strong></td><td><strong>R1,072,189</strong></td></tr>
+          <tr><td><strong>Estate Duty (20%)</strong></td><td><strong>R214,438</strong></td></tr>
+        </table>
+        <p><strong>Liquidity:</strong> Shortfall R1,142,249. If policy is taken to cover shortfall, must gross up for extra estate duty and executor's fees.</p>
+      </div>
+
+      <h3>Example 2 — Out of Community NO Accrual (Brent &amp; Mary)</h3>
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Brent married OCP no accrual. Assets include: 40% CC interest R6,700,000 | Namibia house (inherited 1985) R1,230,000 | Cape Town house R2,850,000 | <strong>Usufruct over farm</strong> (inherited 1985, bare dominium to Roy age 31 ANB, current MV R4,100,000) | Timeshare R10,000 | Seventh Bank shares (20,000 &times; R7.20) = R144,000 | Holiday house (inherited from father-in-law 38 months ago, R1,000,000 original value, now R1,450,000) | Cash R1,400,000</p>
+        <p><strong>Policies:</strong> Payable to estate R300,000 | Keyperson policy (owned by CC, R1,000,000) | Buy-and-sell R5,000,000 (owned by co-members) | Provident fund R2,000,000 to spouse</p>
+        <p><strong>Liabilities:</strong> Cape Town house loan R600,000 | Tax/CGT R350,000 | Admin R10,000</p>
+        <p><strong>Will:</strong> R5M legacy to son, Cape Town house to wife, residue to daughter.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-ex2-duty')">Show/Hide Estate Duty Calc</button>
+      <div class="answer-block shown" id="ans-ex2-duty">
+        <h4>Usufruct Valuation</h4>
+        <p>12% &times; R4,100,000 = R492,000 annual yield<br>
+        R492,000 &times; 8.21538 (factor for Roy age 31 ANB) = R4,041,967<br>
+        <strong>Cap check:</strong> R4,100,000 &minus; R63,749 (original bare dominium) = R4,036,251<br>
+        Use lower of two → <strong>R4,036,251</strong></p>
+
+        <h4>Estate Duty</h4>
+        <table>
+          <tr><td>CC interest</td><td>R6,700,000</td></tr>
+          <tr><td>Namibia house</td><td>R1,230,000</td></tr>
+          <tr><td>Cape Town house</td><td>R2,850,000</td></tr>
+          <tr><td>Timeshare</td><td>R10,000</td></tr>
+          <tr><td>Seventh Bank shares</td><td>R144,000</td></tr>
+          <tr><td>Holiday house</td><td>R1,450,000</td></tr>
+          <tr><td>Cash</td><td>R1,400,000</td></tr>
+          <tr><td>Usufruct (capped)</td><td>R4,036,251</td></tr>
+          <tr><td>Deemed property (policy to estate)</td><td>R300,000</td></tr>
+          <tr><td><strong>Gross Estate</strong></td><td><strong>R18,120,251</strong></td></tr>
+          <tr><td><em>Note: Keyperson &amp; buy-and-sell policies excluded (s3(3)(a)(ii) &amp; s3(3)(a)(iA)). Provident fund excluded per s3(2)(i).</em></td><td></td></tr>
+          <tr><td>Housing loan</td><td>(R600,000)</td></tr>
+          <tr><td>Tax</td><td>(R350,000)</td></tr>
+          <tr><td>Admin</td><td>(R10,000)</td></tr>
+          <tr><td>Executor's fees</td><td>(R561,952)</td></tr>
+          <tr><td>s4(q) — CT house to spouse</td><td>(R2,850,000)</td></tr>
+          <tr><td><strong>Net Estate</strong></td><td><strong>R13,748,299</strong></td></tr>
+          <tr><td>Less: s4A</td><td>(R3,500,000)</td></tr>
+          <tr><td><strong>Dutiable Estate</strong></td><td><strong>R10,248,299</strong></td></tr>
+          <tr><td><strong>Estate Duty</strong></td><td><strong>~R2,049,660</strong></td></tr>
+        </table>
+        <h5>Rapid Succession Reduction (s4A):</h5>
+        <p>Holiday house inherited 38 months ago (&gt; 2 years, ≤ 4 years = 80%).<br>
+        Father-in-law's estate portion: R1,000,000 / R8,000,000 &times; R900,000 = <strong>R112,500</strong><br>
+        Brent's estate portion: R1,000,000 / R13,748,299 &times; R2,049,660 = R149,084 &times; 80% = R119,267<br>
+        Rebate = lower = <strong>R112,500</strong></p>
+        <p><strong>Final Estate Duty = R2,049,660 &minus; R112,500 = R1,937,160</strong></p>
+      </div>
+
+      <h3>Example 3 — In Community of Property (Matt &amp; Julia)</h3>
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Matt (45) and Julia (39) married COP, 1 child Emily (14). Joint estate: House R4,000,000 | Holiday house R2,300,000 | Cash R1,450,000 | Vehicles R320,000 | XYZ (Pty) Ltd shares R2,700,000.</p>
+        <p>Matt's excluded asset (inherited from father, per will): Small apartment R600,500.</p>
+        <p><strong>Policies:</strong> Policy 1 R798,000 to wife | Policy 2 R1,350,000 to estate | Policy 3 R1,000,000 to Emily. Provident fund R2,000,000 (2/3 Julia, 1/3 Emily).</p>
+        <p><strong>Liabilities:</strong> Bond R690,000; funeral R40,000; admin R10,000.</p>
+        <p><strong>Will:</strong> Legacy R4,000,000 cash to Emily; residue to Julia.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-ex3-duty')">Show/Hide Estate Duty Calc</button>
+      <div class="answer-block shown" id="ans-ex3-duty">
+        <h4>CGT on Death</h4>
+        <p>Only the SOLD XYZ shares trigger CGT (others roll over to spouse or are primary residence / personal use):<br>
+        50% of shares: R1,350,000 &minus; R600,000 base cost = R750,000 gain<br>
+        Less annual exclusion R300,000 → R450,000 taxable<br>
+        &times; 40% inclusion = R202,500 taxable capital gain<br>
+        &times; 45% marginal = <strong>R91,125 CGT</strong></p>
+
+        <h4>Estate Duty</h4>
+        <table>
+          <tr><td>Joint estate total</td><td>R10,770,000</td></tr>
+          <tr><td>Less: Julia's 50% share</td><td>(R5,385,000)</td></tr>
+          <tr><td>Matt's half</td><td>R5,385,000</td></tr>
+          <tr><td>Plus: Excluded apartment (Matt's only)</td><td>R600,500</td></tr>
+          <tr><td><strong>Total Property</strong></td><td><strong>R5,985,500</strong></td></tr>
+          <tr><td>Plus Deemed (all 3 policies)</td><td>R3,148,000</td></tr>
+          <tr><td><strong>Gross Estate</strong></td><td><strong>R9,133,500</strong></td></tr>
+          <tr><td>Less: Joint-estate deductions (50% share of bond, CGT, admin, exec)</td><td>(R637,357)</td></tr>
+          <tr><td>Less: Executor's fee on excluded apartment</td><td>(R23,960)</td></tr>
+          <tr><td>Less: Funeral</td><td>(R40,000)</td></tr>
+          <tr><td>Less: s4(q) policy to spouse</td><td>(R798,000)</td></tr>
+          <tr><td>Less: s4(q) residue to spouse</td><td>(R2,634,183)</td></tr>
+          <tr><td><strong>Net Estate</strong></td><td><strong>R5,000,000</strong></td></tr>
+          <tr><td>Less: s4A</td><td>(R3,500,000)</td></tr>
+          <tr><td><strong>Dutiable Estate</strong></td><td><strong>R1,500,000</strong></td></tr>
+          <tr><td><strong>Estate Duty (20%)</strong></td><td><strong>R300,000</strong></td></tr>
+        </table>
+        <h5>Apportionment:</h5>
+        <p>Emily's policy portion: R1,000,000 / R5,000,000 &times; R300,000 = <strong>R60,000</strong> (Emily liable)<br>
+        Balance R240,000 payable from residue by executor.</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>Key lesson from these 3 examples:</strong> The STRUCTURE of the calculation is identical across all marital regimes. What changes is:<br>
+        (1) <strong>COP</strong> → halve the joint estate and joint liabilities/fees; excluded assets (inheritances etc) stay at 100%.<br>
+        (2) <strong>OCP with accrual</strong> → calculate accrual claim first; deduct it under s4(1A).<br>
+        (3) <strong>OCP no accrual</strong> → no accrual calc; deceased's entire separate estate is in scope. Watch for usufructs/fideicommissa and rapid succession.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ JOHAN & SARAH ============ -->
+  <div class="paper-card" id="johan-sarah">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Case Study — Johan &amp; Sarah</span>
+      <span class="paper-meta">Classic  case study — OCP accrual, blended family, buy-and-sell</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Johan (57) &amp; Sarah (55), OCP WITH accrual (not excluded). ANC didn't declare values = commencement is NIL for both. Johan has 2 kids from previous marriage: Mark (25) and Janet (22) — self-supporting. Sarah has Petunia (14) from previous marriage (first husband died before she married Johan 2005). No maintenance claims.</p>
+        <p>Johan works at bank + owns 50% of Top Hats (Pty) Ltd (imports from China). Co-shareholder Blaine (35) owns 49%, Mark owns 1%. Johan no salary from company; Blaine runs it full-time. Company reinvests profits. Johan considering early retirement from bank to join Top Hats full-time. Provident fund retirement age 62 (can take early from 55).</p>
+        <p><strong>Johan's assets (base cost / MV):</strong> Primary res R750K/R3.25M | Share portfolio R450K/R1.2M | Foreign shares R300K/R680K | Top Hats 50% R800K/R1.25M | Unit trust R875K/R1.45M | Money market R350K | Motorcar R310K/R250K | Durbanville flat R1.25M/R1.48M. Total MV R9,910,000.</p>
+        <p><strong>Liabilities:</strong> Bond R450K | Car loan R110,107.</p>
+        <p>Admin (exec excluded) R30K, funeral R20K.</p>
+      </div>
+
+      <div class="question-block"><h4>Typical Questions on this case study</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-johan-sarah')">Show Memo Approach</button>
+      <div class="answer-block" id="ans-johan-sarah">
+        <h4>Key Planning Issues to Identify</h4>
+
+        <h5>1. Accrual Claim</h5>
+        <ul>
+          <li>Both commencement values = NIL (not declared in ANC) → entire net estate at death is "growth"</li>
+          <li>Sarah's daughter Petunia (14) from her previous marriage — first husband died 2003, so Sarah may have inherited. Any inheritance she received is EXCLUDED from accrual.</li>
+          <li>Mark owns 1% of Top Hats — could impact buy-and-sell structure</li>
+        </ul>
+
+        <h5>2. Buy-and-Sell on Top Hats</h5>
+        <ul>
+          <li>No existing buy-and-sell mentioned — Johan's 50% is illiquid</li>
+          <li>If Johan dies: Sarah/kids inherit 50% shares but Blaine may not want them in the business; they may not want to run a handbag import company</li>
+          <li>Recommend: Buy-and-sell between Johan, Blaine, Mark. Each owns life policy on other two. s3(3)(a)(iA) exempts proceeds from estate duty</li>
+          <li>Mark's 1% shareholding + plan for Johan to bequeath to Mark on death — align the will with the buy-and-sell</li>
+        </ul>
+
+        <h5>3. Estate Duty</h5>
+        <ul>
+          <li>Johan's net estate MV R9,350K (after liabilities)</li>
+          <li>s4(q) — whatever residue to Sarah reduces duty</li>
+          <li>Mark's 50% share bequest means that portion is NOT s4(q) → dutiable</li>
+          <li>If Mark takes shares, consider special bequest + buy-and-sell proceeds offset</li>
+        </ul>
+
+        <h5>4. CGT on Death</h5>
+        <ul>
+          <li>Primary residence: R3M exclusion applies (2026/27); rollover if to Sarah</li>
+          <li>Top Hats shares to Mark = CGT triggered. Small business exclusion (R2.7M) if Johan 55+ with business MV &lt; R15M — applies here (his share R1.25M but total business probably around R2.5M)</li>
+          <li>Share portfolio, foreign shares, unit trusts to Sarah → rollover. To kids → CGT.</li>
+        </ul>
+
+        <h5>5. Retirement planning (taking early retirement from bank at 55)</h5>
+        <ul>
+          <li>Provident fund: Early retirement from age 55 allowed; value at early retirement = same as at age 62 (per rules)</li>
+          <li>Two-pot implications (from 1 Sep 2024)</li>
+          <li>At retirement: can commute up to 1/3 as lump sum (taxed per retirement lump sum table); 2/3 must buy annuity</li>
+          <li>Living annuity: nominate Sarah as beneficiary; bypasses estate</li>
+        </ul>
+
+        <h5>6. Liquidity</h5>
+        <ul>
+          <li>Cash in estate: Money market R350K + buy-and-sell proceeds (if structured) + any life cover to estate</li>
+          <li>Cash needed: Funeral R20K + admin R30K + exec fee 3.99% × ~R9.3M = R371K + liabilities R560K + CGT + estate duty + accrual claim to Sarah</li>
+          <li>Likely shortfall — recommend additional life cover to Sarah</li>
+        </ul>
+
+        <h5>7. Estate Duty Minimisation Strategies</h5>
+        <ul>
+          <li>Leave more to Sarah via s4(q) (defer to 2nd death when abatement is R7M)</li>
+          <li>Buy-and-sell reduces estate duty on business shares</li>
+          <li>Testamentary trust for Petunia (Sarah's minor daughter) if Sarah dies first — Special Trust (b) favourable rates</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ALBERT & EMMA CAMERON ============ -->
+  <div class="paper-card" id="albert-emma">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Case Study — Albert &amp; Emma Cameron</span>
+      <span class="paper-meta">Retirement income structures, living annuity, CGT, buy-and-sell</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Albert (52) &amp; Emma (49), OCP EXCLUDING accrual. Daughter Abby (23, self-supporting university lecturer). Albert injured in car accident July 2014, took disability retirement.</p>
+        <p><strong>Retirement benefits (from pension fund):</strong></p>
+        <ul>
+          <li>Total R9.6M; commuted 1/3 = R3.2M lump sum (used for investments &amp; 55% share of Cameron Pty Ltd)</li>
+          <li>2/3 = R6.4M → Living annuity; drawdown 2.5% minimum. Current value R6.45M. Emma nominated beneficiary.</li>
+        </ul>
+        <p><strong>Investments (from after-tax lump sum):</strong></p>
+        <ul>
+          <li>Money market R360K at 6% p.a.</li>
+          <li>Voluntary purchased annuity R600K (10-yr fixed, R7,929/month, capital tax-free portion R5,000; received 24/120 payments)</li>
+          <li>RSA Retail Savings Bonds R460K at 9% (5 yrs from Aug 2014, paid out to him)</li>
+        </ul>
+        <p><strong>Business:</strong> Cameron (Pty) Ltd (advertising). Albert 55%, Mick Lategan (Emma's brother) 45%. Total value R3.5M.</p>
+        <p><strong>Buy-and-sell:</strong> Albert's life policy owned by Mick R1,925,000, Mick pays R1,450/m | Mick's life policy owned by Albert R1,575,000, Albert pays R1,240/m.</p>
+        <p><strong>Albert's assets:</strong> Primary residence R3.2M (BC R2M) | RSA RSBs R460K | Cameron shares R1,925,000 (BC R800K) | Living annuity R6,450,000 | Motor R250K (BC R300K) | Personal use R250K (BC R280K).</p>
+        <p><strong>Albert's policies on OWN life:</strong> Policy 1 R1,200,000 (Emma bene), R2,200/m | Policy 2 R1,575,000 (daughter bene), R1,800/m.</p>
+        <p><strong>RA:</strong> Albert contributes R170K p.a., current value R350K, plans to retire at 60.</p>
+        <p><strong>Liabilities:</strong> Bond R494,858 (8yr, 8.5%, R7,122/m, paid by 60) | Car loan R100K (2yr, 9.5%, R4,591/m).</p>
+        <p><strong>Emma's assets:</strong> Furniture R350K | Motor R190K | Money market R360K | CIS R335K.<br>
+        Liabilities: Credit card R40K.</p>
+      </div>
+
+      <div class="question-block"><h4>Key Exam Issues</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-albert-emma')">Show Memo Approach</button>
+      <div class="answer-block" id="ans-albert-emma">
+        <h4>Planning Issues</h4>
+
+        <h5>1. Buy-and-Sell Analysis</h5>
+        <ul>
+          <li><strong>Good structure:</strong> Each co-shareholder owns policy on the OTHER's life; each pays own premiums</li>
+          <li>s3(3)(a)(iA) exemption met: not deceased's effect/premiums; purpose = purchase interest; proceeds to co-shareholder</li>
+          <li>BUT: Mick is Emma's BROTHER — is this a "family company" for s3(3)(a)(ii) purposes? Probably not (s3(3)(a)(ii) is keyperson, different test)</li>
+          <li>Cover adequacy: Albert's 55% = R1,925,000 vs shares R1,925,000 ✓ matches</li>
+          <li>Mick's 45% = R1,575,000 vs value R1,575,000 ✓ matches</li>
+        </ul>
+
+        <h5>2. Living Annuity on Death</h5>
+        <ul>
+          <li>Emma nominated → bypasses estate (not property in Albert's estate)</li>
+          <li>Not deemed property (retirement fund rule s3(2)(i))</li>
+          <li>Options for Emma: lump sum (taxed per retirement lump sum death table, first R550K tax-free); OR continue as own living annuity (drawdowns taxed as income); OR combination.</li>
+        </ul>
+
+        <h5>3. Voluntary Purchased Annuity</h5>
+        <ul>
+          <li>10-year fixed term. 24 of 120 payments received. 96 payments remaining.</li>
+          <li>On death: remaining capital forms part of Albert's estate as property</li>
+          <li>Value = PV of remaining payments (can be calculated or agreed with insurer)</li>
+          <li>Capital element (tax-free) portion continues for recipient; interest portion taxable</li>
+        </ul>
+
+        <h5>4. Life Insurance Planning</h5>
+        <ul>
+          <li>Policy 1 to Emma: s4(q) eliminates estate duty impact; bypasses executor's fees</li>
+          <li>Policy 2 to daughter Abby: still deemed property under s3(3)(a); no s4(q); Abby must contribute to estate duty apportionment</li>
+          <li>Abby is self-supporting 23-yr-old — consider if R1,575,000 is appropriate given her low needs</li>
+        </ul>
+
+        <h5>5. CGT on Death</h5>
+        <ul>
+          <li>Primary res: R3M exclusion (2026/27), rollover if to Emma</li>
+          <li>Cameron shares to whoever (likely buy-and-sell): gain R1,125,000. Small business exclusion R2.7M available (Albert &gt;55, business &lt;R15M). Result: NO CGT.</li>
+          <li>RSA RSBs: no gain (R460K = R460K)</li>
+          <li>Vehicle, personal use: excluded</li>
+          <li>Money market, CIS: to Emma → rollover; to others → CGT</li>
+        </ul>
+
+        <h5>6. Estate Duty</h5>
+        <ul>
+          <li>Property: residence R3.2M, RSBs R460K, Cameron shares R1,925,000 (sold via buy-and-sell = cash R1,925K into estate), living annuity capital NOT property, vehicles R250K, personal R250K, voluntary annuity PV</li>
+          <li>Deemed: Policies 1 + 2 = R2,775,000 (both domestic policies on Albert's life); Policy R1,925,000 owned by Mick EXEMPT per s3(3)(a)(iA); RA (disallowed contribs if any)</li>
+          <li>Deductions: Funeral, exec fee, bond R494,858, car R100K, CGT, s4(q) residue + Policy 1 to Emma</li>
+          <li>Estate duty likely modest once s4(q) deductions applied</li>
+        </ul>
+
+        <h5>7. Liquidity</h5>
+        <ul>
+          <li>Available: Money market R360K, RSA RSBs R460K, buy-and-sell proceeds R1,925,000 from Mick (if Mick survives Albert)</li>
+          <li>Needed: Funeral, admin, CGT, estate duty, bond settlement, car loan</li>
+          <li>Likely adequate — buy-and-sell delivers key liquidity</li>
+        </ul>
+
+        <h5>8. RA Consideration</h5>
+        <ul>
+          <li>Current R350K small; growing. If Albert retires at 60: can commute 1/3, 2/3 to annuity. R350K is below R247,500 de minimis → can take full as lump sum.</li>
+          <li>Nominate Emma as beneficiary</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DEC 2024 EXAM — BLUE & PINK ============ -->
+  <div class="paper-card" id="dec-2024">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">December 2024 Exam — Full paper incl. Blue &amp; Pink case study</span>
+      <span class="paper-meta">100 marks — MOST RECENT paper — Drafted memos</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="tip-box"><strong>This is the most recent exam — prioritise this one.</strong> Examiner style and question structure are the closest indicator of what you'll face.</div>
+
+      <h3>SECTION A (50 marks) — Short Questions</h3>
+
+      <div class="question-block"><span class="marks">2</span><h4>Q1.1 — Mr Z underinsurance (R10M house insured R8M; R5M fire damage)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-1-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-1-1">
+        <p><strong>Claim partially successful — AVERAGE clause applies.</strong></p>
+        <p>Under the <strong>indemnity principle</strong> of short-term insurance, if you're underinsured the insurer pays proportionally. Ratio: R8M / R10M = 80%.</p>
+        <div class="formula-box">
+          Insurer pays: R5,000,000 × 80% = <strong>R4,000,000</strong><br>
+          Mr Z absorbs: R1,000,000 himself
+        </div>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>Q1.2.1 — Ms AB's liquidity ratio</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-1-2-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-1-2-1">
+        <p>Liquidity ratio = Liquid assets ÷ Monthly expenses<br>
+        Liquid assets: Money market R23,000<br>
+        Monthly expenses: Bond R6,500 (+ clothing/credit ~R1K each maybe). Strict calc: R23,000 / R6,500 = <strong>3.5 months</strong></p>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>Q1.2.2 — Comment on ratio</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-1-2-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-1-2-2">
+        <p>Industry benchmark is 3–6 months. At 3.5 months Ms AB is at the LOWER END of acceptable. Given her credit card debt (R11K) and clothing accounts (R18K) — really high-interest — she should reduce these first or build her emergency fund higher.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q1.3 — Group life cover on death of Mr X</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-1-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-1-3">
+        <p>Mr X contributes 5% of R820K = R41K (member); employer 4% = R32,800 (employer); total R73,800. Life cover at 10% = R7,380 (not relevant to final payout).<br>
+        Death benefit = <strong>2 × R820,000 = R1,640,000</strong></p>
+        <p><strong>Approved group life inside a retirement fund</strong> — falls under <strong>s37C Pension Funds Act</strong>. Trustees must distribute to dependants (not the nominated beneficiary automatically).</p>
+        <ul>
+          <li>Not property in the deceased estate</li>
+          <li>Not subject to executor's fees or estate duty</li>
+          <li>Trustees have 12 months to identify dependants and distribute fairly</li>
+          <li>Taxed per <strong>retirement fund lump sum death table</strong> (first R550K tax-free)</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q1.4 — s4(q) deduction where Mrs X bequeathed share portfolio R9.5M to Family Trust subject to usufruct to husband (age 44) who inherits. Dividends R950K p.a.</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-1-4')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-1-4">
+        <p>The s4(q) deduction equals the <strong>value of the usufruct</strong> bequeathed to the spouse (not the whole R9.5M).</p>
+        <p>Husband's age at Mrs X's death = 44. Age-next-birthday (ANB) = <strong>45</strong>. Life expectancy factor from Table A at age 45 ANB ≈ 9.15 (verify from Annexure).</p>
+        <p><strong>Usufruct valuation — use ACTUAL yield (R950K) or 12% × MV, whichever Commissioner accepts. Here actual yield given:</strong></p>
+        <div class="formula-box">
+          Annual yield = R950,000 (actual)<br>
+          Usufruct value = R950,000 × 9.15 (Table A, male 45 ANB) = <strong>R8,692,500</strong><br>
+          s4(q) deduction = <strong>R8,692,500</strong>
+        </div>
+        <p>Alternative with 12% yield: R9,500,000 × 12% × 9.15 = R10,431,000 — but this exceeds property value, so cap at R9,500,000 would apply. Given actual yield provided, use actual.</p>
+        <p>Bare dominium portion = R9,500,000 − R8,692,500 = R807,500 — goes to trust (not spouse), fully dutiable in Mrs X's estate.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>Q2.1 — Validity of BC's handwritten will (daughter wrote it; BC + 2 witnesses added thumbprints only)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-2-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-2-1">
+        <p><strong>The will is LIKELY INVALID as currently executed:</strong></p>
+        <ul>
+          <li><strong>Wills Act s2(1)(a)(i)-(v):</strong> Testator must SIGN (or affix a MARK like a thumbprint) in the presence of 2 competent witnesses. Witnesses must SIGN their names (not make a mark).</li>
+          <li>If testator makes a mark (thumbprint), a <strong>commissioner of oaths must certify</strong> that the testator identified himself AND intended the document to be his will.</li>
+          <li>BC used only thumbprint WITHOUT a commissioner certifying — formal defect.</li>
+          <li>Witnesses used thumbprints instead of signatures — they can't witness with a mark; they must sign with a signature.</li>
+          <li>Undated will doesn't invalidate it, but makes proving timing difficult.</li>
+        </ul>
+        <p><strong>s2(3) Wills Act condonation:</strong> The court MAY declare the will valid despite formal defects if it's satisfied that the document was intended by the testator to be his will. But this requires a court application — not automatic. Evidence needed: BC's intention, daughter's testimony about writing it at his instruction, witnesses' confirmation.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">4</span><h4>Q2.2 — Other problematic aspects (assume will is valid)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-2-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-2-2">
+        <ul>
+          <li><strong>Stepsister included in residue:</strong> Unusual; she's not typically a close family member. Could be intentional or by mistake; should be verified.</li>
+          <li><strong>Estranged daughter still inherits:</strong> Despite the estrangement, the will gives her an equal share. BC may have wished to disinherit her but didn't — update needed.</li>
+          <li><strong>No executor named:</strong> Master will appoint one — adds delays and possible conflict between heirs.</li>
+          <li><strong>No alternate/substitute heirs</strong> if any beneficiary predeceases — silent on s2C(2).</li>
+          <li><strong>Specific bequest to brother FW</strong> of apartment in Appleton — if disposed of before death, partial intestacy.</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>Q2.3 — Son renounces — how is estate distributed?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-2-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-2-3">
+        <p><strong>Wills Act s2C(1):</strong> If a descendant (son) renounces a benefit together with the surviving spouse, the benefit vests in the surviving spouse (ZC, BC's wife). So the son's share of the residue goes to ZC.</p>
+        <p>The other residuary beneficiaries (daughter, stepsister) still receive their original shares. Only the son's portion shifts to the spouse.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>Q3.1 — PV dies intestate, no will found. Consequences.</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-3-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-3-1">
+        <p>The <strong>Intestate Succession Act 81 of 1987</strong> governs distribution. PV has no choice in who inherits. The Master appoints an executor. No ability to nominate guardians or set up testamentary trusts.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>Q3.2 — Calculate intestate distribution (A father, B stepmother, C &amp; D brothers, E half-sister, F half-sister, G cousin; divisible R12M)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-3-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-3-2">
+        <p>No spouse, no descendants of PV. Governed by <strong>s1(1)(d) + s1(1)(e) Intestate Succession Act</strong>.</p>
+        <p><strong>Rule:</strong> Parents inherit 50/50. If a parent predeceased, that parent's descendants share the deceased parent's half per stirpes.</p>
+        <ul>
+          <li><strong>A (father):</strong> alive → inherits 50% = R6,000,000</li>
+          <li><strong>B (stepmother):</strong> NOT a parent (not biological or adoptive) → <strong>nothing</strong></li>
+          <li>PV's <strong>mother is predeceased</strong> (implied — only half-sister F "same mother"). Mother's 50% split among mother's descendants who are siblings of PV.</li>
+          <li>Mother's descendants (PV's full/half siblings from mother): <strong>F only</strong> (half-sister same mother) — since C, D are brothers (full siblings — share both mother and father), they ALSO inherit from mother's half.</li>
+          <li><strong>C, D, F</strong> share mother's R6,000,000 equally = R2,000,000 each</li>
+          <li><strong>E (half-sister same father):</strong> does NOT inherit (father is alive, so E doesn't come in under father's line — only mother's line splits because she's predeceased). E doesn't inherit.</li>
+          <li><strong>G (cousin):</strong> Nothing (not a child of a predeceased parent of PV)</li>
+        </ul>
+        <p><strong>Distribution:</strong><br>
+        A = R6,000,000 | C = R2,000,000 | D = R2,000,000 | F = R2,000,000<br>
+        B, E, G = R0<br>
+        Total = R12,000,000 ✓</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q3.3 — Shortcomings in CFP XY's services</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-3-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-3-3">
+        <ul>
+          <li><strong>Failed to ensure client had a valid will</strong> — fundamental estate planning failure for a 15-year client relationship</li>
+          <li>An estate analysis should trigger a will review; XY should have recommended PV draft/update a will and kept a copy</li>
+          <li>FPI Code of Ethics/FSCA conduct standards require identifying material gaps in a client's planning</li>
+          <li>Should have used the R12M estate value as a prompt for testamentary trust planning, estate duty minimisation, etc.</li>
+          <li>Proper remedy: maintain a record, send annual review reminders, flag key gaps</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">4</span><h4>Q4.1 — W wants to pay R185K inheritance into his endowment. Consequences?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-4-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-4-1">
+        <p><strong>Long-term Insurance Act restrictions on endowment contributions:</strong></p>
+        <ul>
+          <li>First 5 years of an endowment: <strong>restrictive period</strong>. Contributions in year 1 set the baseline.</li>
+          <li>In any subsequent year within the restrictive period, contributions may NOT exceed 120% of the higher of the contributions in the PREVIOUS 2 years (the "120% rule").</li>
+          <li>Policy inception 1 Feb 2022 → restrictive period 2022–2027. Policy currently around year 3.</li>
+          <li>W contributed R120K at inception + R130K annually. Higher of previous 2 years × 120% = R130K × 120% = <strong>R156K MAX</strong>.</li>
+          <li>Adding R185K EXCEEDS the R156K limit.</li>
+        </ul>
+        <p><strong>Consequences:</strong> The excess becomes a "new start date" — the restrictive period restarts for that excess contribution. Or the insurer may refuse to accept it. Better to invest the R185K in a different product (unit trust, TFSA, etc.).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q4.2 — Capital surplus/shortfall (R22.12M needed)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-4-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-4-2">
+        <p><strong>Capital available at W's death:</strong></p>
+        <table>
+          <tr><td>House (MV R2.3M − bond R1.9M)</td><td>R400,000</td></tr>
+          <tr><td>Townhouse (R970K − R530K)</td><td>R440,000</td></tr>
+          <tr><td>Toyota (R500K − R280K)</td><td>R220,000</td></tr>
+          <tr><td>Endowment (cash value)</td><td>R360,000</td></tr>
+          <tr><td>Life Policy A (to estate)</td><td>R2,200,000</td></tr>
+          <tr><td>Life Policy B (V bene)</td><td>R1,000,000</td></tr>
+          <tr><td>Retirement fund death value</td><td>R500,000</td></tr>
+          <tr><td>Unapproved group life</td><td>R1,200,000</td></tr>
+          <tr><td><strong>Total available</strong></td><td><strong>R6,320,000</strong></td></tr>
+          <tr><td>Less: Estate costs</td><td>(R250,000)</td></tr>
+          <tr><td><strong>NET AVAILABLE</strong></td><td><strong>R6,070,000</strong></td></tr>
+          <tr><td>Capital required</td><td>R22,120,000</td></tr>
+          <tr><td><strong>SHORTFALL</strong></td><td><strong>R16,050,000</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="question-block"><span class="marks">2</span><h4>Q4.3 — Cost/tax-efficient way to address R15M shortfall</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-4-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-4-3">
+        <p><strong>Additional life insurance policy with V nominated as beneficiary.</strong></p>
+        <ul>
+          <li>No executor's fees (bypasses estate)</li>
+          <li>No estate duty impact (s4(q) deduction even though deemed property)</li>
+          <li>Cash flows directly to V immediately — fast, no probate delays</li>
+          <li>No grossing-up needed (policy to spouse)</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>Q5.1 — G wants to transfer primary residence and share portfolio into inter vivos trust. Advise.</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-5-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-5-1">
+        <p><strong>Advice — DISCOURAGE the proposal as structured:</strong></p>
+        <ul>
+          <li><strong>Primary residence transfer:</strong> Triggers CGT at current MV (R2.3M − R1.9M loan, assume base cost much lower). Loses the R3M primary residence exclusion (only available to natural persons or Special Trust (a)). Loses potential rollover on death to spouse.</li>
+          <li><strong>Share portfolio:</strong> Triggers CGT on transfer (MV R330K − BC R5K = R325K gain). At 40% inclusion + marginal rate, CGT payable.</li>
+          <li><strong>Transfer methods:</strong><br>
+            — Donation: Triggers <strong>donations tax 20% (over R100K exemption)</strong>. R5.6M+ donations = R1.1M+ donations tax.<br>
+            — Sale: Triggers CGT; trust needs funds. If on interest-free loan, <strong>s7C applies</strong> — deemed annual donation = official rate × loan balance. Donations tax implications.</li>
+          <li><strong>Trust tax is HARSH:</strong> 45% flat income / 36% effective CGT on retained gains. Primary residence exclusion NOT available in ordinary trust.</li>
+          <li><strong>Estate freezing benefit:</strong> Growth moves out of G's estate after transfer. But the DONATION/CGT/S7C costs often outweigh the estate duty savings in smaller estates.</li>
+          <li><strong>Recommended alternative:</strong> Keep primary residence in G's personal name (use R3M exclusion + spouse rollover). Consider transferring only the share portfolio if legitimate long-term planning. Discuss testamentary trust for kids instead — no CGT / donations on death transfer.</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">7</span><h4>Q5.2 — Accrual claim on G's death (commencement zero; CPI 93.1 → 130.3)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-5-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-5-2">
+        <p>Both commencement values = 0 → no CPI adjustment needed (zero × anything = zero).</p>
+        <table>
+          <tr><th>Asset</th><th>G</th><th>H</th></tr>
+          <tr><td>House</td><td>R2,300,000</td><td>—</td></tr>
+          <tr><td>Townhouse</td><td>R970,000</td><td>—</td></tr>
+          <tr><td>Holiday home (INHERITED 2023 — EXCLUDED from accrual)</td><td>—</td><td>—</td></tr>
+          <tr><td>Toyota</td><td>R500,000</td><td>—</td></tr>
+          <tr><td>Furniture</td><td>R300,000</td><td>—</td></tr>
+          <tr><td>Share portfolio</td><td>R330,000</td><td>—</td></tr>
+          <tr><td>Money market</td><td>R620,000</td><td>—</td></tr>
+          <tr><td>Endowment (surrender)</td><td>R360,000</td><td>—</td></tr>
+          <tr><td>Life Policy B (G-owned, no bene — to estate)</td><td>R1,000,000</td><td>—</td></tr>
+          <tr><td>Policy Y (G-owned on H's life — ownership value)</td><td>R15,000</td><td>—</td></tr>
+          <tr><td>Apartment</td><td>—</td><td>R950,000</td></tr>
+          <tr><td>Volvo</td><td>—</td><td>R600,000</td></tr>
+          <tr><td>Commercial property (INHERITED — EXCLUDED)</td><td>—</td><td>—</td></tr>
+          <tr><td>Policy A (H owns on G life)</td><td>—</td><td>R2,000,000</td></tr>
+          <tr><td>Policy X (H-owned, no bene)</td><td>—</td><td>R1,250,000</td></tr>
+          <tr><td>Subtotal</td><td>R6,395,000</td><td>R4,800,000</td></tr>
+          <tr><td>Less: Liabilities</td><td>(R1,900K+R530K+R280K+R25K = R2,735K)</td><td>(R360K+R380K+R1,200K = R1,940K)</td></tr>
+          <tr><td>Net</td><td>R3,660,000</td><td>R2,860,000</td></tr>
+          <tr><td>RA — EXCLUDED</td><td>—</td><td>—</td></tr>
+          <tr><td><strong>Accrual</strong></td><td><strong>R3,660,000</strong></td><td><strong>R2,860,000</strong></td></tr>
+        </table>
+        <p>Claim = (R3,660,000 − R2,860,000) ÷ 2 = <strong>R400,000</strong><br>
+        <strong>H has the claim against G's estate (smaller accrual = claimant).</strong></p>
+      </div>
+
+      <h3>SECTION B (50 marks) — Case Study</h3>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q1.1 — Mrs Kriek alleges her commencement value R2M (ANC says R650K). Can she use higher value at divorce?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B1-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-B1-1">
+        <p><strong>Yes — under E v E [2019] ZAKZPHC 40.</strong> The commencement values in an ANC are only <em>prima facie</em> proof of the commencement values. Either spouse can rebut this presumption by leading evidence that the actual commencement value differed.</p>
+        <p>This overturned the old position in <em>Olivier v Olivier</em> (1998) which held ANC values are binding.</p>
+        <p><strong>Mrs Kriek CAN seek to prove her actual commencement value was R2M</strong> — but she bears the onus of proof. She will need documentary evidence (bank statements, property deeds from 10+ years ago, etc.).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q1.2.1 — Tax of rental distributed: R50K to Ty (13), R20K to Bee (19)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B1-2-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-B1-2-1">
+        <p>Mrs Ze <strong>donated</strong> the property (gratuitous disposition).</p>
+        <p><strong>Distribution to Ty (13, minor child of donor):</strong> s7(3) applies — rental income deemed Mrs Ze's (not Ty's). R50K taxed at Mrs Ze's marginal rate.</p>
+        <p><strong>Distribution to Bee (19, adult):</strong> s7(3) does NOT apply (Bee is adult). Per s25B conduit, R20K rental taxed in Bee's hands; retains rental nature.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>Q1.2.2 — Mrs Ze's property donation tax consequences</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B1-2-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-B1-2-2">
+        <p><strong>Donations tax</strong> payable at 20% (first R30M). The R5M property donation (less R100K annual exemption) = R4,900,000 × 20% = <strong>R980,000 donations tax</strong> payable by Mrs Ze within 3 months of donation.</p>
+        <p>Also CGT is triggered on Mrs Ze (deemed disposal at MV).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q1.2.3 — Loan R1.6M at 7% (official 8%) — tax consequences</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B1-2-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-B1-2-3">
+        <p><strong>s7C deemed donation:</strong> (8% − 7%) × R1,600,000 = R16,000.<br>
+        Annual exemption R100,000 already used → full R16,000 is taxable.<br>
+        <strong>Donations tax: R16,000 × 20% = R3,200</strong></p>
+        <p>Plus: Mrs Ze earns R112,000 interest (7% × R1.6M) in her own hands — gross income, with R23,800 interest exemption.</p>
+        <p>Mrs Ze also has s7(5) attribution of the R90K interest earned by the trust (if retained due to trustees' discretion).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">11</span><h4>Q2.1 — CGT on Blue's death (big case study — COP, various assets, holiday home inherited, London apartment donated by mother)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B2-1')">Show Memo Approach</button>
+      <div class="answer-block" id="ans-2024-B2-1">
+        <p><strong>COP — only 50% of joint estate assets included in CGT calc (except excluded assets which stay 100%).</strong></p>
+        <p><strong>Joint estate assets (halved):</strong></p>
+        <ul>
+          <li>Primary residence: 50% MV R2,250,000 − 50% BC R1,000,000 = R1,250,000 gain. Less R3M primary residence exclusion — R0 gain. Also rollover to Pink for residue portion — but residence is NOT bequeathed to Pink (holiday home + furniture to Pink; residue to trust) → shares of residue to trust. Part rollover applicable only if going to spouse.</li>
+          <li>Rental property: 50% gain R220K (halved) — to trust → no rollover.</li>
+          <li>Vehicle: Personal use excluded.</li>
+          <li>Unit trust: 50% gain R100K — to trust → no rollover.</li>
+          <li>Shares in Colours (Pty) Ltd 75%: 50% interest + 100% of the other half = actually since 75% is JOINT (COP), 50% of it is Blue's. Gain = 50% × (R12M − R75) ≈ R6M.</li>
+        </ul>
+        <p><strong>Excluded assets (100% Blue's):</strong></p>
+        <ul>
+          <li>Holiday home (INHERITED — BUT no exclusion from COP? Actually if will didn't specifically exclude from marital regime, it's IN the joint estate; if excluded, 100% Blue's). Notes say will didn't exclude → halved.</li>
+          <li>London apartment (DONATED by mother — if no deed/conditions, subject to COP → halved).</li>
+        </ul>
+        <p><strong>Bequest routing affects rollover:</strong> Holiday home + furniture to Pink → rollover. Residue to Colourful Family Trust → no rollover; CGT triggered.</p>
+        <p><strong>Calc structure:</strong></p>
+        <table>
+          <tr><td>Primary residence gain (50%)</td><td>0 (R3M exclusion)</td></tr>
+          <tr><td>Holiday home → Pink (rollover)</td><td>0</td></tr>
+          <tr><td>Rental property (50%) → trust</td><td>R220,000</td></tr>
+          <tr><td>Unit trust (50%) → trust</td><td>R100,000</td></tr>
+          <tr><td>Colours shares 75%: 50% × (12M − 75)</td><td>R5,999,963</td></tr>
+          <tr><td>London apartment (50%): (GBP 400K − 200K) × 22 × 50%</td><td>R2,200,000</td></tr>
+          <tr><td>Total gain</td><td>~R8,519,963</td></tr>
+          <tr><td>Less: Annual exclusion on death R300K (old) / R440K (new)</td><td>(R300K - R440K)</td></tr>
+          <tr><td>Net</td><td>~R8.1M</td></tr>
+          <tr><td>× 40% inclusion</td><td>R3.24M</td></tr>
+          <tr><td>× 45% marginal = <strong>CGT</strong></td><td><strong>~R1,458,000</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="question-block"><span class="marks">16</span><h4>Q2.2 — Estate Duty on Blue's death</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B2-2')">Show Memo Approach</button>
+      <div class="answer-block" id="ans-2024-B2-2">
+        <p><strong>COP estate duty — key structure:</strong></p>
+        <ol>
+          <li>Add all joint estate assets + excluded assets</li>
+          <li>Deduct surviving spouse's 50% share of joint estate</li>
+          <li>Add Blue's deemed property (policies)</li>
+          <li>Deduct joint estate liabilities (halved) + excluded property liabilities (full)</li>
+          <li>Deduct executor's fee on joint estate assets (but only 50% attributed to Blue's side)</li>
+          <li>s4(q) for bequests to Pink (holiday home + furniture)</li>
+          <li>Less s4A R3.5M abatement</li>
+        </ol>
+        <table>
+          <tr><th>Property</th><th></th></tr>
+          <tr><td>Blue's 50% of joint estate (MV R17,470,000 total × 50%) + excluded assets (none here — holiday home inherited but not excluded from COP per will)</td><td>~R8,735,000</td></tr>
+          <tr><td>Plus Policy C endowment (Pink bene, but property if Blue owner: surrender?)</td><td>R500,000</td></tr>
+          <tr><td>Plus Policy B deemed (Pink bene)</td><td>R3,000,000</td></tr>
+          <tr><td>Policy A (owned by Pink, Blue life insured): s3(3)(a) deemed in Blue's estate at proceeds value</td><td>R2,000,000</td></tr>
+          <tr><td>Policy C keyperson (owned by Colours Pty Ltd on Blue's life): s3(3)(a)(ii) 4 requirements — premiums not deducted ✓, company-owned, Pink/kids not beneficiaries — if all met, EXCLUDED; else include at proceeds − premiums+6% = R6,000,000 − R566,000 = R5,434,000</td><td>~R0 if exempt</td></tr>
+          <tr><td>RA B disallowed contribution s3(3)(e): R750K</td><td>R750,000</td></tr>
+          <tr><td><strong>Gross estate</strong></td><td><strong>~R14,985,000</strong></td></tr>
+          <tr><th>Deductions</th><th></th></tr>
+          <tr><td>Funeral R100K, final R100K</td><td>(R200,000)</td></tr>
+          <tr><td>Liabilities (50% of joint R2,630K)</td><td>(R1,315,000)</td></tr>
+          <tr><td>CGT from Q2.1</td><td>(~R1,458,000)</td></tr>
+          <tr><td>Executor's fee 50% (negotiated at 50% discount) = 1.9950% × joint assets</td><td>(~R348K)</td></tr>
+          <tr><td>s4(q) holiday home + furniture to Pink (50% = 2.5M joint × 50%)</td><td>(R2,500,000)</td></tr>
+          <tr><td><strong>Net estate</strong></td><td>~R9,164,000</td></tr>
+          <tr><td>Less s4A</td><td>(R3,500,000)</td></tr>
+          <tr><td><strong>Dutiable</strong></td><td>~R5,664,000</td></tr>
+          <tr><td><strong>Estate duty (20%)</strong></td><td><strong>~R1,132,800</strong></td></tr>
+        </table>
+        <p>Numbers indicative — exact answer depends on treatment of Policy C keyperson (likely exempt per s3(3)(a)(ii)) and whether holiday home is excluded.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>Q2.3 — Who's liable for payment of estate duty?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B2-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-B2-3">
+        <p>The <strong>executor</strong> of Blue's estate is liable to pay the estate duty to SARS. Under <strong>s11 Estate Duty Act</strong>, the executor recovers apportioned duty from beneficiaries of deemed property (e.g. Policy A to Pink, Policy B to Pink — but Pink gets s4(q) so no duty on those). Non-spouse beneficiaries (Colourful Family Trust receiving residue) bear apportioned duty.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>Q2.4 — Liquidity surplus/shortfall (liabilities incurred in own name; surety not enforced)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B2-4')">Show Memo Approach</button>
+      <div class="answer-block" id="ans-2024-B2-4">
+        <p><strong>Cash in / available:</strong></p>
+        <ul>
+          <li>Policies to estate (if any): Nil — Policies B &amp; C to Pink, Policy A to Pink (Pink-owned)</li>
+          <li>Unit trust R500K (50% Blue's share of COP)</li>
+          <li>Cash element of furniture/vehicles — nil</li>
+          <li>Shares sale: if Colourful Trust takes residue, can Colours shares be sold? Likely via buy-and-sell with Grey Family Trust (25% holder) or sold to Trust.</li>
+        </ul>
+        <p><strong>Cash out:</strong></p>
+        <ul>
+          <li>Estate duty ~R1,132,800</li>
+          <li>CGT ~R1,458,000</li>
+          <li>Liabilities (Blue's own name) — R1,315,000 joint half + R125K credit card + R350K vehicle = ~R1,790K</li>
+          <li>Funeral R100K, final R100K</li>
+          <li>Executor fee ~R348K, Master R7K</li>
+          <li><strong>Total ~R4,935,800</strong></li>
+        </ul>
+        <p><strong>Shortfall: ~R4M+</strong> without Pink voluntarily contributing. Needs life cover payable to Pink to address.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">7</span><h4>Q2.5 — Recommendations (tax-efficient, tailored)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2024-B2-5')">Show Memo</button>
+      <div class="answer-block" id="ans-2024-B2-5">
+        <ol>
+          <li><strong>Address liquidity shortfall:</strong> Additional life cover (R4M+) with Pink as beneficiary. Avoids executor's fees; s4(q) means no estate duty impact; immediate cash to Pink who can voluntarily contribute to estate.</li>
+          <li><strong>Estate duty minimisation:</strong> Consider bequeathing more residue to Pink (not to Colourful Family Trust) to maximise s4(q). Trust can receive assets later on Pink's death or via Pink's own will.</li>
+          <li><strong>CGT rollover opportunity:</strong> Redirect more bequests to Pink for s9HA rollover (primary residence, unit trusts). Reduces CGT at first death; deferred to Pink's death when cumulative abatement is R7M.</li>
+          <li><strong>Buy-and-sell with Grey Family Trust:</strong> Currently no buy-and-sell structure for Colours (Pty) Ltd. Recommend entering one to ensure liquidity for share value on Blue's death; structure policy ownership correctly (Grey Trust owns on Blue's life; Blue owns on Grey's life) to meet s3(3)(a)(iA) exemption.</li>
+          <li><strong>Review RA B disallowed contribution (R750K):</strong> Reduces over time as tax-deductible contributions catch up; meanwhile it's exposed to estate duty. Consider accelerating deductions.</li>
+          <li><strong>Update will:</strong> Consider testamentary trust for children through Pink's eventual will rather than Colourful Family Trust on Blue's death; more control.</li>
+          <li><strong>Review Policy C keyperson structure:</strong> Confirm all 4 s3(3)(a)(ii) requirements met; if so, R6M is excluded from Blue's estate.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MARCH 2021 EXAM ============ -->
+  <div class="paper-card" id="march-2021">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">March 2021 Exam — Martin (sole proprietor, disability) + Rodney &amp; Tanya</span>
+      <span class="paper-meta">40 marks Section B — Drafted memos</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+
+      <div class="scenario-box">
+        <h4>Q1 Facts (20 marks) — Martin (55), sole proprietor</h4>
+        <p>Widowed 6 yrs. No children. Earns R52,500/month AFTER tax (before RA R12,500/month). Townhouse bond R200K, repayment R2K/month, paid off at age 65. Needs same after-tax income if disabled, so he can keep contributing to RA and retire at 65 without needing disability income post-retirement.</p>
+        <p><strong>Business (sole proprietor):</strong> Tools R600K | Office furniture R100K | No saleable goodwill.</p>
+        <p><strong>Liabilities:</strong> Bond R200K | Bank OD R20K | Credit card R30K.</p>
+        <p><strong>Policies:</strong> Policy A R4M life + R2M disability accelerator | Policy B pure endowment R600K, 10 yrs in force. Medical aid paid from business.</p>
+        <p><strong>Investments:</strong> Money market R250K (emergency) | Unit trust R400K.</p>
+        <p>No family — bequeaths to nephew Derek. Assumptions: RA sufficient at 65. Income grows 6% p.a., growth rate 9%.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">13</span><h4>1.1 — Capital shortfall if disabled today</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2021-1-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2021-1-1">
+        <p><strong>Capital needs analysis using real rate for growing annuity:</strong></p>
+        <p>Real rate = (9% − 6%) / (1 + 6%) = 3/1.06 = <strong>2.83%</strong></p>
+        <p><strong>Income need per year (annualised, before retirement age 65):</strong></p>
+        <ul>
+          <li>After-tax income R52,500/month × 12 = R630,000</li>
+          <li>+ RA contribution R12,500/month × 12 = R150,000</li>
+          <li>Total annual need = <strong>R780,000</strong></li>
+          <li>Term until retirement (65 − 55) = 10 years</li>
+        </ul>
+        <p><strong>PV of growing annuity (BEGIN mode):</strong> PMT R780,000, i = 2.83%, n = 10<br>
+        PV ≈ <strong>R6,967,000</strong></p>
+        <p><strong>Add: lump sum debts to settle:</strong> Bond R200K + OD R20K + CC R30K = R250K</p>
+        <p><strong>Total capital required = R6,967,000 + R250,000 = R7,217,000</strong></p>
+        <p><strong>Capital available:</strong></p>
+        <ul>
+          <li>Policy A disability accelerator R2,000,000</li>
+          <li>Policy B endowment surrender R600,000</li>
+          <li>Money market R250,000</li>
+          <li>Unit trust R400,000</li>
+          <li>Business assets sale ~R700,000</li>
+          <li>Total ~<strong>R3,950,000</strong></li>
+        </ul>
+        <p><strong>Shortfall = R7,217,000 − R3,950,000 ≈ R3,267,000</strong></p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>1.2 — Two LT products for shortfall + tax implications</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2021-1-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2021-1-2">
+        <ol>
+          <li><strong>Top-up disability lump sum cover</strong> — tax-free in recipient's hands. Ensures immediate liquidity.</li>
+          <li><strong>Income protection policy (temporary disability)</strong> — monthly income until age 65. Benefits are <strong>TAXABLE</strong> in recipient's hands (unlike lump sum). Premiums not deductible.</li>
+        </ol>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>1.3.1 — Does Policy A form part of insolvent estate?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2021-1-3-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2021-1-3-1">
+        <p><strong>Section 63 Long-term Insurance Act</strong> protects policy proceeds from insolvency IF:</p>
+        <ul>
+          <li>Policy in force 3+ years ✓ (7 years)</li>
+          <li>Life assured is policyholder OR their spouse ✓ (Martin is both)</li>
+        </ul>
+        <p><strong>Policy A is PROTECTED</strong> — does NOT form part of insolvent estate. Creditors cannot access it.</p>
+        <p>Proceeds are protected up to maximum (historically R50K, then raised; confirm current LTIA regulations).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>1.3.2 — How to ensure Derek benefits from Policy A</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2021-1-3-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2021-1-3-2">
+        <p><strong>Nominate Derek as the beneficiary</strong> on Policy A directly with the insurer. Proceeds will bypass the estate entirely and pay directly to Derek — avoiding insolvency, avoiding executor's fees, avoiding delays.</p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>Q2 Facts (20 marks) — Rodney &amp; Tanya Cooper</h4>
+        <p>Rodney (55) + Tanya (50), OCP with accrual. Married 1992. ANC commencement zero each. Son Dennis (28, self-supporting). Rodney: investment banker, retires at 65, SA art collector (Pierneef painting inherited from brother 12 yrs ago).</p>
+        <p><strong>Rodney's assets:</strong> Primary res R5.5M (BC R2.3M) | Holiday home R2.5M (BC R1.6M) | Unit trust R4,575K (BC R2.3M) | Paintings R2.6M (BC R1.4M — Pierneef inherited) | Cash R700K | Motor R350K (BC R500K).</p>
+        <p><strong>Liabilities:</strong> Bond R1M | CC R250K.</p>
+        <p><strong>Policies:</strong> A R3.2M (no bene, to estate) | B (Dennis bene) | C R900K sinking fund (no bene) | D R2.8M (on Tanya's life, Rodney owns) | E R500K (Tanya bene).</p>
+      </div>
+
+      <div class="question-block"><h4>Full memo for Q2 — Depends on question sub-parts (not fully extracted)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2021-Q2')">Show Memo Approach</button>
+      <div class="answer-block" id="ans-2021-Q2">
+        <p><strong>Key themes in Q2:</strong></p>
+        <ul>
+          <li><strong>Accrual:</strong> Both commencement values zero → ALL net estate at death is "growth". Painting INHERITED by Rodney 12 yrs ago → EXCLUDED. Unit trust, primary res etc → included.</li>
+          <li><strong>Estate duty:</strong> Policies A, B, C, E all deemed property. Policy D is Rodney-owned on Tanya's life → it's property s3(2) (surrender value if any) in Rodney's estate. Policy E to Tanya → s4(q).</li>
+          <li><strong>CGT on death:</strong> Primary residence R3M exclusion (recent rule) applies. Paintings (if going to non-spouse) attract CGT. Unit trust gain if sold (non-spouse bequest) attracts CGT; if to Tanya → rollover.</li>
+          <li><strong>Planning (leaving maximum to Dennis):</strong> Leave everything to Tanya via s4(q) first, defer duty to 2nd death. But Dennis's inheritance depends on Tanya's will too. Consider testamentary trust for Dennis.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MAY 2016 — JACQUES & CLARISSA ============ -->
+  <div class="paper-card" id="may-2016">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">May 2016 Exam — Jacques &amp; Clarissa (OCP accrual)</span>
+      <span class="paper-meta">35 marks — Drafted memos</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Jacques (39) + Clarissa (42) married March 2005, OCP with accrual. Kids: George (9), Anna (6). Jacques has daughter Mandy (17) from 1st marriage (lives with wealthy mother — no maintenance). Clarissa has son James (16) whom Jacques formally adopted. CPI 62.9 → 119.3. Commencement: Jacques R320K, Clarissa R80K. Game farm in Namibia (R1.2M at wedding, inherited 2002) excluded from accrual. Marginal rate 41%. CGT R127,385. Funeral R50K. Executor VAT registered.</p>
+
+        <p><strong>Assets (Jacques / Clarissa):</strong></p>
+        <ul>
+          <li>Family home 50%/50% R1.6M each (joint owners)</li>
+          <li>Jacques: Farm Namibia R2.15M (excluded) | Industrial Stellenbosch R800K (inherited 2007) | Personal R30K | Vehicles R150K | Shares R1.45M | Bank R150K | Money market R500K | JJJ Attorneys 40% R1M (buy-and-sell with Jannie 35% + Jabu 25%, not related) | Loan to JJJ R120K | Policy A R800K (to estate) | Policy B R2.5M (Clarissa bene) | Policy C R1.25M (owned by Jannie &amp; Jabu — buy-and-sell) | Policy D R550K (owned by JJJ, covers bank loan surety; value after prem+6%) | RA R1.15M. Contributed R85K p.a. deductible; this year R50K extra not deducted.</li>
+          <li>Clarissa: Personal R30K | Vehicles R150K | Shares R963K | Bank R230K | Raggedy Ann Kids Clothing CC 100% R2.5M | Policy E R1.5M (Clarissa life, Jacques bene) | RA R75K</li>
+        </ul>
+        <p><strong>Liabilities:</strong> Bond 50% each R550K on primary res | Vehicle R125K (J) R25K (C) | Surety JJJ bank loan R550K</p>
+        <p><strong>Will (Jacques):</strong> Farm + Stellenbosch + JJJ shares → testamentary trust "for benefit of my children"; R200K → NSRI (PBO); residue → Clarissa.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q1.1 — Who qualifies as beneficiaries of Jacques's testamentary trust?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2016-1-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2016-1-1">
+        <p>"My children" in a will is interpreted broadly. Jacques's children include:</p>
+        <ul>
+          <li><strong>George (9)</strong> — biological child with Clarissa ✓</li>
+          <li><strong>Anna (6)</strong> — biological child with Clarissa ✓</li>
+          <li><strong>Mandy (17)</strong> — biological child from first marriage ✓</li>
+          <li><strong>James (16)</strong> — formally ADOPTED by Jacques. Per Children's Act 38 of 2005 s242, an adopted child is deemed a child of the adoptive parent for ALL purposes, including succession ✓</li>
+        </ul>
+        <p>All 4 qualify. If Jacques wanted to exclude certain children (e.g. Mandy's mother is wealthy), he must NAME them in the will.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">2</span><h4>Q1.2 — Who's included in Clarissa's bequest to "her children"?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2016-1-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2016-1-2">
+        <p>Clarissa's children are:</p>
+        <ul>
+          <li><strong>George (9)</strong> — biological ✓</li>
+          <li><strong>Anna (6)</strong> — biological ✓</li>
+          <li><strong>James (16)</strong> — biological son, now adopted by Jacques. Adoption does not sever the link to biological mother ✓ (still her child)</li>
+        </ul>
+        <p>Mandy is NOT Clarissa's child (no biological or adoptive link).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q1.3 — Structure wills for fair treatment + maintenance for younger children</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2016-1-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2016-1-3">
+        <ul>
+          <li><strong>Testamentary trust with named beneficiaries</strong> and percentages/shares — avoids ambiguity</li>
+          <li><strong>Different capital distribution ages</strong> e.g. education support until 25, capital at 30</li>
+          <li><strong>Life insurance</strong> with specific beneficiaries to top up the younger kids' inheritance (since Mandy already has a wealthy mother, less cover needed for her)</li>
+          <li>Use <strong>Special Trust Type (b)</strong> so youngest is under 18 — individual tax rates apply</li>
+          <li>Consider specific maintenance trust clauses for education, medical, reasonable living</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">8</span><h4>Q2 — Accrual claim (Jacques dies today)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2016-Q2')">Show Memo</button>
+      <div class="answer-block" id="ans-2016-Q2">
+        <p>CPI adjustment: 119.3 / 62.9 = 1.8966<br>
+        Jacques commencement: R320K × 1.8966 = <strong>R606,917</strong><br>
+        Clarissa commencement: R80K × 1.8966 = <strong>R151,729</strong></p>
+        <table>
+          <tr><th>Asset</th><th>Jacques</th><th>Clarissa</th></tr>
+          <tr><td>Family home (50% each)</td><td>R1,600,000</td><td>R1,600,000</td></tr>
+          <tr><td>Farm Namibia (EXCLUDED)</td><td>—</td><td>—</td></tr>
+          <tr><td>Stellenbosch site (inherited 2007 — EXCLUDED)</td><td>—</td><td>—</td></tr>
+          <tr><td>Personal &amp; vehicles</td><td>R180,000</td><td>R180,000</td></tr>
+          <tr><td>Shares</td><td>R1,450,000</td><td>R963,000</td></tr>
+          <tr><td>Bank + money market</td><td>R650,000</td><td>R230,000</td></tr>
+          <tr><td>JJJ 40% shares</td><td>R1,000,000</td><td>—</td></tr>
+          <tr><td>Loan to JJJ</td><td>R120,000</td><td>—</td></tr>
+          <tr><td>Raggedy Ann CC 100% (if acquired during marriage, included)</td><td>—</td><td>R2,500,000</td></tr>
+          <tr><td>Policy A (payable to estate)</td><td>R800,000</td><td>—</td></tr>
+          <tr><td>Policy B (nominated Clarissa — EXCLUDED)</td><td>—</td><td>—</td></tr>
+          <tr><td>Policy C (co-shareholder owned — EXCLUDED)</td><td>—</td><td>—</td></tr>
+          <tr><td>Policy D (JJJ-owned — EXCLUDED from Jacques's accrual)</td><td>—</td><td>—</td></tr>
+          <tr><td>Policy E (Clarissa life, Jacques beneficiary)</td><td>R1,500,000</td><td>—</td></tr>
+          <tr><td>RA (excluded — not in estate under s37C)</td><td>—</td><td>—</td></tr>
+          <tr><td><strong>Subtotal</strong></td><td><strong>R7,300,000</strong></td><td><strong>R5,473,000</strong></td></tr>
+          <tr><td>Less: Bond + vehicle + surety</td><td>(R1,225,000)</td><td>(R575,000)</td></tr>
+          <tr><td>Net</td><td>R6,075,000</td><td>R4,898,000</td></tr>
+          <tr><td>Less: Commencement CPI-adjusted</td><td>(R606,917)</td><td>(R151,729)</td></tr>
+          <tr><td><strong>Accrual</strong></td><td><strong>R5,468,083</strong></td><td><strong>R4,746,271</strong></td></tr>
+        </table>
+        <p>Difference: R5,468,083 − R4,746,271 = R721,812 ÷ 2 = <strong>R360,906</strong></p>
+        <p><strong>Clarissa has the claim against Jacques's estate</strong> (she has the smaller accrual). Approximate — classification of assets open to interpretation; marker's discretion.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">14</span><h4>Q3 — Estate duty payable on Jacques's death</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2016-Q3')">Show Memo</button>
+      <div class="answer-block" id="ans-2016-Q3">
+        <table>
+          <tr><th colspan="2">Property</th></tr>
+          <tr><td>Family home (50%)</td><td>R1,600,000</td></tr>
+          <tr><td>Farm Namibia (SA res → worldwide)</td><td>R2,150,000</td></tr>
+          <tr><td>Stellenbosch site</td><td>R800,000</td></tr>
+          <tr><td>Personal + vehicles</td><td>R180,000</td></tr>
+          <tr><td>Shares</td><td>R1,450,000</td></tr>
+          <tr><td>Bank + money market</td><td>R650,000</td></tr>
+          <tr><td>JJJ 40% shares</td><td>R1,000,000</td></tr>
+          <tr><td>Loan to JJJ</td><td>R120,000</td></tr>
+          <tr><td>Policy E (Clarissa life, Jacques bene — ownership right)</td><td>R1,500,000</td></tr>
+          <tr><td>RA — excluded per s3(2)(i) but add s3(3)(e) disallowed contribution</td><td>R50,000</td></tr>
+          <tr><td><strong>Subtotal Property</strong></td><td><strong>R9,500,000</strong></td></tr>
+          <tr><th colspan="2">Deemed Property s3(3)(a)</th></tr>
+          <tr><td>Policy A (to estate)</td><td>R800,000</td></tr>
+          <tr><td>Policy B (Clarissa bene)</td><td>R2,500,000</td></tr>
+          <tr><td>Policy C (buy-and-sell — s3(3)(a)(iA) exemption MET: owned by co-shareholders, for purchasing his shares, no premiums paid by Jacques)</td><td>R0 (EXCLUDED)</td></tr>
+          <tr><td>Policy D (keyperson for bank loan — s3(3)(a)(ii): owned by company, not by Jacques; not payable to estate/relative. EXEMPT)</td><td>R0 (EXCLUDED)</td></tr>
+          <tr><td><strong>Subtotal Deemed</strong></td><td><strong>R3,300,000</strong></td></tr>
+          <tr><td><strong>Gross Estate</strong></td><td><strong>R12,800,000</strong></td></tr>
+          <tr><th colspan="2">Deductions</th></tr>
+          <tr><td>Funeral s4(a)</td><td>(R50,000)</td></tr>
+          <tr><td>Liabilities (bond + vehicle + surety)</td><td>(R1,225,000)</td></tr>
+          <tr><td>CGT s4(b)</td><td>(R127,385)</td></tr>
+          <tr><td>Executor's fee 3.99% × ~R9.5M</td><td>(R379,050)</td></tr>
+          <tr><td>Master</td><td>(R600)</td></tr>
+          <tr><td>Accrual claim s4(1A)</td><td>(R360,906)</td></tr>
+          <tr><td>s4(h) PBO bequest to NSRI</td><td>(R200,000)</td></tr>
+          <tr><td>s4(q) — Policy B to Clarissa</td><td>(R2,500,000)</td></tr>
+          <tr><td>s4(q) — Residue to Clarissa (calc balance)</td><td>~(R3,500,000)</td></tr>
+          <tr><td><strong>Net estate</strong></td><td>~R4,457,059</td></tr>
+          <tr><td>Less s4A</td><td>(R3,500,000)</td></tr>
+          <tr><td><strong>Dutiable</strong></td><td>~R957,059</td></tr>
+          <tr><td><strong>Estate Duty (20%)</strong></td><td>~<strong>R191,412</strong></td></tr>
+        </table>
+        <p>Note: farm + site + JJJ shares to testamentary trust (not spouse) — not eligible for s4(q). R200K PBO qualifies s4(h). Surety may or may not be enforced (depends whether Policy D pays bank — likely does, so surety extinguished).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q4 — Correct treatment of Policy D</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2016-Q4')">Show Memo</button>
+      <div class="answer-block" id="ans-2016-Q4">
+        <p>Policy D: owner JJJ Attorneys, life assured Jacques, purpose to cover bank loan Jacques has stood surety for.</p>
+        <p><strong>s3(3)(a)(ii) keyperson exemption</strong> — 4 requirements:</p>
+        <ol>
+          <li>Policy not effected by/at instance of deceased ✓ (JJJ took it out)</li>
+          <li>No premium paid by deceased ✓ (JJJ pays)</li>
+          <li>No amount payable to deceased's estate ✓ (proceeds to JJJ/bank)</li>
+          <li>No amount payable to relative, dependant or family company ✓ (JJJ not family company — Jacques only 40%)</li>
+        </ol>
+        <p><strong>All 4 met → Policy D is EXCLUDED from deemed property. R0.</strong></p>
+      </div>
+
+      <div class="question-block"><span class="marks">2</span><h4>Q5 — Does JJJ owe anything to the estate?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2016-Q5')">Show Memo</button>
+      <div class="answer-block" id="ans-2016-Q5">
+        <p><strong>Yes — R120,000 loan account</strong> owed by JJJ to Jacques must be repaid to the estate (it's an asset of the estate).</p>
+        <p>Additionally, <strong>Policy C</strong> (R1,250,000 owned by Jannie &amp; Jabu) proceeds → co-shareholders use to buy Jacques's 40% JJJ shares at MV from the estate. So R1,000,000 flows into the estate from the buy-and-sell.</p>
+        <p>Total cash into estate from JJJ side: R120K (loan repayment) + R1,000,000 (buy-and-sell share purchase) = <strong>R1,120,000</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MAY 2015 — JOHNNY WALKER ============ -->
+  <div class="paper-card" id="may-2015">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">May 2015 Exam — Johnny Walker (OCP no accrual) &amp; Trust Questions</span>
+      <span class="paper-meta">35 marks — Drafted memos</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+
+      <div class="scenario-box">
+        <h4>Q1 Facts (22 marks) — Johnny &amp; Savanah Walker</h4>
+        <p>Married 1 Sept 1984 OCP EXCLUDING accrual and profit/loss. Marginal rate 40%.</p>
+        <p><strong>Johnny's assets:</strong> Family home R2.35M (bought 2002 R575K, R320K extensions 2008, primary residence) | Household R98K | Vehicles R625K (Lexus + Isuzu personal) | Speedboat R77K (9.85m, bought 2011 R57K) | Farm Glenhope R4.2M (inherited 4 yrs ago, estate value R2.8M; managing cattle-stud operations) | Loan to J Walker Trust R500K (interest-free, on demand) | JSE portfolio R1.95M (BC R1.2M) | Bank R900K | Policy A R5M (own life, payable to estate) | Policy B R2.5M (own life, Savanah beneficiary) | Policy C R500K (own life, no beneficiary; taken out to generate cash to bequeath to trust to offset loan).</p>
+        <p><strong>Liabilities:</strong> Bond R732K | Bank OD R57K.</p>
+        <p><strong>Will:</strong> Farm → son Justin | JSE portfolio → daughter Brooke | Cash = loan balance → J Walker Trust | Residue → Savanah.</p>
+        <p>Savanah's assets R2.7M, liabilities R400K.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>1.1 — CGT payable by estate</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-1-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-1-1">
+        <table>
+          <tr><th>Asset</th><th>MV</th><th>BC</th><th>Exclusion / Rollover</th><th>Gain</th></tr>
+          <tr><td>Family home</td><td>R2,350,000</td><td>R895K (R575K + R320K)</td><td>Primary res exclusion (R2M old) → residue to Savanah (rollover)</td><td>0</td></tr>
+          <tr><td>Vehicles</td><td>R625,000</td><td>—</td><td>Personal use</td><td>0</td></tr>
+          <tr><td>Speedboat (9.85m &gt; 10m rule? Under 10m → personal use)</td><td>R77,000</td><td>R57,000</td><td>Personal use</td><td>0</td></tr>
+          <tr><td>Farm Glenhope → son Justin (NO spouse rollover)</td><td>R4,200,000</td><td>R2,800,000 (stepped up on inheritance)</td><td>—</td><td>R1,400,000</td></tr>
+          <tr><td>JSE portfolio → daughter Brooke (no rollover)</td><td>R1,950,000</td><td>R1,200,000</td><td>—</td><td>R750,000</td></tr>
+          <tr><td>Loan a/c to trust (bequeathed cash equivalent → trust)</td><td>R500,000</td><td>R500,000</td><td>Par 12A(6) — loan forms property in estate</td><td>0</td></tr>
+          <tr><td><strong>Aggregate gain</strong></td><td></td><td></td><td></td><td><strong>R2,150,000</strong></td></tr>
+          <tr><td>Less: Annual exclusion on death (old R300K)</td><td></td><td></td><td></td><td>(R300,000)</td></tr>
+          <tr><td>Net</td><td></td><td></td><td></td><td>R1,850,000</td></tr>
+          <tr><td>× 40% inclusion</td><td></td><td></td><td></td><td>R740,000</td></tr>
+          <tr><td><strong>× 40% marginal = CGT</strong></td><td></td><td></td><td></td><td><strong>R296,000</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="question-block"><span class="marks">12</span><h4>1.2 — Estate Duty (VAT on exec fee, final R30K, Master R600)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-1-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-1-2">
+        <table>
+          <tr><th colspan="2">Property s3(2)</th></tr>
+          <tr><td>Family home</td><td>R2,350,000</td></tr>
+          <tr><td>Household</td><td>R98,000</td></tr>
+          <tr><td>Vehicles</td><td>R625,000</td></tr>
+          <tr><td>Speedboat</td><td>R77,000</td></tr>
+          <tr><td>Farm Glenhope (bona fide farming → 70% valuation? Not clear if bona fide; use full MV unless specified)</td><td>R4,200,000</td></tr>
+          <tr><td>Loan to trust</td><td>R500,000</td></tr>
+          <tr><td>JSE portfolio</td><td>R1,950,000</td></tr>
+          <tr><td>Bank</td><td>R900,000</td></tr>
+          <tr><td><strong>Subtotal</strong></td><td><strong>R10,700,000</strong></td></tr>
+          <tr><th colspan="2">Deemed Property s3(3)(a)</th></tr>
+          <tr><td>Policy A (to estate)</td><td>R5,000,000</td></tr>
+          <tr><td>Policy B (Savanah beneficiary)</td><td>R2,500,000</td></tr>
+          <tr><td>Policy C (no beneficiary)</td><td>R500,000</td></tr>
+          <tr><td><strong>Subtotal</strong></td><td><strong>R8,000,000</strong></td></tr>
+          <tr><td><strong>Gross Estate</strong></td><td><strong>R18,700,000</strong></td></tr>
+          <tr><th colspan="2">Deductions s4</th></tr>
+          <tr><td>Funeral/final s4(a)</td><td>(R30,000)</td></tr>
+          <tr><td>Master s4(c)</td><td>(R600)</td></tr>
+          <tr><td>Executor 3.99% × R10.7M</td><td>(R426,930)</td></tr>
+          <tr><td>Bond + OD s4(b)</td><td>(R789,000)</td></tr>
+          <tr><td>CGT s4(b)</td><td>(R296,000)</td></tr>
+          <tr><td>s4(q) — Policy to Savanah</td><td>(R2,500,000)</td></tr>
+          <tr><td>s4(q) — Residue to Savanah (family home + household + vehicles + speedboat + bank + Policy A + Policy C − expenses − legacies)</td><td>approx (R6,158,470)</td></tr>
+          <tr><td><strong>Net estate</strong></td><td>~R8.5M</td></tr>
+          <tr><td>Less s4A</td><td>(R3,500,000)</td></tr>
+          <tr><td><strong>Dutiable</strong></td><td>~R5M</td></tr>
+          <tr><td><strong>Duty (20%)</strong></td><td>~<strong>R1M</strong></td></tr>
+        </table>
+        <p><em>Exact residue depends on which assets constitute the residue; method marks are primary.</em></p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>1.3 — Liquidity analysis</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-1-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-1-3">
+        <table>
+          <tr><th>Cash available</th><th></th></tr>
+          <tr><td>Bank account</td><td>R900,000</td></tr>
+          <tr><td>Policy A (to estate)</td><td>R5,000,000</td></tr>
+          <tr><td>Policy C (no beneficiary = to estate)</td><td>R500,000</td></tr>
+          <tr><td>JSE portfolio bequeathed to Brooke — NOT available (specific bequest)</td><td>0</td></tr>
+          <tr><td><strong>Total available</strong></td><td><strong>R6,400,000</strong></td></tr>
+          <tr><th>Cash needed</th><th></th></tr>
+          <tr><td>Funeral + Master + Exec fee</td><td>R457,530</td></tr>
+          <tr><td>Bond + OD</td><td>R789,000</td></tr>
+          <tr><td>CGT</td><td>R296,000</td></tr>
+          <tr><td>Estate duty (on non-spouse portion; apportion)</td><td>~R500,000</td></tr>
+          <tr><td>Cash legacy to trust (= loan R500K)</td><td>R500,000</td></tr>
+          <tr><td><strong>Total needed</strong></td><td>~<strong>R2,542,530</strong></td></tr>
+          <tr><td><strong>SURPLUS</strong></td><td><strong>~R3,857,470</strong></td></tr>
+        </table>
+        <p><strong>Savanah's claim:</strong> Savanah is not eligible for a maintenance claim (she has R2.7M own assets) — estate is liquid. Policy B (R2.5M) bypasses the estate and goes directly to her.</p>
+      </div>
+
+      <div class="scenario-box"><h4>Q2 (13 marks) — Wills &amp; Trusts</h4></div>
+
+      <div class="question-block"><span class="marks">3</span><h4>2.1 — Mildred's Will: valid? (One witness only signed last page; other signed every page)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-2-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-2-1">
+        <p><strong>Valid.</strong> Wills Act s2(1)(a)(v): witnesses must sign ANYWHERE on the will, in presence of testator and each other. They need NOT sign every page — only the testator must sign every page.</p>
+        <p>So Mildred (testator) signing every page + Huberta signing every page + Iona signing only last page = all requirements met. The will is validly executed.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>2.2 — Dabula amends trust deed to add new partner Anna &amp; her son Crispin as beneficiaries. Vuyo unhappy.</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-2-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-2-2">
+        <p>Once beneficiaries have accepted benefits under the trust, their rights are "vested" and cannot be unilaterally removed or diluted — even if the trust deed purports to allow amendment.</p>
+        <p><strong>Crookes v Watson 1956 AD:</strong> Classic authority — once beneficiaries have accepted the benefits, the deed becomes a stipulatio alteri (contract in favour of third parties) and can only be amended with the beneficiaries' consent.</p>
+        <p>The preamble here states "trustees accept the donation on behalf of the beneficiaries" — acceptance has occurred.</p>
+        <p><strong>Vuyo's remedies:</strong></p>
+        <ul>
+          <li>Challenge the amendment in court — seek to have it set aside</li>
+          <li>Vuyo, Manto, Thandi must all be parties (co-beneficiaries)</li>
+          <li>Approach the Master of the High Court to investigate trustees' conduct</li>
+          <li>Apply to remove Dabula as trustee for breach of fiduciary duty (conflict of interest — he's amending to benefit new partner at cost to existing beneficiaries)</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">2</span><h4>2.3.1 — Was investing whole trust fund in Dick's holiday resort appropriate?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-2-3-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-2-3-1">
+        <p><strong>No, inappropriate.</strong> Trustees have statutory and common law duties:</p>
+        <ul>
+          <li><strong>Trust Property Control Act s9:</strong> Duty of care of prudent and careful person; avoid conflicts of interest</li>
+          <li><strong>Duty of diversification:</strong> Putting ALL trust assets in one speculative investment breaches this</li>
+          <li><strong>Conflict of interest:</strong> Dick was personally involved in the project — he benefited while trust beneficiaries bore the risk</li>
+          <li>Investment was for Denver's specific purpose (tertiary education + business start-up) — required capital preservation, not speculation</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">2</span><h4>2.3.2 — Tom signed whatever Dick gave him; doesn't understand. Protected?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-2-3-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-2-3-2">
+        <p><strong>No, not protected.</strong> Trustees have a duty to <strong>understand</strong> and <strong>actively manage</strong> the trust (s9 TPCA). "I just signed what I was given" is not a defence — it's itself a breach of fiduciary duty.</p>
+        <p>Tom is jointly liable with Dick's estate for losses flowing from the breach. Since Dick's estate is insolvent and Tom is wealthy, Denver will likely recover against Tom.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">1</span><h4>2.3.3 — Does the indemnity clause in the will protect Tom?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2015-2-3-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2015-2-3-3">
+        <p><strong>No.</strong> Indemnity clauses against <strong>gross negligence or wilful misconduct</strong> are void (TPCA s9(2)). Signing documents without reading/understanding them constitutes at least gross negligence. The clause cannot shield Tom.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MAY 2014 — JACK SPARROW ============ -->
+  <div class="paper-card" id="may-2014">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">May 2014 Exam — Jack Sparrow (OCP no accrual)</span>
+      <span class="paper-meta">35 marks — Drafted memos</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="scenario-box">
+        <h4>Facts — Question 1 (20 marks)</h4>
+        <p>Jack married Jill Sept 1988, OCP EXCLUDING accrual. ANC values: Jack R150K, Jill R45K. CPI: 16.5 → 108.9. Jill's assets R5.8M, liabilities R400K. Marginal rate 40%.</p>
+        <p><strong>Jack's assets:</strong> Family home R2.9M (bought 2005 R980K) | Flat London R2,225,000 (inherited from aunt Gladys 3yrs ago) | Household R125K | Vehicles R875K | Firearms R18K | Jack &amp; Jill (Pty) Ltd 40% R3.8M (company set up 2002, 10,000 R1 shares) | Loan a/c in J&amp;J R380K (interest-free) | CIS R2.35M (BC R1.65M) | Bank R1.28M | Policy A R5M (to estate) | Policy B R1.5M (Jack life, Jill owner, premium R7.5K p.a. × 7 yrs) | Policy C R6M (Jack life, J&amp;J (Pty) Ltd owner — keyperson, premium R36K p.a. × 4 yrs).</p>
+        <p><strong>Liabilities:</strong> Bond R810K | Bank OD R127K | Surety for student loans R220K (children Davy &amp; Calypso).</p>
+        <p><strong>Will:</strong> Flat London → son Davy; CIS → daughter Calypso; residue → Jill.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>1.1 — Accrual claim</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2014-1-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2014-1-1">
+        <p><strong>No accrual claim.</strong> The ANC <strong>excludes accrual</strong> — "excluding community of property AND of profit and loss, no reference to accrual system" means the marriage is OCP with accrual EXPRESSLY EXCLUDED. No claim possible. Jack and Jill's estates remain entirely separate at death.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">15</span><h4>1.2 — Estate Duty (final expenses R30K, Master R600, exec charges VAT)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2014-1-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2014-1-2">
+        <table>
+          <tr><th colspan="2">Property s3(2)</th></tr>
+          <tr><td>Family home</td><td>R2,900,000</td></tr>
+          <tr><td>Flat London (SA resident → worldwide)</td><td>R2,225,000</td></tr>
+          <tr><td>Household</td><td>R125,000</td></tr>
+          <tr><td>Vehicles</td><td>R875,000</td></tr>
+          <tr><td>Firearms</td><td>R18,000</td></tr>
+          <tr><td>Jack &amp; Jill shares</td><td>R3,800,000</td></tr>
+          <tr><td>Loan account</td><td>R380,000</td></tr>
+          <tr><td>CIS</td><td>R2,350,000</td></tr>
+          <tr><td>Bank</td><td>R1,280,000</td></tr>
+          <tr><td><strong>Subtotal</strong></td><td><strong>R13,953,000</strong></td></tr>
+          <tr><th colspan="2">Deemed Property s3(3)</th></tr>
+          <tr><td>Policy A (to estate)</td><td>R5,000,000</td></tr>
+          <tr><td>Policy B (Jill owns but Jack life assured — deemed property; reduce by premiums+6%): R1,500,000 − R64,091 (7 × R7,500 @ 6%)</td><td>R1,435,909</td></tr>
+          <tr><td>Policy C (keyperson — check s3(3)(a)(ii) exclusion: NOT paid by deceased, NOT payable to estate, NOT to spouse/relative. Company = 40% Jack → "family company". Exclusion FAILS → deemed property. Reduce by premiums+6%: R36K × 4 yrs @ 6% ≈ R166K. R6,000,000 − R166,000)</td><td>R5,834,000</td></tr>
+          <tr><td><strong>Subtotal</strong></td><td><strong>R12,269,909</strong></td></tr>
+          <tr><td><strong>Gross Estate</strong></td><td><strong>R26,222,909</strong></td></tr>
+          <tr><th colspan="2">Deductions s4</th></tr>
+          <tr><td>Funeral/final expenses s4(a)</td><td>(R30,000)</td></tr>
+          <tr><td>Master's fee s4(c)</td><td>(R600)</td></tr>
+          <tr><td>Executor's fee 3.99% × R13,953,000</td><td>(R556,725)</td></tr>
+          <tr><td>Bond + OD + surety</td><td>(R1,157,000)</td></tr>
+          <tr><td>s4(q): Residue to Jill (calc: Gross − legacies − costs)</td><td>Large</td></tr>
+        </table>
+        <p><strong>Note:</strong> Specific bequests (flat London to Davy = R2,225,000; CIS to Calypso = R2,350,000) are NOT s4(q). Everything else (after deductions) → Jill → s4(q). Net estate approximately R4M. Less s4A R3.5M → Dutiable ~R500K → Duty ~R100K.</p>
+        <p><em>(Method marks: show structure, apportion between legatees per s11. Policy C treatment is key examinable point.)</em></p>
+      </div>
+
+      <div class="scenario-box"><h4>Q2 (15 marks) — Wills Act &amp; Trust questions</h4></div>
+
+      <div class="question-block"><span class="marks">5</span><h4>2.1 — Provision in Wills Act to help Amy (surviving spouse with insufficient residue)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2014-2-1')">Show Memo</button>
+      <div class="answer-block" id="ans-2014-2-1">
+        <p><strong>Section 2C(1) Wills Act.</strong> If a descendant (Graeme or Quinton) renounces their share of the bequest (residue), AND they would have taken together with the surviving spouse, the renounced portion VESTS in the surviving spouse (Amy).</p>
+        <p>So if Graeme and/or Quinton renounce, their portions go to Amy automatically. The will doesn't need to be rewritten. This is often used to address exactly this situation — adult children stepping aside so the surviving parent is properly provided for.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>2.2 — Amy's remedy if sons refuse; to whom does she claim, what factors considered?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2014-2-2')">Show Memo</button>
+      <div class="answer-block" id="ans-2014-2-2">
+        <p><strong>Maintenance of Surviving Spouses Act 27 of 1990.</strong> Amy can claim reasonable maintenance from the deceased estate if she cannot provide from her own means.</p>
+        <p><strong>Claim is addressed to the EXECUTOR</strong> of her husband's deceased estate (not to Graeme/Quinton directly). The executor must evaluate and either accept or reject; if rejected, Amy can approach the court.</p>
+        <p><strong>Factors considered (per Oshry NO v Feldman 2010 SCA):</strong></p>
+        <ul>
+          <li>Amount available in the estate</li>
+          <li>Amy's existing means, earning capacity, needs</li>
+          <li>Standard of living during marriage</li>
+          <li>Age of surviving spouse</li>
+          <li>Duration of the marriage</li>
+        </ul>
+        <p>Maintenance has same priority as a dependent child's claim.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">5</span><h4>2.3 — Roger sold flats to trust below MV; income distributed to minors Rafael &amp; Andy. How is R300K taxed?</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-2014-2-3')">Show Memo</button>
+      <div class="answer-block" id="ans-2014-2-3">
+        <p>Roger sold to trust for R1.5M; similar block sold for R3M. Gratuitous portion = R1.5M (sale below MV by R1.5M).</p>
+        <p><strong>s25B conduit principle</strong> — income distributed to children is prima facie taxed in their hands.</p>
+        <p><strong>BUT — s7(3) applies:</strong> Rafael (9) and Andy (7) are MINOR children of the donor (Roger). Income received by minor child resulting from a gratuitous disposition by parent is DEEMED to be the parent's income.</p>
+        <p><strong>Result:</strong> R300,000 is taxed in <strong>Roger's hands</strong>, at his marginal rate. Income retains its rental nature.</p>
+        <p>Rentals retained in trust (R0 in this case since all distributed) would have triggered s7(5) attribution to Roger as well.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TRUST TAX SAMPLE Q&A ============ -->
+  <div class="paper-card" id="trust-tax-samples">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Trust Taxation Sample Questions — 6 scenarios with memos</span>
+      <span class="paper-meta"> PGFPEN-8 Section A TAX — with answers</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="tip-box">Trusts feature in nearly every exam. Master the conduit principle (s25B) and anti-avoidance (s7(2), s7(3), s7(5), s7(6), s7C, Par 70/72 Eighth Sch).</div>
+
+      <h3>Q1 — Bricks Family Trust (15 marks)</h3>
+      <div class="scenario-box"><h4>Facts</h4>
+        <p>Bob created the Bricks Family Trust (discretionary). Three adult children are beneficiaries (all SA resident, one working in France). Bob sold a share portfolio on an interest-free loan (R1,000,000) to the trust 3 years ago. Trustees sold portfolio for R1,300,000 in 2023. Loan still outstanding. Rate of gratuitousness: 8%.</p>
+      </div>
+      <div class="question-block">
+        <span class="marks">2</span><h4>1.1</h4>
+        <p>Trustees vest the total gain equally in 3 beneficiaries. Explain CGT implications.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-1-1')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-1-1">
+        <p>R300,000 gain &divide; 3 = R100,000 vested in each beneficiary. Beneficiary is SA resident → taxed in beneficiary's hands under <strong>s25B conduit</strong>. Individual rates apply: R50,000 annual exclusion, 40% inclusion. No attribution applies (adults, SA resident).</p>
+      </div>
+      <div class="question-block">
+        <span class="marks">6</span><h4>1.2</h4>
+        <p>Assume trustees retained the gain instead. Fully explain CGT implications. Show amounts added to taxable income.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-1-2')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-1-2">
+        <p>If gain retained, general rule: gain taxed in trust unless attribution applies.<br>
+        <strong>Paragraph 70 Eighth Schedule</strong> applies here — gain arose from "conditional" donation (trustees must exercise discretion). Bob's gratuitous disposition (interest-free loan) gave rise to the gain.</p>
+        <p><strong>Bob taxed to the extent of his gratuitousness:</strong><br>
+        R1,000,000 &times; 8% &times; 3 years = <strong>R240,000</strong> (attributed to Bob)<br>
+        Bob: R240,000 &minus; R40,000 exclusion = R200,000 &times; 40% = <strong>R80,000</strong> added to Bob's taxable income.</p>
+        <p><strong>Balance R60,000</strong> (R300K − R240K) taxed in trust: 80% inclusion, no exclusion → R48,000 added to trust's taxable income at 45% flat.</p>
+      </div>
+      <div class="question-block">
+        <span class="marks">3</span><h4>1.3</h4>
+        <p>If beneficiaries were non-resident and trustees distribute the gain, explain the principles.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-1-3')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-1-3">
+        <p><strong>Para 72 Eighth Schedule:</strong> Where gain vested in non-resident and arose from a gratuitous disposition by SA-resident donor, gain attributable to donor is taxed in donor's hands (Bob) to extent of gratuitousness. Balance taxed in trust. Non-resident beneficiary pays no SA tax on attributed portion.</p>
+      </div>
+      <div class="question-block">
+        <span class="marks">4</span><h4>1.4</h4>
+        <p>Will the interest-free loan be treated as a donation for donations tax in 2023 (official rate 4.5%)?</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-1-4')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-1-4">
+        <p><strong>s7C Income Tax Act</strong> applies to all low/no-interest loans to trusts. Deemed donation = (official rate &minus; charged rate) &times; loan.<br>
+        R1,000,000 &times; (4.5% &minus; 0%) = <strong>R45,000</strong> deemed donation.<br>
+        Bob has R100,000 annual donations tax exemption — this may or may not attract donations tax depending on other donations made.</p>
+      </div>
+
+      <h3>Q2 — Shaun's Testamentary Trust (6 marks)</h3>
+      <div class="scenario-box"><h4>Facts</h4>
+        <p>Shaun left share portfolio to testamentary trust for his 2 minor children (youngest 15, eldest 19). Trustees sold underperforming shares.</p>
+      </div>
+      <div class="question-block"><h4>2.1 — If trust retains gain, explain tax (3)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-2-1')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-2-1">
+        <p>Gain retained in trust — no attribution. Testamentary trust for relatives of deceased with youngest beneficiary under 18 = <strong>Special Trust Type (b)</strong>.<br>
+        Tax: Individual rates but NO annual exclusion for Type (b). 40% of aggregate gain added to trust's taxable income.</p>
+      </div>
+      <div class="question-block"><h4>2.2 — Shares distributed in specie to beneficiaries. 500 each. Base R10, MV R12 (3)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-2-2')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-2-2">
+        <p>Vesting at MV (connected parties). Per beneficiary:<br>
+        Proceeds 500 × R12 = R6,000; base 500 × R10 = R5,000; <strong>Gain R1,000</strong>.<br>
+        Less than annual exclusion — nothing added to taxable income.</p>
+      </div>
+
+      <h3>Q3 — Mason Family Trust (18 marks)</h3>
+      <div class="scenario-box"><h4>Facts</h4>
+        <p>Mr Mason founded inter vivos trust 1 March 2023. Donated flat worth R750,000. Beneficiaries: Mason, his father, his son John (16). Rental income R60,000. Expenses R20,000. Gratuitousness 8%. Trustees distributed 50% of income to John on 28 Feb 2023.</p>
+      </div>
+      <div class="question-block"><h4>3.1 — Explain taxation of trust income (12)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-3-1')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-3-1">
+        <p><strong>Income distributed to John (50% = R30K):</strong><br>
+        s25B conduit — John receives, income retains rental nature, 50% of R20K expenses deductible.<br>
+        BUT: John is minor child of donor → <strong>s7(3) applies</strong>. Rental income deemed to be Mason's, not John's.</p>
+        <p><strong>Income retained in trust (50% = R30K):</strong><br>
+        Trust is discretionary → <strong>s7(5) applies</strong>. Income retained due to trustees' discretion = donor's income. Mason's gratuitousness: R750K × 8% = R60K.<br>
+        Since R60K &gt; R40K rental, <strong>Mason taxed on full R40K retained rental</strong>. He gets proportionate deduction for expenses.</p>
+        <p><strong>Result:</strong> Mason taxed on all trust rental income (both distributed and retained).</p>
+      </div>
+      <div class="question-block"><h4>3.2 — If Mason had died, does trust qualify as special trust? (6)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-3-2')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-3-2">
+        <p><strong>No.</strong> Special trust (a) = for disabled person (not applicable). Special trust (b) = testamentary trust for minors (but Mason's trust is inter vivos, not testamentary).<br>
+        Ordinary inter vivos trust applies. Retained income taxed at 45% flat. Distributed to John → taxed in John's hands (no s7(3) as donor deceased).</p>
+      </div>
+
+      <h3>Q4 — Richard's Disability Trust (6 marks)</h3>
+      <div class="scenario-box"><h4>Facts</h4>
+        <p>Inter vivos trust created by Richard for sole disabled grandson. Trust holds shares &amp; gold watch. Trustees sold: watch (base R200K → proceeds R250K); shares (base R2M → proceeds R2.2M). Gain retained.</p>
+      </div>
+      <div class="question-block"><h4>Explain CGT &amp; calculate</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-4')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-4">
+        <p><strong>Special Trust Type (a)</strong> — sole disabled beneficiary. Individual rates, 40% inclusion, annual exclusion, personal-use exclusion.</p>
+        <table>
+          <tr><td>Gold watch gain</td><td>R0 (personal-use exclusion)</td></tr>
+          <tr><td>Shares gain (R2.2M − R2M)</td><td>R200,000</td></tr>
+          <tr><td>Less annual exclusion (old R40K)</td><td>(R40,000)</td></tr>
+          <tr><td>Net</td><td>R160,000</td></tr>
+          <tr><td>× 40% inclusion</td><td>R64,000</td></tr>
+          <tr><td>CGT @ 18% (individual rates)</td><td><strong>R11,520</strong></td></tr>
+        </table>
+      </div>
+
+      <h3>Q5 — Toby's Family Trust (8 marks)</h3>
+      <div class="scenario-box"><h4>Facts</h4>
+        <p>Toby low-interest loan R6M at 2% p.a. to his family trust. Trust earned R300K dividends. All distributed to children: Jack (18), Sue (19), John (27). Official rate assumed 8%.</p>
+      </div>
+      <div class="question-block"><h4>5.1 — Extent of Toby's and children's tax liabilities (5)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-5-1')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-5-1">
+        <p><strong>Interest income to Toby:</strong> 2% × R6M = R120,000 (gross income). Entitled to interest exemption (R23,800).<br>
+        <strong>Dividends to children:</strong> s25B conduit — vested in children. s7(3) doesn't apply (all 18+). Dividends retain nature → exempt in children's hands.<br>
+        <strong>s7C deemed donation:</strong> (8% − 2%) × R6M = R360,000 − R100K exemption = R260K donations tax event.</p>
+      </div>
+      <div class="question-block"><h4>5.2 — Trust deed allows Toby to cancel beneficiary income rights (3)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-5-2')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-5-2">
+        <p><strong>s7(6) applies</strong> — donor retains power to revoke beneficiary rights. Even though Toby hasn't exercised the power, mere retention triggers s7(6). Dividend income deemed Toby's. But dividends retain nature → still exempt in Toby's hands. No practical tax increase.</p>
+      </div>
+
+      <h3>Q6 — Liam's Discretionary Trust (14 marks)</h3>
+      <div class="scenario-box"><h4>Facts</h4>
+        <p>Liam funds trust via interest-free loans. Beneficiaries: spouse Chloe + 3 minor children (youngest disabled). Assets: business premises (rental R250K, expenses R50K); endowment R950K (interest R47.5K); residential property (inherited from Liam's dad, used by family as primary residence, value R10M → R15M).</p>
+      </div>
+      <div class="question-block"><h4>6.1 — Rental income tax (7)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-6-1')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-6-1">
+        <p><strong>50% distributed to Chloe:</strong> s25B — taxed in her hands, retains rental nature, 50% of expenses deductible. No s7(2) (no tax-avoidance intent).<br>
+        <strong>50% retained:</strong> s7(5) — Liam made interest-free loans → retained income deemed Liam's. He gets proportionate expense deduction.</p>
+      </div>
+      <div class="question-block"><h4>6.2 — Endowment interest taxation (1)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-6-2')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-6-2">
+        <p>Interest within endowment taxed per <strong>five-fund approach</strong> in the insurer's hands, NOT in the trust. Individual Policyholder Fund rate of 30% applies (beneficiaries are natural persons).</p>
+      </div>
+      <div class="question-block"><h4>6.3 — Trustees sell primary residence at MV and retain gain (5)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-6-3')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-6-3">
+        <p><strong>No primary residence exclusion</strong> — not a Special Trust (a) (not all beneficiaries disabled; disabled son isn't sole beneficiary). Gain R15M − R10M = R5M. No attribution (property inherited by trust, not donated by Liam). 80% × R5M = <strong>R4,000,000 added to trust at 45%</strong>.</p>
+      </div>
+      <div class="question-block"><h4>6.4 — Liam bequeaths loan account to trust (1)</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-trust-6-4')">Show Memo</button>
+      <div class="answer-block" id="ans-trust-6-4">
+        <p>No CGT. <strong>Para 12A(6) Eighth Schedule</strong> — debt reduction where loan forms property in estate for estate duty purposes = no CGT on write-off.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MOCK 2017 WITH MEMO (Paul & Robyn Bird) ============ -->
+  <div class="paper-card" id="mock-2017">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Mock Exam May 2017 — Paul &amp; Robyn Bird (WITH full memo)</span>
+      <span class="paper-meta">45 marks — Official memo provided</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="scenario-box">
+        <h4>Facts</h4>
+        <p>Paul &amp; Robyn Bird (both 40 ANB), OCP with accrual, married 15 years (Paul's 2nd marriage; June left him R50K). Commencement values: Paul R75K, Robyn nil. CPI 48.6 → 121.3.</p>
+        <p><strong>Bird Family Trust</strong> (discretionary, created by Paul's dad 10 yrs ago; beneficiaries Paul, Robyn, kids):</p>
+        <ul>
+          <li>Share portfolio: MV R15M / BC R5M (Paul's dad bequeathed with usufruct to Paul; 3% dividend yield accepted)</li>
+          <li>Town house: MV R1M / BC R600K (bought with R600K interest-free loan from Paul)</li>
+          <li>Endowment on Paul's life: surrender R235K / death R250K (single R100K premium, 6 yrs ago)</li>
+          <li>Liability: Loan to Paul R600K</li>
+        </ul>
+        <p><strong>Paul's assets:</strong> Primary residence R3M (BC R1.7M, bond R500K) | Vehicle R300K (BC R400K, loan R200K) | Best Links (Pty) Ltd 24% shares MV R2,208,000 (BC R200K) — total assets R9.2M, Paul key-person | Loan a/c owed by Best Links R700K | CIS R450K (BC R400K)</p>
+        <p><strong>Paul's policies:</strong> Policy 1 (Robyn owner) R2M on Paul's life | Policy 2 (Best Links owner) R700K to settle loan on Paul's death | Policy 3 second-hand endowment (Paul bought 5yrs ago for R250K, now R340K surrender/R360K death) | RA 4: R1M single contribution 1 May 2016, R150K deductible in 2017, R1.2M value, Robyn beneficiary.</p>
+        <p><strong>Robyn's assets:</strong> Holiday home R1.9M (BC R900K) | Vehicle R300K (BC R350K, loan R75K) | Household R500K (BC R600K)</p>
+        <p><strong>Robyn's policies:</strong> Policy 1 R1.5M pure risk (Robyn life, Robyn owner) | Policy 2 sinking fund R375K (Robyn owner, donated by Paul).</p>
+        <p><strong>Will (Paul's):</strong> Loan to trust + CIS + second-hand policy → to trust. Residue → children equally.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">8</span><h4>Q1 — Taxable capital gain on Paul's death</h4>
+        <p>Calculate CGT. Executor sold Best Links shares to co-shareholders at MV. Marginal rate 45%.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-m2017-Q1')">Show Memo</button>
+      <div class="answer-block" id="ans-m2017-Q1">
+        <table>
+          <tr><th>Asset</th><th>MV</th><th>BC</th><th>Exclusion</th><th>Gain</th></tr>
+          <tr><td>Loan to trust</td><td>R600K</td><td>R600K</td><td>Par 12A(6)</td><td>0</td></tr>
+          <tr><td>Ceasing usufruct</td><td>0</td><td>R1,245,675</td><td>Loss ignored Par 15</td><td>0</td></tr>
+          <tr><td>Primary residence</td><td>R3M</td><td>R1.7M</td><td>R2M primary res (old rate)</td><td>0</td></tr>
+          <tr><td>Vehicle</td><td>R300K</td><td>R400K</td><td>Personal use</td><td>0</td></tr>
+          <tr><td>CIS</td><td>R450K</td><td>R400K</td><td>—</td><td>R50,000</td></tr>
+          <tr><td>Second-hand policy</td><td>R340K</td><td>R250K</td><td>—</td><td>R90,000</td></tr>
+          <tr><td>Best Links shares</td><td>R2,376,000 *</td><td>R200K</td><td>R1.8M small biz</td><td>R376,000</td></tr>
+          <tr><td>Loan from Best Links</td><td>R700K</td><td>R700K</td><td>—</td><td>0</td></tr>
+          <tr><td>Total gains</td><td></td><td></td><td></td><td>R516,000</td></tr>
+          <tr><td>Less: Exclusion on death (old R300K)</td><td></td><td></td><td></td><td>(R300,000)</td></tr>
+          <tr><td>Aggregate gain</td><td></td><td></td><td></td><td>R216,000</td></tr>
+          <tr><td><strong>Taxable capital gain (40%)</strong></td><td></td><td></td><td></td><td><strong>R86,400</strong></td></tr>
+        </table>
+        <p>* Best Links shares increased by keyperson policy: R2,208,000 + (24% × R700K) = R2,376,000. Small business exclusion available (total assets R9.2M &lt; R10M threshold at the time).<br>
+        Ceasing usufruct: base cost = 3% × R5M × 8.3045 (Table B 50yrs, trust beneficiary) = R1,245,675. Par 15 limits loss on non-trade asset.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">10</span><h4>Q2 — Accrual Claim</h4>
+        <p>Calculate accrual claim and who's liable. Assume all taxes/CGT = R350K.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-m2017-Q2')">Show Memo</button>
+      <div class="answer-block" id="ans-m2017-Q2">
+        <p>Adjusted commencement Paul: 121.3/48.6 × R75K = <strong>R187,191</strong>. Robyn: nil.</p>
+        <table>
+          <tr><th>Asset at dissolution</th><th>Paul</th><th>Robyn</th></tr>
+          <tr><td>Primary residence</td><td>R3,000,000</td><td>—</td></tr>
+          <tr><td>Vehicle</td><td>R300,000</td><td>R300,000</td></tr>
+          <tr><td>Best Links shares</td><td>R2,376,000</td><td>—</td></tr>
+          <tr><td>Loan from Best Links</td><td>R700,000</td><td>—</td></tr>
+          <tr><td>Loan from trust</td><td>R600,000</td><td>—</td></tr>
+          <tr><td>CIS</td><td>R450,000</td><td>—</td></tr>
+          <tr><td>Second-hand policy</td><td>R340,000</td><td>—</td></tr>
+          <tr><td>Policy 1 (Robyn owns on Paul)</td><td>—</td><td>R2,000,000</td></tr>
+          <tr><td>Holiday home</td><td>—</td><td>R1,900,000</td></tr>
+          <tr><td>Household</td><td>—</td><td>R500,000</td></tr>
+          <tr><td>Sinking fund</td><td>—</td><td>R375,000</td></tr>
+          <tr><td>Total</td><td>R7,766,000</td><td>R5,075,000</td></tr>
+          <tr><td>Less: Liabilities + tax</td><td>(R1,050,000)</td><td>(R75,000)</td></tr>
+          <tr><td>Less: Excluded (sinking fund = donation between spouses)</td><td></td><td>(R375,000)</td></tr>
+          <tr><td>Net estate</td><td>R6,716,000</td><td>R4,625,000</td></tr>
+          <tr><td>Less: CPI-adj commencement</td><td>(R187,191)</td><td>(0)</td></tr>
+          <tr><td><strong>Accrual</strong></td><td><strong>R6,528,809</strong></td><td><strong>R4,625,000</strong></td></tr>
+        </table>
+        <p>Claim = (R6,528,809 − R4,625,000) ÷ 2 = <strong>R951,905</strong><br>
+        <strong>Robyn has the claim against Paul's estate</strong> (smaller accrual = claimant).</p>
+      </div>
+
+      <div class="question-block"><span class="marks">20</span><h4>Q3 — Estate Duty</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-m2017-Q3')">Show Memo</button>
+      <div class="answer-block" id="ans-m2017-Q3">
+        <table>
+          <tr><th colspan="2">Property</th></tr>
+          <tr><td>Primary residence</td><td>R3,000,000</td></tr>
+          <tr><td>Vehicle</td><td>R300,000</td></tr>
+          <tr><td>Best Links shares</td><td>R2,376,000</td></tr>
+          <tr><td>Loan: Best Links</td><td>R700,000</td></tr>
+          <tr><td>Loan: Trust</td><td>R600,000</td></tr>
+          <tr><td>CIS</td><td>R450,000</td></tr>
+          <tr><td>Second-hand policy</td><td>R340,000</td></tr>
+          <tr><td>Ceasing usufruct (valued @ 3% × R15M × 8.3045 = R3,737,025)</td><td>R3,737,025</td></tr>
+          <tr><td>Disallowed RA contribution (s3(2)(bA): R1M − R150K = R850K)</td><td>R850,000</td></tr>
+          <tr><td><strong>Subtotal Property</strong></td><td><strong>R12,353,025</strong></td></tr>
+          <tr><th colspan="2">Deemed Property</th></tr>
+          <tr><td>Trust endowment (R250K death − R141,851 premium+6%)</td><td>R108,149</td></tr>
+          <tr><td>Policy owned by Robyn</td><td>R2,000,000</td></tr>
+          <tr><td>Policy owned by Best Links</td><td>R700,000</td></tr>
+          <tr><td><strong>Subtotal Deemed</strong></td><td><strong>R2,808,149</strong></td></tr>
+          <tr><td><strong>Gross Estate</strong></td><td><strong>R15,161,174</strong></td></tr>
+          <tr><th colspan="2">Deductions</th></tr>
+          <tr><td>Executor's fee (3.99% × R7.766M)</td><td>(R309,863)</td></tr>
+          <tr><td>Master's fee</td><td>(R600)</td></tr>
+          <tr><td>Funeral</td><td>(R15,000)</td></tr>
+          <tr><td>Tax (incl CGT)</td><td>(R350,000)</td></tr>
+          <tr><td>Liabilities</td><td>(R700,000)</td></tr>
+          <tr><td>Accrual claim s4(1A)</td><td>(R951,905)</td></tr>
+          <tr><td>s4(p): 24% × R700K</td><td>(R168,000)</td></tr>
+          <tr><td>s4(q) policy to Robyn</td><td>(R2,000,000)</td></tr>
+          <tr><td><strong>Total deductions</strong></td><td><strong>(R4,495,368)</strong></td></tr>
+          <tr><td><strong>Net Estate</strong></td><td><strong>R10,665,806</strong></td></tr>
+          <tr><td>Less: s4A (R3.5M × 2 = R7M portable from June's estate)</td><td>(R7,000,000)</td></tr>
+          <tr><td><strong>Dutiable Estate</strong></td><td><strong>R3,665,806</strong></td></tr>
+          <tr><td><strong>Estate Duty (20%)</strong></td><td><strong>R733,161</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="question-block"><span class="marks">3</span><h4>Q4 — RA investment wisdom</h4>
+        <p>Was Paul's R1M RA investment wise from estate duty perspective?</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-m2017-Q4')">Show Memo</button>
+      <div class="answer-block" id="ans-m2017-Q4">
+        <p><strong>Yes, wise.</strong> Only disallowed portion (R850K) is deemed property (s3(3)(e) / s3(2)(bA)). Actual RA value R1.2M would have been fully in estate if invested elsewhere (e.g. unit trusts). Disallowed contributions reduce over time as deductions catch up.</p>
+      </div>
+
+      <div class="question-block"><span class="marks">2</span><h4>Q5 — Davis Committee proposals</h4></div>
+      <button class="answer-toggle" onclick="showAnswer('ans-m2017-Q5')">Show Memo</button>
+      <div class="answer-block" id="ans-m2017-Q5">
+        <ul>
+          <li>Abolish s4(q) deduction (seen as discriminatory)</li>
+          <li>Single R15M abatement (scrap rollover system) OR 25% rate above R30M</li>
+        </ul>
+      </div>
+
+      <div class="question-block"><span class="marks">2</span><h4>Q6 — Trust rental income taxation</h4>
+        <p>How is retained rental taxed? Market interest 9.5%.</p>
+      </div>
+      <button class="answer-toggle" onclick="showAnswer('ans-m2017-Q6')">Show Memo</button>
+      <div class="answer-block" id="ans-m2017-Q6">
+        <p><strong>s7(5):</strong> Income retained due to trustees' discretion is deemed donor's (Paul's). Extent of gratuitousness: R600K × 9.5% = <strong>R57,000</strong>. That's the max attributed to Paul.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ASSIGNMENT 2025 MEMO ============ -->
+  <div class="paper-card" id="assignment-memo">
+    <div class="paper-header" onclick="togglePaper(this)">
+      <span class="paper-title">Assignment A —  DLO5 Marking Guidelines (12/2025)</span>
+      <span class="paper-meta">Recent assignment with official memo — risk planning focus</span>
+      <span class="chevron">&#9662;</span>
+    </div>
+    <div class="paper-body">
+      <div class="tip-box">
+        This assignment has the <strong>official marking guidelines</strong> already, so use it to understand exactly what examiners are looking for. Focus areas: long-term cover gap analysis, short-term insurable interest &amp; averaging, solvency ratios, effective rates.
+      </div>
+      <p>The memo is lengthy and structured. Key themes in the memo:</p>
+      <ul>
+        <li><strong>Capital Needs Analysis (CNA):</strong> Lump sum needs (A) + PV of income needs (B) − Capital available (C) = Shortfall (D). Examiners look for BOTH lump-sum needs AND PV of growing annuity calculations.</li>
+        <li><strong>Long-term recommendations:</strong> Additional life cover payable to spouse (s4(q) deduction, no executor's fee); review disability cover; dread disease cover; income protection.</li>
+        <li><strong>Short-term insurance:</strong> Apply the average clause properly (underinsured ratio); insurable interest; duty of utmost good faith; excess.</li>
+        <li><strong>Ratios:</strong> Solvency = Assets / Liabilities (&gt;1); Liquidity = Liquid assets / Monthly expenses (3&ndash;6 months); Debt-service &lt;36%.</li>
+        <li><strong>Effective vs nominal:</strong> Effective = (1 + nominal/m)^m &minus; 1. Always compare loans on effective rate.</li>
+      </ul>
+      <p><em>See the full marking guide PDF for detailed scoring; the essential method is taught in the CNA and Insurance Overview sections of your study guide.</em></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePaper(el) {
+  el.closest('.paper-card').classList.toggle('collapsed');
+}
+function showAnswer(id) {
+  var a = document.getElementById(id);
+  if (a) a.classList.toggle('shown');
+}
+function toggleAllAnswers(show) {
+  document.querySelectorAll('.answer-block').forEach(function(a){
+    if (show) a.classList.add('shown'); else a.classList.remove('shown');
+  });
+}
+function toggleTheme() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('themeBtn').textContent = 'Dark Mode';
+    localStorage.setItem('pfpres-exam-theme','light');
+  } else {
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('themeBtn').textContent = 'Light Mode';
+    localStorage.setItem('pfpres-exam-theme','dark');
+  }
+}
+if (localStorage.getItem('pfpres-exam-theme') === 'dark') {
+  document.documentElement.setAttribute('data-theme','dark');
+  document.addEventListener('DOMContentLoaded', function(){ document.getElementById('themeBtn').textContent='Light Mode'; });
+}
+function searchContent() {
+  var q = document.getElementById('searchBox').value.toLowerCase().trim();
+  document.querySelectorAll('.paper-card').forEach(function(card){
+    var text = card.textContent.toLowerCase();
+    card.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
+  });
+}
+</script>
+
+
+
+
+<script>
+(function(){
+  function forceOpen() {
+    document.querySelectorAll('.section-card').forEach(function(c) { c.classList.add('open'); });
+    document.querySelectorAll('.paper-card').forEach(function(c) { c.classList.remove('collapsed'); });
+    document.querySelectorAll('.answer-block').forEach(function(a) { a.classList.add('shown'); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', forceOpen);
+  else forceOpen();
+})();
+</script>
+
+</body>
+</html>
