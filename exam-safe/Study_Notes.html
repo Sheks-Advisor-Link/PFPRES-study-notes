@@ -1042,6 +1042,16 @@ li { margin-bottom: 3px !important; }
 .quiz-score-bar { display: none !important; }
 </style>
 
+
+<style>
+/* Belt-and-braces hide */
+#sec-flashcards, #sec-quiz,
+.flashcard-container, .flashcard-controls, .flashcard,
+.flashcard-front, .flashcard-back,
+.quiz-question, .quiz-options, .quiz-feedback, .quiz-score-bar,
+[data-section="flashcards"], [data-section="quiz"] { display: none !important; }
+</style>
+
 </head>
 <body>
 
@@ -3524,54 +3534,7 @@ li { margin-bottom: 3px !important; }
  </div>
  </div>
 
- <!-- ==================== SECTION 15: FLASHCARDS ==================== -->
- <div class="section-card calc" id="sec-flashcards" data-section="flashcards">
- <div class="section-header" onclick="toggleSection(this)">
- <div class="section-check" onclick="event.stopPropagation(); toggleCheck(this)" data-key="flashcards">&#10003;</div>
- <span class="section-title">15. Flashcards</span>
- <span class="section-badge calc">Study</span>
- <span class="chevron">&#9660;</span>
- </div>
- <div class="section-body">
- <div class="section-content">
- <p>Click the card to flip it. Use the arrows to navigate.</p>
- <div class="flashcard-container">
- <div class="flashcard" id="flashcard" onclick="flipCard()">
- <div class="flashcard-inner">
- <div class="flashcard-front" id="fcFront"></div>
- <div class="flashcard-back" id="fcBack"></div>
- </div>
- </div>
- <div class="flashcard-controls">
- <button class="btn" onclick="prevCard()">&#8592; Prev</button>
- <span class="flashcard-counter" id="fcCounter">1 / 1</span>
- <button class="btn" onclick="nextCard()">Next &#8594;</button>
- <button class="btn" onclick="shuffleCards()">Shuffle</button>
- </div>
- </div>
- </div>
- </div>
- </div>
-
- <!-- ==================== SECTION 16: QUIZ ==================== -->
- <div class="section-card calc" id="sec-quiz" data-section="quiz">
- <div class="section-header" onclick="toggleSection(this)">
- <div class="section-check" onclick="event.stopPropagation(); toggleCheck(this)" data-key="quiz">&#10003;</div>
- <span class="section-title">16. Self-Test Quiz</span>
- <span class="section-badge calc">Study</span>
- <span class="chevron">&#9660;</span>
- </div>
- <div class="section-body">
- <div class="section-content">
- <div class="quiz-score-bar">
- <span class="progress-label">Your Score</span>
- <div class="score-display" id="quizScore">0 / 0</div>
- <button class="btn" style="margin-top:10px;" onclick="resetQuiz()">Reset Quiz</button>
- </div>
- <div id="quizContainer"></div>
- </div>
- </div>
- </div>
+ 
 
 </div><!-- /main-content -->
 
