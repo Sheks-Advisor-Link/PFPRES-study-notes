@@ -368,6 +368,13 @@ li { margin-bottom: 3px !important; }
 .quiz-question, .quiz-score-bar, .flashcard-controls { display: none !important; }
 </style>
 
+
+<style>
+#how-to-use, #exam-tips, .how-to-use { display: none !important; }
+/* Remove tip-box (my editorial tip commentaries) */
+.tip-box { display: none !important; }
+</style>
+
 </head>
 <body>
 
@@ -380,9 +387,6 @@ li { margin-bottom: 3px !important; }
  </div>
  <div class="sidebar-nav">
  <div class="nav-heading">Getting Started</div>
- <a href="#how-to-use">How to Use This Guide</a>
- <a href="#exam-tips">Exam Strategy &amp; Tips</a>
-
  <div class="nav-heading">Worked Examples (with memos)</div>
  <a href="#kevin-maria">Accrual &amp; Estate Duty — Kevin &amp; Maria</a>
  <a href="#three-estate-examples">3 Estate Duty Examples (marital regimes)</a>
@@ -419,90 +423,6 @@ li { margin-bottom: 3px !important; }
  <button class="btn btn-primary" onclick="window.print()">&#128424; Print / Save PDF</button>
  <button class="btn" onclick="toggleTheme()" id="themeBtn">Dark Mode</button>
  </div>
-
- <div class="how-to-use" id="how-to-use">
- <h2>How to Use This Guide</h2>
- <p>This compilation brings together <strong>every past exam, sample paper, and case study</strong> you shared, with memos provided where the original paper had one, and memos I drafted in plain language where they didn't.</p>
- <h3>The Exam-Day Study Plan (One Full Day, 3 Days Before)</h3>
- <ol>
- <li><strong>Morning (3&ndash;4 hours):</strong> Work through the 3 foundational worked examples (Kevin &amp; Maria accrual; 3 Estate Duty marital regime examples; Assignment 2025 memo). These teach you the CALCULATION METHOD — learn the <em>template</em>, not the numbers.</li>
- <li><strong>Midday (2 hours):</strong> Do the Trust Taxation Sample Questions (6 x Q&amp;A). Trusts always come up in some form.</li>
- <li><strong>Afternoon (3&ndash;4 hours):</strong> Tackle 2-3 past papers under exam conditions. Start with Mock 2017 (has memo so you can self-mark). Then Dec 2024 (most recent). Then March 2021.</li>
- <li><strong>Evening (1&ndash;2 hours):</strong> Review the case studies (Johan &amp; Sarah; Albert &amp; Emma). These are the style of scenario you'll see in the exam.</li>
- </ol>
- <h3>How to Read Each Question</h3>
- <ol>
- <li>Read the <span style="color:var(--accent-facts);font-weight:700;">purple facts box</span> carefully.</li>
- <li>Try answering the <span style="color:var(--accent-q);font-weight:700;">blue question</span> on paper FIRST before clicking "Show Memo".</li>
- <li>Click "Show Memo" to reveal the <span style="color:var(--accent-a);font-weight:700;">green memo/answer</span>.</li>
- <li>Compare your approach to the memo. Focus on METHOD not just final numbers.</li>
- </ol>
-
- <div class="tip-box">
- <strong>Tax-rate caveat:</strong> These past papers use the tax rates of THEIR YEAR (e.g. 2017 papers use R300,000 CGT death exclusion, R2M primary residence exclusion). Your exam uses <strong>current 2026/27 rates</strong>: R440,000 death exclusion, R50,000 annual exclusion, R3,000,000 primary residence, R2,700,000 small business. Apply these in your actual exam — but when checking memos, use the paper's year rates.
- </div>
- </div>
-
- <!-- ============ EXAM TIPS ============ -->
- <div class="paper-card" id="exam-tips">
- <div class="paper-header" onclick="togglePaper(this)">
- <span class="paper-title">Exam Strategy &amp; Top Tips</span>
- <span class="paper-meta">Read first</span>
- <span class="chevron">&#9662;</span>
- </div>
- <div class="paper-body">
- <h3>Structure of the Exam</h3>
- <ul>
- <li><strong>100 marks total, 4 hours writing time</strong> (about 2.4 minutes per mark)</li>
- <li>Typically 2&ndash;4 case-study-based questions</li>
- <li>Open book — but KNOW WHERE THINGS ARE. Fumbling pages costs time.</li>
- <li>Topics almost always covered: <strong>Estate duty calculation, Accrual, CGT on death, Trusts (s7C, conduit, attribution), Life insurance, Buy-and-sell</strong></li>
- </ul>
-
- <h3>Top 10 Exam-Day Tips</h3>
- <ol>
- <li><strong>Attack the easiest/highest marks first.</strong> Don't get bogged down on Q1 if Q3 has marks you can bank quickly.</li>
- <li><strong>Show your working.</strong> Examiners give method marks even if arithmetic is off by a rand.</li>
- <li><strong>Label every number.</strong> E.g. "Primary residence (s4(q) deduction): R3,000,000". Never leave a number naked.</li>
- <li><strong>State the section.</strong> Each time you apply a rule, cite: "s3(3)(a) Estate Duty Act deems life insurance on deceased's life as property..."</li>
- <li><strong>Link to the scenario.</strong> Don't just quote theory — APPLY it. "In this case, the policy was owned by Mick on Albert's life, which means s3(3)(a) applies because..."</li>
- <li><strong>Watch for buy-and-sell 3 requirements &amp; keyman 4 requirements.</strong> These come up constantly. Memorise them.</li>
- <li><strong>Know the CPI formula for accrual:</strong> Commencement value &times; (CPI at death &divide; CPI at marriage).</li>
- <li><strong>Know the "grossing-up" divisor 0.7678</strong> for life cover to estate (15% VAT + 20% duty).</li>
- <li><strong>Always do the liquidity analysis</strong> even if not explicitly asked — showing it carries method marks.</li>
- <li><strong>Time management:</strong> If you're stuck for &gt;5 minutes on any sub-question, move on. Come back.</li>
- </ol>
-
- <h3>Most Common Errors Students Make</h3>
- <ul>
- <li>Forgetting to <strong>halve</strong> in a COP estate (only 50% is in deceased's estate).</li>
- <li>Including <strong>retirement fund benefits</strong> in estate duty (they're excluded by s3(2)(i)). But don't forget <strong>s3(3)(e)</strong> for disallowed contributions.</li>
- <li>Forgetting the <strong>s4(1A) accrual claim deduction</strong> before calculating s4(q).</li>
- <li>Valuing the <strong>usufruct at full property value</strong> instead of using 12% &times; MV &times; table factor.</li>
- <li>Using <strong>current age</strong> instead of age-next-birthday for table lookups.</li>
- <li>Forgetting to add the <strong>s3(3)(a) deemed life policies</strong> (especially ones paid to children/third parties).</li>
- </ul>
-
- <h3>Memorise These Numbers (2026/27)</h3>
- <table>
- <tr><th>Item</th><th>Amount</th></tr>
- <tr><td>Estate duty abatement (s4A)</td><td>R3,500,000 (R7M if rollover from spouse)</td></tr>
- <tr><td>Estate duty rate</td><td>20% up to R30M; 25% above</td></tr>
- <tr><td>CGT annual exclusion (alive)</td><td>R50,000</td></tr>
- <tr><td>CGT annual exclusion (death)</td><td>R440,000</td></tr>
- <tr><td>Primary residence CGT exclusion</td><td>R3,000,000</td></tr>
- <tr><td>Small business exclusion (55+)</td><td>R2,700,000 (MV ≤ R15M)</td></tr>
- <tr><td>CGT inclusion rate (individuals)</td><td>40% (max effective 18%)</td></tr>
- <tr><td>CGT inclusion rate (trusts/companies)</td><td>80% (max effective 36%)</td></tr>
- <tr><td>Donations tax annual exemption</td><td>R100,000</td></tr>
- <tr><td>Donations tax rate</td><td>20% up to R30M; 25% above</td></tr>
- <tr><td>Executor's fee (incl VAT)</td><td>3.99% of gross estate assets</td></tr>
- <tr><td>Max Master's fee</td><td>R7,000</td></tr>
- <tr><td>Retirement fund lump sum tax-free (death)</td><td>R550,000</td></tr>
- </table>
- </div>
- </div>
-
 
  <!-- ============ KEVIN & MARIA — ACCRUAL WORKED EXAMPLE ============ -->
  <div class="paper-card" id="kevin-maria">

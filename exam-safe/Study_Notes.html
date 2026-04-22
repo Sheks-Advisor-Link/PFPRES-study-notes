@@ -1052,6 +1052,14 @@ li { margin-bottom: 3px !important; }
 [data-section="flashcards"], [data-section="quiz"] { display: none !important; }
 </style>
 
+
+<style>
+#sec-overview, #sec-plain-english,
+[data-section="overview"], [data-section="plainenglish"] { display: none !important; }
+/* Remove any remaining editorial "exam tip" labels - keep content but drop label */
+.tip-box { display: none !important; }
+</style>
+
 </head>
 <body>
 
@@ -1065,8 +1073,6 @@ li { margin-bottom: 3px !important; }
  <p>Risk &amp; Estate Planning</p>
  </div>
  <div class="sidebar-nav" id="sidebarNav">
- <a href="#sec-overview"><span class="nav-dot law"></span>How an Estate Works</a>
- <a href="#sec-plain-english"><span class="nav-dot plan"></span>Quick summary</a>
  <a href="#sec-glossary"><span class="nav-dot calc"></span>Key Terms Glossary</a>
  <a href="#sec-risk-basics"><span class="nav-dot plan"></span>Risk &amp; Life Stages</a>
  <a href="#sec-insurance"><span class="nav-dot plan"></span>Insurance Overview</a>
@@ -1128,137 +1134,6 @@ li { margin-bottom: 3px !important; }
  </div>
 
  <div id="noResults" class="no-results" style="display:none;">No matching sections found.</div>
-
- <!-- ==================== SECTION 0: HOW AN ESTATE WORKS ==================== -->
- <div class="section-card law" id="sec-overview" data-section="overview">
- <div class="section-header" onclick="toggleSection(this)">
- <div class="section-check" onclick="event.stopPropagation(); toggleCheck(this)" data-key="overview">&#10003;</div>
- <span class="section-title">0. How an Estate Works &mdash; The Big Picture</span>
- <span class="section-badge law">Foundation</span>
- <span class="chevron">&#9660;</span>
- </div>
- <div class="section-body">
- <div class="section-content">
- <h3>What is a "Deceased Estate"?</h3>
- <p>When someone dies in South Africa, all their assets and liabilities come together to form a legal entity called a <strong>deceased estate</strong>. This estate is a separate legal person in the eyes of the law &mdash; it can sue, be sued, own property, and owe debts. The estate exists from the moment of death until it is fully wound up (usually 6 months to 3 years later). The entire process is regulated by the <strong>Administration of Estates Act 66 of 1965</strong> and supervised by the <strong>Master of the High Court</strong>.</p>
-
- <h3>The 7-Step Process of Winding Up an Estate</h3>
- <ol>
- <li><strong>Death &amp; reporting:</strong> The death is reported to the Master of the High Court within <strong>14 days</strong>. Required documents include the Death Notice (Form J294), death certificate, original will (if any), inventory (Form J243), Next of Kin Affidavit (Form J192), and Acceptance of Trust forms (Form J155).</li>
- <li><strong>Executor appointed:</strong> The Master issues <strong>Letters of Executorship</strong> (for estates over R250,000) or <strong>Letters of Authority</strong> (for estates under R250,000 &mdash; the simpler "Section 18(3)" process). The executor is typically named in the will; otherwise nominated by heirs.</li>
- <li><strong>Gather &amp; value:</strong> Executor identifies, collects, and values all assets at market value at date of death. Advertises for creditors in the Government Gazette and a local newspaper (30 days to lodge claims).</li>
- <li><strong>Pay debts, taxes &amp; costs:</strong> Funeral costs, debts, CGT (on death), income tax (to date of death), executor's fees, Master's fees, and estate duty are all settled from estate funds.</li>
- <li><strong>Liquidation &amp; Distribution Account (L&amp;D):</strong> The executor drafts the L&amp;D account detailing all assets, liabilities, costs, and proposed distributions. This is lodged with the Master, who has about 2 months to examine it and raise any queries.</li>
- <li><strong>Public advertisement:</strong> The L&amp;D account is advertised to lie open for public inspection for 21 days at the Master's office and the relevant Magistrate's court.</li>
- <li><strong>Distribution &amp; discharge:</strong> Once approved and objections resolved, the executor distributes remaining assets to heirs per the will or intestate succession. The estate is then closed.</li>
- </ol>
-
- <h3>Key Players in an Estate</h3>
- <table class="comparison-table">
- <thead><tr><th>Role</th><th>What They Do</th></tr></thead>
- <tbody>
- <tr><td><strong>Deceased / Testator</strong></td><td>The person who died. "Testator" is used when they left a valid will.</td></tr>
- <tr><td><strong>Executor</strong></td><td>The person appointed by the Master to manage the estate. Nominated in the will or by heirs. Takes legal control of assets, settles debts, pays taxes, distributes to heirs.</td></tr>
- <tr><td><strong>Master of the High Court</strong></td><td>State official who supervises estate administration. Issues Letters of Executorship/Authority, approves L&amp;D account, resolves disputes. Falls under the Dept of Justice &amp; Constitutional Development.</td></tr>
- <tr><td><strong>Heir</strong></td><td>Person who inherits under a will or intestate succession. Typically receives a share of the residue or a specific asset.</td></tr>
- <tr><td><strong>Legatee</strong></td><td>Person who receives a specific bequest (legacy) under a will &mdash; e.g. "R100,000 to my nephew" or "my watch to my brother". A legatee has first claim, before heirs to residue.</td></tr>
- <tr><td><strong>Beneficiary</strong></td><td>General term for anyone who benefits. Also used specifically for nominated recipients on insurance policies, retirement funds, or trust distributions.</td></tr>
- <tr><td><strong>Trustee</strong></td><td>Person managing a trust. Has fiduciary duty to administer trust property for the benefit of trust beneficiaries.</td></tr>
- <tr><td><strong>SARS</strong></td><td>Collects income tax to date of death, CGT on death, estate duty, and donations tax. The estate must be tax-compliant before it can close.</td></tr>
- <tr><td><strong>Conveyancer</strong></td><td>Attorney who transfers immovable property from the deceased estate to heirs (or to a buyer if sold).</td></tr>
- </tbody>
- </table>
-
- <h3>Why Estate Planning Matters</h3>
- <p>Without proper planning, an estate can face serious problems:</p>
- <ul>
- <li><strong>No will (dying intestate):</strong> Your assets are distributed per the Intestate Succession Act 81 of 1987 &mdash; which may not match your wishes (e.g. a life partner you aren't married to may get nothing).</li>
- <li><strong>Liquidity shortfall:</strong> Estate owes taxes &amp; costs but has no cash &mdash; family assets (like the home or business) may have to be sold at fire-sale prices.</li>
- <li><strong>Estate duty exposure:</strong> Without structuring (trusts, insurance, spouse bequests), up to 25% of large estates can be lost to estate duty.</li>
- <li><strong>Contested claims:</strong> A surviving spouse left out of a will may launch a maintenance claim, delaying distribution to other heirs.</li>
- <li><strong>Business disruption:</strong> Without a buy-and-sell agreement, a business can fail when a shareholder dies.</li>
- </ul>
-
- <h3>The Four Pillars of This Module</h3>
- <p>Everything in this study guide fits into four broad areas:</p>
- <ol>
- <li><strong>Technical foundations:</strong> Marital regimes, wills, intestate succession, trusts &mdash; the legal framework within which estates operate.</li>
- <li><strong>Tax on death:</strong> Estate duty, CGT on death, income tax to date of death &mdash; the tax consequences of dying.</li>
- <li><strong>Risk management tools:</strong> Life insurance, buy-and-sell agreements, retirement funds &mdash; the products used to address risks.</li>
- <li><strong>Analysis &amp; planning:</strong> Liquidity analysis, capital needs analysis &mdash; the calculations that tie everything together and identify shortfalls.</li>
- </ol>
-
- <div class="info-box">
- <strong>Summary:</strong> When you die, the law treats all your stuff (and your debts) as one bundle called your "estate". Someone (the executor) is put in charge of sorting it out &mdash; paying what you owe, paying taxes, and then giving what's left to the people named in your will (or, if you didn't have one, to whoever the law says). Estate planning is about making sure this process is smooth, tax-efficient, and matches what you actually want to happen.
- </div>
- </div>
- </div>
- </div>
-
- <!-- ==================== SECTION: PLAIN ENGLISH SUMMARIES ==================== -->
- <div class="section-card plan" id="sec-plain-english" data-section="plainenglish">
- <div class="section-header" onclick="toggleSection(this)">
- <div class="section-check" onclick="event.stopPropagation(); toggleCheck(this)" data-key="plainenglish">&#10003;</div>
- <span class="section-title">Quick summary &mdash; The Whole Module in 10 Minutes</span>
- <span class="section-badge plan">Quick Read</span>
- <span class="chevron">&#9660;</span>
- </div>
- <div class="section-body">
- <div class="section-content">
- <p>Each topic in this guide explained in one short paragraph, no jargon. If you only had 10 minutes to understand the whole module, read this.</p>
-
- <h3>Marital Regimes</h3>
- <p>When you get married in South Africa you're picking one of three "systems" for how your stuff will be shared. <strong>In community of property</strong> means everything you each own gets combined into one pot &mdash; great for sharing, bad if one of you is financially reckless. <strong>Out of community, no accrual</strong> means you each keep your own stuff &mdash; great for keeping things separate, bad if one spouse gave up a career for the family. <strong>Out of community with accrual</strong> (the most common choice today) keeps you separate during the marriage but shares the <em>growth</em> when the marriage ends. Default is COP if you didn't sign an ANC (antenuptial contract) before the wedding.</p>
-
- <h3>Estate Duty</h3>
- <p>When you die, South Africa charges a tax on your "estate" (everything you owned). You get the first <strong>R3.5 million free</strong> (the "abatement"). Anything above that is taxed at 20% (up to R30M) or 25% (above R30M). But here's the trick: anything you leave to your spouse is <strong>completely exempt</strong> (s4(q) deduction) &mdash; you can leave a R100M estate to your wife and pay zero estate duty. Also, your unused R3.5M rolls over to her, so when SHE dies she has R7M of abatement. This is why most estate planning tries to delay estate duty to the second death.</p>
-
- <h3>CGT on Death</h3>
- <p>The tax man treats your death as if you "sold" everything at market value &mdash; even if nothing was actually sold. This triggers capital gains tax on the growth since you bought each asset. BUT if you leave things to your spouse, she "takes over" your original purchase price (no tax yet &mdash; just deferred). For anything going to kids, friends, etc., your estate must pay the CGT before distributing. The annual exclusion in the year you die is R440,000 (much bigger than the R50,000 you get while alive) and your primary residence is shielded up to R3 million of gain.</p>
-
- <h3>Life Insurance in Estate Planning</h3>
- <p>Most people's estates are "asset rich but cash poor" &mdash; you own a house, shares, and a business, but you don't have a million rand in the bank. When you die, the estate owes taxes and fees immediately. Without cash, the executor may have to sell the family home to pay SARS. Life insurance is the answer &mdash; it pays out cash quickly. But who you name as the beneficiary matters a LOT. Naming your <strong>spouse</strong> is usually the best: the payout avoids executor's fees (saving 3.99%), doesn't count in the accrual, and qualifies for the s4(q) deduction. Naming your <strong>estate</strong> means the money is available to pay estate costs directly &mdash; but you give up 3.99% to executor's fees.</p>
-
- <h3>Trusts</h3>
- <p>A trust is a legal "box" that holds assets for someone else's benefit. Three roles: the <strong>founder</strong> (who sets it up and puts assets in), the <strong>trustees</strong> (who manage the assets &mdash; like a board of directors), and the <strong>beneficiaries</strong> (who benefit from the trust). Two main types: <strong>Inter vivos trusts</strong> (set up while you're alive &mdash; used to shift growth out of your estate and protect assets from creditors) and <strong>testamentary trusts</strong> (set up in your will &mdash; typically used to hold assets for minor children until they're old enough). Downside: retained income in a trust is taxed at a flat 45%, and kept capital gains at 36% effective &mdash; brutal. That's why trustees usually distribute income/gains to beneficiaries who are in lower tax brackets.</p>
-
- <h3>Intestate Succession</h3>
- <p>If you die without a valid will, the Intestate Succession Act decides who inherits. If you have a spouse but no kids, spouse gets everything. If you have kids but no spouse, kids share equally. If you have both, spouse gets the greater of R250,000 or a "child's share", and kids share the rest. If neither, your parents inherit. Since 2021 (<em>Bwanya</em> case), permanent life partners are also now covered &mdash; but informal dating partners are NOT. This is why having a will is one of the most basic adult financial tasks.</p>
-
- <h3>Maintenance of Surviving Spouse</h3>
- <p>If you die and leave a spouse who genuinely can't support themselves (e.g. stay-at-home partner), the Maintenance of Surviving Spouses Act lets them claim "reasonable maintenance" from your estate &mdash; even if your will left them nothing. The court looks at the estate's size, the spouse's own means, and their standard of living during the marriage. Same priority as a dependent child's claim. Since 2021 this applies to permanent life partners too.</p>
-
- <h3>Usufruct &amp; Bare Dominium</h3>
- <p>A <strong>usufruct</strong> is the right to USE property without owning it &mdash; like being given the keys to a holiday home for life. <strong>Bare dominium</strong> is owning property you can't use &mdash; you hold the title deed but can't live there. Classic estate planning: a husband dies and leaves his wife a usufruct over the family home (she lives there for life), with his children getting the bare dominium (they own it on paper). When she eventually dies, the children automatically become full owners. This lets the husband provide for his wife AND ultimately transfer the home to his children, without a second estate duty event.</p>
-
- <h3>Liquidity Analysis</h3>
- <p>Every estate must pay bills: funeral, debts, taxes, executor's fees. Liquidity analysis simply asks: does the estate have enough <strong>cash</strong> (or near-cash) to pay these without having to sell assets in a hurry? If yes &mdash; great. If no &mdash; you have a "liquidity shortfall" and need to plan for it, usually with life insurance. This is often where clients find out their estate plan is broken.</p>
-
- <h3>Retirement Funds on Death</h3>
- <p>Retirement fund benefits (pension, provident, RA, preservation) are treated completely separately from your estate. They're not subject to estate duty, not subject to executor's fees, not in the accrual. They sit in their own "bubble" and pass directly to your nominated beneficiary (or as the trustees decide under s37C). This makes retirement savings one of the most tax-efficient ways to pass wealth on death. Catch: withdrawals are taxed at the death lump sum tax table (first R550,000 tax-free).</p>
-
- <h3>Buy-and-Sell Agreements</h3>
- <p>If you own a business with partners and you die, there's a problem: your heirs inherit your shares (they want cash, not shares in a business they don't know how to run), and your partners are now in business with your widow or kids. A buy-and-sell agreement solves this: each partner takes out a life policy on the others' lives. When one dies, the survivors get insurance payouts and use them to buy the deceased's shares from the estate at a pre-agreed price. Everyone wins: the family gets cash, the business continues smoothly, and if structured properly (partners own the policies, not the deceased), the insurance proceeds are NOT included in the deceased's estate for estate duty.</p>
-
- <h3>The Mental Model to Keep in Mind</h3>
- <div class="info-box">
- <strong>When you die, three "taxes" can be triggered:</strong>
- <ol>
- <li><strong>Income tax</strong> on any income earned up to your date of death (final return).</li>
- <li><strong>CGT</strong> on the "deemed disposal" of all your assets at market value (s9HA).</li>
- <li><strong>Estate duty</strong> on your net estate minus the R3.5M abatement.</li>
- </ol>
- <strong>And three "costs":</strong>
- <ol>
- <li><strong>Executor's fees</strong> (3.99% including VAT).</li>
- <li><strong>Master's fees</strong> (up to R7,000).</li>
- <li><strong>Debts &amp; funeral</strong> (whatever was outstanding).</li>
- </ol>
- <strong>The estate plan's job</strong> is to minimize these (via spouse bequests, trusts, retirement structuring, insurance) and make sure there's enough cash to pay them without fire-selling assets.
- </div>
- </div>
- </div>
- </div>
 
  <!-- ==================== SECTION: GLOSSARY ==================== -->
  <div class="section-card calc" id="sec-glossary" data-section="glossary">
@@ -3630,7 +3505,7 @@ li { margin-bottom: 3px !important; }
  function tagPrintSections(){
  // Exam essentials: key reference content
  var essentialIds = [
- 'sec-overview', 'sec-plain-english', 'sec-glossary', 'sec-tax-figures',
+ 'sec-glossary', 'sec-tax-figures',
  'sec-formulas', 'sec-case-law', 'sec-worked-example', 'sec-cna',
  'sec-admin-fees'
  ];
